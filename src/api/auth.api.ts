@@ -16,6 +16,26 @@ export async function login(
   return response;
 }
 
+export async function demoLogin(
+  role: "CUSTOMER" | "COURIER",
+): Promise<ApiResponse<LoginResponse>> {
+  const email =
+    role === "CUSTOMER"
+      ? process.env.NEXT_PUBLIC_DEMO_CUSTOMER_EMAIL
+      : process.env.NEXT_PUBLIC_DEMO_COURIER_EMAIL;
+
+  const password = process.env.NEXT_PUBLIC_DEMO_PASSWORD;
+
+  if (!email || !password) {
+    throw new Error("Demo credentials are not configured");
+  }
+
+  return login({
+    email,
+    password,
+  });
+}
+
 export async function getMe(): Promise<ApiResponse<AuthUser>> {
   return apiClient<ApiResponse<AuthUser>>("/auth/me");
 }
