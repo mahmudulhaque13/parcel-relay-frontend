@@ -35,10 +35,55 @@ export interface ShipmentQuery {
   sortOrder?: "asc" | "desc";
 }
 
+export interface ShipmentQuotePayload {
+  originZoneId: string;
+  destinationZoneId: string;
+  weight: number;
+  codAmount: number;
+}
+
+export interface ShipmentQuote {
+  originZone: {
+    id: string;
+    name: string;
+    code: string;
+  };
+
+  destinationZone: {
+    id: string;
+    name: string;
+    code: string;
+  };
+
+  pricing: {
+    pricingRuleId: string;
+    basePrice: number;
+    perKgPrice: number;
+    codPercentage: number;
+    weightCharge: number;
+    codCharge: number;
+    deliveryCharge: number;
+  };
+
+  shipment: {
+    weight: number;
+    codAmount: number;
+  };
+}
+
 export async function getMyShipments(
   query?: ShipmentQuery,
 ): Promise<ApiResponse<ShipmentListData>> {
   return apiClient<ApiResponse<ShipmentListData>>("/shipments", {
     query,
+  });
+}
+
+export async function getShipmentQuote(
+  payload: ShipmentQuotePayload,
+): Promise<ApiResponse<ShipmentQuote>> {
+  return apiClient<ApiResponse<ShipmentQuote>>("/shipments/quote", {
+    method: "POST",
+    body: payload,
   });
 }
