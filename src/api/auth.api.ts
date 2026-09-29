@@ -1,31 +1,19 @@
 import apiClient from "@/lib/apiClient";
+import { clearAccessToken, setAccessToken } from "@/lib/auth-storage";
 import type { ApiResponse } from "@/types/api";
-
-export interface LoginPayload {
-  email: string;
-  password: string;
-}
-
-export interface AuthUser {
-  id: string;
-  name: string;
-  email: string;
-  role: "CUSTOMER" | "COURIER" | "ADMIN";
-  status: string;
-}
-
-export interface LoginData {
-  user: AuthUser;
-  accessToken: string;
-}
+import type { AuthUser, LoginPayload, LoginResponse } from "@/types/auth";
 
 export async function login(
   payload: LoginPayload,
-): Promise<ApiResponse<LoginData>> {
-  return apiClient<ApiResponse<LoginData>>("/auth/login", {
+): Promise<ApiResponse<LoginResponse>> {
+  const response = await apiClient<ApiResponse<LoginResponse>>("/auth/login", {
     method: "POST",
     body: payload,
   });
+
+  setAccessToken(response.data.accessToken);
+
+  return response;
 }
 
 export async function getMe(): Promise<ApiResponse<AuthUser>> {
@@ -35,16 +23,24 @@ export async function getMe(): Promise<ApiResponse<AuthUser>> {
 export async function refreshToken(): Promise<
   ApiResponse<{ accessToken: string }>
 > {
-  return apiClient<ApiResponse<{ accessToken: string }>>(
+  const response = await apiClient<ApiResponse<{ accessToken: string }>>(
     "/auth/refresh-token",
     {
       method: "POST",
     },
   );
+
+  setAccessToken(response.data.accessToken);
+
+  return response;
 }
 
 export async function logout(): Promise<ApiResponse<null>> {
-  return apiClient<ApiResponse<null>>("/auth/logout", {
+  const response = await apiClient<ApiResponse<null>>("/auth/logout", {
     method: "POST",
   });
+
+  clearAccessToken();
+
+  return response;
 }
