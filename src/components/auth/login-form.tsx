@@ -81,9 +81,8 @@ export default function LoginForm() {
           </div>
         )}
 
-        <form.Field
-          name="email"
-          children={(field) => (
+        <form.Field name="email">
+          {(field) => (
             <div className="space-y-2">
               <label htmlFor={field.name} className="text-sm font-medium">
                 Email
@@ -108,11 +107,10 @@ export default function LoginForm() {
               )}
             </div>
           )}
-        />
+        </form.Field>
 
-        <form.Field
-          name="password"
-          children={(field) => (
+        <form.Field name="password">
+          {(field) => (
             <div className="space-y-2">
               <label htmlFor={field.name} className="text-sm font-medium">
                 Password
@@ -137,11 +135,12 @@ export default function LoginForm() {
               )}
             </div>
           )}
-        />
+        </form.Field>
 
         <form.Subscribe
           selector={(state) => [state.canSubmit, state.isSubmitting]}
-          children={([canSubmit, isSubmitting]) => (
+        >
+          {([canSubmit, isSubmitting]) => (
             <button
               type="submit"
               disabled={!canSubmit || isSubmitting}
@@ -157,7 +156,7 @@ export default function LoginForm() {
               )}
             </button>
           )}
-        />
+        </form.Subscribe>
       </form>
 
       <div className="relative">
