@@ -40,19 +40,30 @@ export async function getMe(): Promise<ApiResponse<AuthUser>> {
   return apiClient<ApiResponse<AuthUser>>("/auth/me");
 }
 
+let refreshPromise: Promise<ApiResponse<{ accessToken: string }>> | null = null;
+
 export async function refreshToken(): Promise<
   ApiResponse<{ accessToken: string }>
 > {
-  const response = await apiClient<ApiResponse<{ accessToken: string }>>(
+  if (refreshPromise) {
+    return refreshPromise;
+  }
+
+  refreshPromise = apiClient<ApiResponse<{ accessToken: string }>>(
     "/auth/refresh-token",
     {
       method: "POST",
     },
-  );
+  )
+    .then((response) => {
+      setAccessToken(response.data.accessToken);
+      return response;
+    })
+    .finally(() => {
+      refreshPromise = null;
+    });
 
-  setAccessToken(response.data.accessToken);
-
-  return response;
+  return refreshPromise;
 }
 
 export async function logout(): Promise<ApiResponse<null>> {

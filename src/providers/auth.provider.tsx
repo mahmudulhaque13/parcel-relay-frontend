@@ -41,7 +41,9 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
         if (mounted) {
           setUser(response.data);
         }
-      } catch {
+      } catch (error) {
+        console.error("Auth initialization failed:", error);
+
         clearAccessToken();
 
         if (mounted) {

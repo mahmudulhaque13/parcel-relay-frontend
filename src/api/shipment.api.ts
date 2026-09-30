@@ -87,3 +87,23 @@ export async function getShipmentQuote(
     body: payload,
   });
 }
+
+export interface CreateShipmentPayload {
+  originZoneId: string;
+  destinationZoneId: string;
+  recipientName: string;
+  recipientPhone: string;
+  deliveryAddress: string;
+  packageDescription: string;
+  weight: number;
+  codAmount: number;
+}
+
+export async function createShipment(
+  payload: CreateShipmentPayload,
+): Promise<ApiResponse<Shipment>> {
+  return apiClient<ApiResponse<Shipment>>("/shipments", {
+    method: "POST",
+    body: payload,
+  });
+}
