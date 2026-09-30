@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { ArrowLeft, MapPin, Package, User } from "lucide-react";
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
