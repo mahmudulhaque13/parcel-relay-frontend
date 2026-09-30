@@ -114,3 +114,78 @@ export async function updateAdminUserStatus(
     body: payload,
   });
 }
+
+export interface AdminShipmentReport {
+  id: string;
+  trackingNumber: string;
+  recipientName: string;
+  recipientPhone: string;
+  deliveryAddress: string;
+  weight: number;
+  deliveryCharge: number;
+  codAmount: number;
+  status: string;
+  paymentStatus: string;
+  createdAt: string;
+  updatedAt: string;
+
+  customer: {
+    id: string;
+    name: string;
+    email: string;
+  };
+
+  originZone: {
+    id: string;
+    name: string;
+    code: string;
+  };
+
+  destinationZone: {
+    id: string;
+    name: string;
+    code: string;
+  };
+}
+
+export interface AdminShipmentReportSummary {
+  totalShipments: number;
+  totalDeliveryCharge: number;
+  totalCodAmount: number;
+  totalWeight: number;
+}
+
+export interface AdminShipmentReportData {
+  data: AdminShipmentReport[];
+
+  summary: AdminShipmentReportSummary;
+
+  meta: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPage: number;
+  };
+}
+
+export interface AdminShipmentReportQuery {
+  page?: number;
+  limit?: number;
+  status?: string;
+  originZoneId?: string;
+  destinationZoneId?: string;
+  q?: string;
+  sortBy?: "createdAt" | "updatedAt" | "deliveryCharge";
+  sortOrder?: "asc" | "desc";
+}
+
+export async function getAdminShipmentReports(
+  query?: AdminShipmentReportQuery,
+): Promise<ApiResponse<AdminShipmentReportData>> {
+  return apiClient<ApiResponse<AdminShipmentReportData>>(
+    "/admin/reports/shipments",
+    {
+      query,
+    },
+  );
+}
