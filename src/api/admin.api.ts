@@ -39,3 +39,45 @@ export async function getAdminDashboardStats(): Promise<
 > {
   return apiClient<ApiResponse<AdminDashboardStats>>("/admin/dashboard-stats");
 }
+
+export interface AdminUser {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  status: string;
+  authProvider: string;
+  emailVerified: boolean;
+  imageUrl: string | null;
+  isDeleted: boolean;
+  deletedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AdminUserListData {
+  data: AdminUser[];
+  meta: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPage: number;
+  };
+}
+
+export interface AdminUserQuery {
+  page?: number;
+  limit?: number;
+  role?: string;
+  status?: string;
+  q?: string;
+  sortOrder?: "asc" | "desc";
+}
+
+export async function getAdminUsers(
+  query?: AdminUserQuery,
+): Promise<ApiResponse<AdminUserListData>> {
+  return apiClient<ApiResponse<AdminUserListData>>("/admin/users", {
+    query,
+  });
+}
