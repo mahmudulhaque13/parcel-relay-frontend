@@ -107,3 +107,57 @@ export async function createShipment(
     body: payload,
   });
 }
+
+export interface ShipmentDetails extends Shipment {
+  paymentStatus: string;
+  originZone: {
+    id: string;
+    name: string;
+    code: string;
+  };
+  destinationZone: {
+    id: string;
+    name: string;
+    code: string;
+  };
+  pricingRule: {
+    id: string;
+    name: string;
+    basePrice: number;
+    perKgPrice: number;
+    codPercentage: number;
+  } | null;
+  events: ShipmentEvent[];
+}
+
+export interface ShipmentEvent {
+  id: string;
+  shipmentId: string;
+  status: string;
+  description: string | null;
+  location: string | null;
+  createdAt: string;
+}
+
+export interface ShipmentTimeline {
+  shipment: {
+    id: string;
+    trackingNumber: string;
+    status: string;
+  };
+  events: ShipmentEvent[];
+}
+
+export async function getShipmentById(
+  shipmentId: string,
+): Promise<ApiResponse<ShipmentDetails>> {
+  return apiClient<ApiResponse<ShipmentDetails>>(`/shipments/${shipmentId}`);
+}
+
+export async function getShipmentTimeline(
+  shipmentId: string,
+): Promise<ApiResponse<ShipmentTimeline>> {
+  return apiClient<ApiResponse<ShipmentTimeline>>(
+    `/shipments/${shipmentId}/timeline`,
+  );
+}
