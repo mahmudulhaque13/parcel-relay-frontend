@@ -1,6 +1,10 @@
 import apiClient from "@/lib/apiClient";
 import type { ApiResponse } from "@/types/api";
 
+export type AdminUserRole = "CUSTOMER" | "COURIER" | "ADMIN";
+
+export type AdminUserStatus = "ACTIVE" | "INACTIVE" | "BLOCKED" | "DELETED";
+
 export interface AdminDashboardStats {
   users: {
     total: number;
@@ -44,8 +48,8 @@ export interface AdminUser {
   id: string;
   name: string;
   email: string;
-  role: string;
-  status: string;
+  role: AdminUserRole;
+  status: AdminUserStatus;
   authProvider: string;
   emailVerified: boolean;
   imageUrl: string | null;
@@ -68,8 +72,8 @@ export interface AdminUserListData {
 export interface AdminUserQuery {
   page?: number;
   limit?: number;
-  role?: string;
-  status?: string;
+  role?: AdminUserRole;
+  status?: AdminUserStatus;
   q?: string;
   sortOrder?: "asc" | "desc";
 }
@@ -79,5 +83,34 @@ export async function getAdminUsers(
 ): Promise<ApiResponse<AdminUserListData>> {
   return apiClient<ApiResponse<AdminUserListData>>("/admin/users", {
     query,
+  });
+}
+
+export interface UpdateAdminUserRolePayload {
+  role: AdminUserRole;
+  phone?: string;
+}
+
+export interface UpdateAdminUserStatusPayload {
+  status: AdminUserStatus;
+}
+
+export async function updateAdminUserRole(
+  userId: string,
+  payload: UpdateAdminUserRolePayload,
+): Promise<ApiResponse<AdminUser>> {
+  return apiClient<ApiResponse<AdminUser>>(`/admin/users/${userId}/role`, {
+    method: "PATCH",
+    body: payload,
+  });
+}
+
+export async function updateAdminUserStatus(
+  userId: string,
+  payload: UpdateAdminUserStatusPayload,
+): Promise<ApiResponse<AdminUser>> {
+  return apiClient<ApiResponse<AdminUser>>(`/admin/users/${userId}/status`, {
+    method: "PATCH",
+    body: payload,
   });
 }
