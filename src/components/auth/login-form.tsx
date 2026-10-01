@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { demoLogin, login } from "@/api/auth.api";
+import GoogleLoginComponent from "@/components/modules/google-login/GoogleLogin";
 import { useAuth } from "@/hooks/use-auth";
 import { getRoleHome } from "@/routes/role-routes";
 import { loginSchema } from "@/validation/auth.validation";
@@ -177,6 +178,24 @@ export default function LoginForm() {
           )}
         </form.Subscribe>
       </form>
+
+      <div className="space-y-4">
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t border-border" />
+          </div>
+
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background px-2 text-muted-foreground">
+              Or continue with
+            </span>
+          </div>
+        </div>
+
+        <div className="flex justify-center">
+          <GoogleLoginComponent />
+        </div>
+      </div>
 
       <div className="space-y-3">
         <div className="relative">

@@ -112,3 +112,16 @@ export async function logout(): Promise<ApiResponse<null>> {
 
   return response;
 }
+
+export async function googleLogin(payload: {
+  idToken: string;
+}): Promise<ApiResponse<LoginResponse>> {
+  const response = await apiClient<ApiResponse<LoginResponse>>("/auth/google", {
+    method: "POST",
+    body: payload,
+  });
+
+  setAccessToken(response.data.accessToken);
+
+  return response;
+}
