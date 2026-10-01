@@ -3,6 +3,43 @@ import { clearAccessToken, setAccessToken } from "@/lib/auth-storage";
 import type { ApiResponse } from "@/types/api";
 import type { AuthUser, LoginPayload, LoginResponse } from "@/types/auth";
 
+export interface RegisterPayload {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface RegisterResponse {
+  message: string;
+}
+
+export async function register(
+  payload: RegisterPayload,
+): Promise<ApiResponse<RegisterResponse>> {
+  return apiClient<ApiResponse<RegisterResponse>>("/auth/register", {
+    method: "POST",
+    body: payload,
+  });
+}
+
+export interface VerifyEmailPayload {
+  email: string;
+  otp: string;
+}
+
+export interface VerifyEmailResponse {
+  message: string;
+}
+
+export async function verifyEmail(
+  payload: VerifyEmailPayload,
+): Promise<ApiResponse<VerifyEmailResponse>> {
+  return apiClient<ApiResponse<VerifyEmailResponse>>("/auth/verify-email", {
+    method: "POST",
+    body: payload,
+  });
+}
+
 export async function login(
   payload: LoginPayload,
 ): Promise<ApiResponse<LoginResponse>> {

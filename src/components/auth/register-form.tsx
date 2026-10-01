@@ -6,67 +6,58 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { demoLogin, login } from "@/api/auth.api";
-import { useAuth } from "@/hooks/use-auth";
-import { getRoleHome } from "@/routes/role-routes";
-import { loginSchema } from "@/validation/auth.validation";
+import { register } from "@/api/auth.api";
+import { registerSchema } from "@/validation/auth.validation";
 
-export default function LoginForm() {
+export default function RegisterForm() {
   const router = useRouter();
-  const { setUser } = useAuth();
 
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const form = useForm({
     defaultValues: {
+      name: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
 
     validators: {
-      onSubmit: loginSchema,
+      onSubmit: registerSchema,
     },
 
     onSubmit: async ({ value }) => {
       setErrorMessage("");
+      setSuccessMessage("");
 
       try {
-        const response = await login({
+        await register({
+          name: value.name.trim(),
           email: value.email.trim(),
           password: value.password,
         });
 
-        setUser(response.data.user);
+        setSuccessMessage(
+          "Account created successfully. Redirecting to email verification...",
+        );
 
-        router.push(getRoleHome(response.data.user.role));
+        setTimeout(() => {
+          router.push(
+            `/verify-email?email=${encodeURIComponent(value.email.trim())}`,
+          );
+        }, 1200);
       } catch (error) {
-        console.error("Login failed:", error);
+        console.error("Registration failed:", error);
 
         setErrorMessage(
-          "Invalid email or password. Please check your credentials and try again.",
+          "Registration failed. Please check your information and try again.",
         );
       }
     },
   });
-
-  const handleDemoLogin = async (role: "CUSTOMER" | "COURIER") => {
-    setErrorMessage("");
-
-    try {
-      const response = await demoLogin(role);
-
-      setUser(response.data.user);
-
-      router.push(getRoleHome(response.data.user.role));
-    } catch (error) {
-      console.error("Demo login failed:", error);
-
-      setErrorMessage(
-        "Demo login failed. Please make sure the backend is running.",
-      );
-    }
-  };
 
   return (
     <div className="space-y-6">
@@ -86,6 +77,39 @@ export default function LoginForm() {
             {errorMessage}
           </div>
         )}
+
+        {successMessage && (
+          <output className="block rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-600">
+            {successMessage}
+          </output>
+        )}
+
+        <form.Field name="name">
+          {(field) => (
+            <div className="space-y-2">
+              <label htmlFor={field.name} className="text-sm font-medium">
+                Name
+              </label>
+
+              <input
+                id={field.name}
+                name={field.name}
+                type="text"
+                autoComplete="name"
+                value={field.state.value}
+                onChange={(event) => field.handleChange(event.target.value)}
+                placeholder="Your name"
+                className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+              />
+
+              {field.state.meta.errors.map((error) => (
+                <p key={error?.toString()} className="text-sm text-red-600">
+                  {error?.toString()}
+                </p>
+              ))}
+            </div>
+          )}
+        </form.Field>
 
         <form.Field name="email">
           {(field) => (
@@ -126,10 +150,10 @@ export default function LoginForm() {
                   id={field.name}
                   name={field.name}
                   type={showPassword ? "text" : "password"}
-                  autoComplete="current-password"
+                  autoComplete="new-password"
                   value={field.state.value}
                   onChange={(event) => field.handleChange(event.target.value)}
-                  placeholder="Enter your password"
+                  placeholder="Enter a strong password"
                   className="w-full rounded-lg border border-input bg-background px-3 py-2 pr-10 text-sm outline-none focus:ring-2 focus:ring-ring"
                 />
 
@@ -140,6 +164,52 @@ export default function LoginForm() {
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
                 >
                   {showPassword ? (
+                    <EyeOff className="size-4" />
+                  ) : (
+                    <Eye className="size-4" />
+                  )}
+                </button>
+              </div>
+
+              {field.state.meta.errors.map((error) => (
+                <p key={error?.toString()} className="text-sm text-red-600">
+                  {error?.toString()}
+                </p>
+              ))}
+            </div>
+          )}
+        </form.Field>
+
+        <form.Field name="confirmPassword">
+          {(field) => (
+            <div className="space-y-2">
+              <label htmlFor={field.name} className="text-sm font-medium">
+                Confirm Password
+              </label>
+
+              <div className="relative">
+                <input
+                  id={field.name}
+                  name={field.name}
+                  type={showConfirmPassword ? "text" : "password"}
+                  autoComplete="new-password"
+                  value={field.state.value}
+                  onChange={(event) => field.handleChange(event.target.value)}
+                  placeholder="Confirm your password"
+                  className="w-full rounded-lg border border-input bg-background px-3 py-2 pr-10 text-sm outline-none focus:ring-2 focus:ring-ring"
+                />
+
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword((current) => !current)}
+                  aria-label={
+                    showConfirmPassword
+                      ? "Hide confirm password"
+                      : "Show confirm password"
+                  }
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  {showConfirmPassword ? (
                     <EyeOff className="size-4" />
                   ) : (
                     <Eye className="size-4" />
@@ -168,55 +238,23 @@ export default function LoginForm() {
               {isSubmitting ? (
                 <>
                   <span className="loading loading-ring loading-sm" />
-                  Signing in...
+                  Creating account...
                 </>
               ) : (
-                "Sign in"
+                "Create account"
               )}
             </button>
           )}
         </form.Subscribe>
       </form>
 
-      <div className="space-y-3">
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t border-border" />
-          </div>
-
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">
-              Demo login
-            </span>
-          </div>
-        </div>
-
-        <div className="grid gap-3 sm:grid-cols-2">
-          <button
-            type="button"
-            onClick={() => handleDemoLogin("CUSTOMER")}
-            className="rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-muted"
-          >
-            Demo Customer
-          </button>
-
-          <button
-            type="button"
-            onClick={() => handleDemoLogin("COURIER")}
-            className="rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-muted"
-          >
-            Demo Courier
-          </button>
-        </div>
-      </div>
-
       <p className="text-center text-sm text-muted-foreground">
-        Don&apos;t have an account?{" "}
+        Already have an account?{" "}
         <Link
-          href="/register"
+          href="/login"
           className="font-medium text-primary hover:underline"
         >
-          Create an account
+          Sign in
         </Link>
       </p>
     </div>

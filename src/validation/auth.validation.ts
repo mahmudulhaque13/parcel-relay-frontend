@@ -16,11 +16,27 @@ export const loginSchema = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
-export const registerSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
-  password: strongPasswordSchema,
+export const registerSchema = z
+  .object({
+    name: z.string().trim().min(2, "Name must be at least 2 characters"),
+
+    email: z.string().trim().email("Invalid email address"),
+
+    password: strongPasswordSchema,
+
+    confirmPassword: z.string().min(1, "Please confirm your password"),
+  })
+  .refine((values) => values.password === values.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
+export const verifyEmailSchema = z.object({
+  email: z.string().trim().email("Invalid email address"),
+  otp: z.string().regex(/^\d{6}$/, "OTP must be 6 digits"),
 });
+
+export type VerifyEmailFormValues = z.infer<typeof verifyEmailSchema>;
 
 export type LoginFormValues = z.infer<typeof loginSchema>;
 export type RegisterFormValues = z.infer<typeof registerSchema>;
