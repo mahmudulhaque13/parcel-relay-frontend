@@ -46,3 +46,20 @@ export async function getPaymentStatus(
 ): Promise<ApiResponse<PaymentStatus>> {
   return apiClient<ApiResponse<PaymentStatus>>(`/payments/${shipmentId}`);
 }
+
+export interface PaymentSuccessResponse {
+  sessionId: string;
+  paymentStatus: string;
+  status: string;
+}
+
+export async function getPaymentSuccess(
+  sessionId: string,
+): Promise<ApiResponse<PaymentSuccessResponse>> {
+  return apiClient<ApiResponse<PaymentSuccessResponse>>(
+    `/payments/success?session_id=${encodeURIComponent(sessionId)}`,
+    {
+      method: "GET",
+    },
+  );
+}

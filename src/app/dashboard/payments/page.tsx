@@ -1,15 +1,19 @@
 "use client";
 
-import { CreditCard, Eye, Receipt } from "lucide-react";
+import { CreditCard, Eye, Loader2, Receipt } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
+import { initiatePayment } from "@/api/payment.api";
 import { useMyShipments } from "@/hooks/use-my-shipments";
 import { usePaymentStatus } from "@/hooks/use-payment-status";
 import { getShipmentStatusLabel } from "@/lib/shipment-status";
 
 function PaymentDetails({ shipmentId }: { shipmentId: string }) {
   const { data, isLoading, isError } = usePaymentStatus(shipmentId);
+
+  const [isPaying, setIsPaying] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
 
   if (isLoading) {
     return (
@@ -34,11 +38,40 @@ function PaymentDetails({ shipmentId }: { shipmentId: string }) {
 
   const paymentData = data.data;
 
+  const canPay =
+    paymentData.shipment.paymentStatus !== "PAID" &&
+    paymentData.shipment.status === "PENDING_PAYMENT";
+
+  const handlePayment = async () => {
+    if (isPaying) return;
+
+    setPaymentError(null);
+    setIsPaying(true);
+
+    try {
+      const response = await initiatePayment({
+        shipmentId,
+      });
+
+      const paymentUrl = response.data.paymentUrl;
+
+      if (!paymentUrl) {
+        throw new Error("Stripe payment URL was not returned.");
+      }
+
+      window.location.href = paymentUrl;
+    } catch {
+      setPaymentError("Unable to start the payment. Please try again.");
+      setIsPaying(false);
+    }
+  };
+
   return (
     <div className="mt-4 space-y-4 rounded-lg border bg-muted/20 p-4">
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <p className="text-xs text-muted-foreground">Payment Status</p>
+
           <p className="mt-1 font-medium">
             {paymentData.shipment.paymentStatus}
           </p>
@@ -46,11 +79,52 @@ function PaymentDetails({ shipmentId }: { shipmentId: string }) {
 
         <div>
           <p className="text-xs text-muted-foreground">Delivery Charge</p>
+
           <p className="mt-1 font-medium">
             ৳{paymentData.shipment.deliveryCharge}
           </p>
         </div>
       </div>
+
+      {canPay && (
+        <div className="rounded-lg border bg-background p-4">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="font-medium">Payment Required</p>
+
+              <p className="mt-1 text-sm text-muted-foreground">
+                Complete your Stripe payment to continue processing this
+                shipment.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={handlePayment}
+              disabled={isPaying}
+              className="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {isPaying ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                  Redirecting...
+                </>
+              ) : (
+                <>
+                  <CreditCard className="size-4" />
+                  Pay Now
+                </>
+              )}
+            </button>
+          </div>
+
+          {paymentError && (
+            <p role="alert" className="mt-3 text-sm text-destructive">
+              {paymentError}
+            </p>
+          )}
+        </div>
+      )}
 
       {paymentData.payments.length === 0 ? (
         <div className="rounded-md border border-dashed p-4 text-center text-sm text-muted-foreground">
@@ -60,6 +134,7 @@ function PaymentDetails({ shipmentId }: { shipmentId: string }) {
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <Receipt className="h-4 w-4" />
+
             <h3 className="font-medium">Payment Transactions</h3>
           </div>
 
@@ -73,6 +148,7 @@ function PaymentDetails({ shipmentId }: { shipmentId: string }) {
                   <p className="text-xs text-muted-foreground">
                     Transaction ID
                   </p>
+
                   <p className="mt-1 break-all font-medium">
                     {payment.transactionId}
                   </p>
@@ -80,21 +156,25 @@ function PaymentDetails({ shipmentId }: { shipmentId: string }) {
 
                 <div>
                   <p className="text-xs text-muted-foreground">Amount</p>
+
                   <p className="mt-1 font-medium">৳{payment.amount}</p>
                 </div>
 
                 <div>
                   <p className="text-xs text-muted-foreground">Method</p>
+
                   <p className="mt-1 font-medium">{payment.method}</p>
                 </div>
 
                 <div>
                   <p className="text-xs text-muted-foreground">Status</p>
+
                   <p className="mt-1 font-medium">{payment.status}</p>
                 </div>
 
                 <div>
                   <p className="text-xs text-muted-foreground">Created</p>
+
                   <p className="mt-1">
                     {new Date(payment.createdAt).toLocaleString()}
                   </p>
@@ -102,6 +182,7 @@ function PaymentDetails({ shipmentId }: { shipmentId: string }) {
 
                 <div>
                   <p className="text-xs text-muted-foreground">Paid At</p>
+
                   <p className="mt-1">
                     {payment.paidAt
                       ? new Date(payment.paidAt).toLocaleString()
@@ -136,6 +217,7 @@ export default function PaymentsPage() {
       <main className="min-h-screen p-6">
         <div className="mx-auto max-w-7xl space-y-6">
           <div className="h-9 w-48 animate-pulse rounded-md bg-muted" />
+
           <div className="h-5 w-96 animate-pulse rounded-md bg-muted" />
 
           <div className="space-y-4">
