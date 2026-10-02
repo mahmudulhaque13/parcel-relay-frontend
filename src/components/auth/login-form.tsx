@@ -51,7 +51,7 @@ export default function LoginForm() {
     },
   });
 
-  const handleDemoLogin = async (role: "CUSTOMER" | "COURIER") => {
+  const handleDemoLogin = async (role: "CUSTOMER" | "COURIER" | "ADMIN") => {
     setErrorMessage("");
 
     try {
@@ -210,7 +210,7 @@ export default function LoginForm() {
           </div>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid gap-3 sm:grid-cols-3">
           <button
             type="button"
             onClick={() => handleDemoLogin("CUSTOMER")}
@@ -225,6 +225,14 @@ export default function LoginForm() {
             className="rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-muted"
           >
             Demo Courier
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleDemoLogin("ADMIN")}
+            className="rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-muted"
+          >
+            Demo Admin
           </button>
         </div>
       </div>

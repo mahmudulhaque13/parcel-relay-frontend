@@ -54,23 +54,19 @@ export async function login(
 }
 
 export async function demoLogin(
-  role: "CUSTOMER" | "COURIER",
+  role: "CUSTOMER" | "COURIER" | "ADMIN",
 ): Promise<ApiResponse<LoginResponse>> {
-  const email =
-    role === "CUSTOMER"
-      ? process.env.NEXT_PUBLIC_DEMO_CUSTOMER_EMAIL
-      : process.env.NEXT_PUBLIC_DEMO_COURIER_EMAIL;
+  const response = await apiClient<ApiResponse<LoginResponse>>(
+    "/auth/demo-login",
+    {
+      method: "POST",
+      body: { role },
+    },
+  );
 
-  const password = process.env.NEXT_PUBLIC_DEMO_PASSWORD;
+  setAccessToken(response.data.accessToken);
 
-  if (!email || !password) {
-    throw new Error("Demo credentials are not configured");
-  }
-
-  return login({
-    email,
-    password,
-  });
+  return response;
 }
 
 export async function getMe(): Promise<ApiResponse<AuthUser>> {
