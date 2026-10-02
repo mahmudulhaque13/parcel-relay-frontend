@@ -40,6 +40,46 @@ export async function verifyEmail(
   });
 }
 
+export interface ForgotPasswordPayload {
+  email: string;
+}
+
+export interface ForgotPasswordResponse {
+  email: string;
+}
+
+export async function forgotPassword(
+  payload: ForgotPasswordPayload,
+): Promise<ApiResponse<ForgotPasswordResponse>> {
+  return apiClient<ApiResponse<ForgotPasswordResponse>>(
+    "/auth/forgot-password",
+    {
+      method: "POST",
+      body: payload,
+    },
+  );
+}
+
+export interface ResetPasswordPayload {
+  email: string;
+  otp: string;
+  newPassword: string;
+}
+
+export interface ResetPasswordResponse {
+  email: string;
+  message: string;
+}
+
+export async function resetPassword(
+  payload: ResetPasswordPayload,
+): Promise<ApiResponse<ResetPasswordResponse>> {
+  return apiClient<ApiResponse<ResetPasswordResponse>>("/auth/reset-password", {
+    method: "POST",
+    body: payload,
+  });
+}
+
 export async function login(
   payload: LoginPayload,
 ): Promise<ApiResponse<LoginResponse>> {

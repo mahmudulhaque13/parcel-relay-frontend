@@ -157,6 +157,15 @@ export default function LoginForm() {
           )}
         </form.Field>
 
+        <div className="flex justify-end">
+          <Link
+            href="/forgot-password"
+            className="text-sm font-medium text-primary hover:underline"
+          >
+            Forgot password?
+          </Link>
+        </div>
+
         <form.Subscribe
           selector={(state) => [state.canSubmit, state.isSubmitting]}
         >

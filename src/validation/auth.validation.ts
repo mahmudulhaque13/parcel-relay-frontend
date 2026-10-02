@@ -40,3 +40,13 @@ export type VerifyEmailFormValues = z.infer<typeof verifyEmailSchema>;
 
 export type LoginFormValues = z.infer<typeof loginSchema>;
 export type RegisterFormValues = z.infer<typeof registerSchema>;
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().email("Invalid email address"),
+});
+
+export const resetPasswordSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  otp: z.string().regex(/^\d{6}$/, "OTP must be 6 digits"),
+  newPassword: strongPasswordSchema,
+});
