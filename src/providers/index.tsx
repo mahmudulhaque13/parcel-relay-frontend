@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { Toaster } from "sonner";
 
 import AuthProvider from "./auth.provider";
 import GoogleAuthProvider from "./google-auth.provider";
@@ -10,7 +11,10 @@ export default function Providers({ children }: { children: ReactNode }) {
   return (
     <GoogleAuthProvider>
       <QueryProvider>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          {children}
+          <Toaster richColors position="top-right" />
+        </AuthProvider>
       </QueryProvider>
     </GoogleAuthProvider>
   );

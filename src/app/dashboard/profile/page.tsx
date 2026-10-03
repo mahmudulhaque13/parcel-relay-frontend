@@ -1,15 +1,10 @@
 "use client";
 
 import { useForm } from "@tanstack/react-form";
-import {
-  CheckCircle2,
-  Image as ImageIcon,
-  Mail,
-  Save,
-  User,
-} from "lucide-react";
+import { Image as ImageIcon, Mail, Save, User } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
+import { toast } from "sonner";
 
 import { useMyProfile } from "@/hooks/use-my-profile";
 import { useUpdateMyProfile } from "@/hooks/use-update-my-profile";
@@ -19,8 +14,6 @@ import {
 } from "@/validation/profile.validation";
 
 export default function CustomerProfilePage() {
-  const [successMessage, setSuccessMessage] = useState("");
-
   const profileQuery = useMyProfile();
   const updateProfileMutation = useUpdateMyProfile();
 
@@ -42,18 +35,21 @@ export default function CustomerProfilePage() {
     },
 
     onSubmit: async ({ value }) => {
-      setSuccessMessage("");
-
       const payload = {
         name: value.name.trim(),
         ...(value.imageUrl.trim() ? { imageUrl: value.imageUrl.trim() } : {}),
       };
 
-      await updateProfileMutation.mutateAsync(payload);
+      try {
+        await updateProfileMutation.mutateAsync(payload);
 
-      setSuccessMessage("Profile updated successfully.");
+        toast.success("Profile updated successfully.");
 
-      await profileQuery.refetch();
+        await profileQuery.refetch();
+      } catch (error) {
+        console.error("Profile update failed:", error);
+        toast.error("Failed to update your profile. Please try again.");
+      }
     },
   });
 
@@ -306,22 +302,6 @@ export default function CustomerProfilePage() {
               );
             }}
           </form.Field>
-
-          {/* Success Message */}
-          {successMessage && (
-            <output className="flex items-center gap-2 rounded-md border border-green-500/20 bg-green-500/10 px-4 py-3 text-sm text-green-700 dark:text-green-400">
-              <CheckCircle2 className="h-4 w-4 shrink-0" />
-              <span>{successMessage}</span>
-            </output>
-          )}
-
-          {/* Update Error */}
-          {updateProfileMutation.isError && (
-            <div className="rounded-md border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive">
-              Failed to update your profile. Please check your information and
-              try again.
-            </div>
-          )}
 
           {/* Submit */}
           <div className="flex justify-end border-t pt-5">

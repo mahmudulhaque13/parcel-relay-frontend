@@ -15,6 +15,7 @@ import {
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 
 import type {
   AdminUser,
@@ -94,8 +95,6 @@ export default function AdminManagePage() {
     useState<AdminUserStatus>("ACTIVE");
 
   const [phone, setPhone] = useState("");
-  const [actionError, setActionError] = useState("");
-  const [actionSuccess, setActionSuccess] = useState("");
 
   const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
@@ -185,8 +184,7 @@ export default function AdminManagePage() {
     setSelectedUser(user);
     setSelectedRole(user.role);
     setPhone("");
-    setActionError("");
-    setActionSuccess("");
+
     setIsRoleModalOpen(true);
   }
 
@@ -194,8 +192,7 @@ export default function AdminManagePage() {
     setSelectedUser(user);
     setSelectedStatus(user.status);
     setConfirmDelete(false);
-    setActionError("");
-    setActionSuccess("");
+
     setIsStatusModalOpen(true);
   }
 
@@ -206,8 +203,7 @@ export default function AdminManagePage() {
 
     setSelectedUser(null);
     setPhone("");
-    setActionError("");
-    setActionSuccess("");
+
     setConfirmDelete(false);
     setIsRoleModalOpen(false);
     setIsStatusModalOpen(false);
@@ -218,16 +214,13 @@ export default function AdminManagePage() {
       return;
     }
 
-    setActionError("");
-    setActionSuccess("");
-
     if (selectedRole === selectedUser.role) {
-      setActionError("Please select a different role.");
+      toast.error("Please select a different role.");
       return;
     }
 
     if (selectedRole === "COURIER" && phone.trim().length < 7) {
-      setActionError("Phone number is required when changing role to COURIER.");
+      toast.error("Phone number is required when changing role to COURIER.");
       return;
     }
 
@@ -240,13 +233,13 @@ export default function AdminManagePage() {
         },
       });
 
-      setActionSuccess("User role updated successfully.");
+      toast.success("User role updated successfully.");
 
       setTimeout(() => {
         closeModals();
       }, 700);
     } catch (mutationError) {
-      setActionError(getErrorMessage(mutationError));
+      toast.error(getErrorMessage(mutationError));
     }
   }
 
@@ -255,16 +248,13 @@ export default function AdminManagePage() {
       return;
     }
 
-    setActionError("");
-    setActionSuccess("");
-
     if (selectedStatus === selectedUser.status) {
-      setActionError("Please select a different status.");
+      toast.error("Please select a different status.");
       return;
     }
 
     if (selectedStatus === "DELETED" && !confirmDelete) {
-      setActionError("Please confirm that you want to delete this user.");
+      toast.error("Please confirm that you want to delete this user.");
       return;
     }
 
@@ -276,13 +266,13 @@ export default function AdminManagePage() {
         },
       });
 
-      setActionSuccess("User status updated successfully.");
+      toast.success("User status updated successfully.");
 
       setTimeout(() => {
         closeModals();
       }, 700);
     } catch (mutationError) {
-      setActionError(getErrorMessage(mutationError));
+      toast.error(getErrorMessage(mutationError));
     }
   }
 
@@ -592,14 +582,6 @@ export default function AdminManagePage() {
               </div>
             )}
 
-            {actionError && (
-              <ActionMessage type="error" message={actionError} />
-            )}
-
-            {actionSuccess && (
-              <ActionMessage type="success" message={actionSuccess} />
-            )}
-
             <div className="flex justify-end gap-2">
               <button
                 type="button"
@@ -675,14 +657,6 @@ export default function AdminManagePage() {
                   I understand that this action will mark the user as deleted.
                 </span>
               </label>
-            )}
-
-            {actionError && (
-              <ActionMessage type="error" message={actionError} />
-            )}
-
-            {actionSuccess && (
-              <ActionMessage type="success" message={actionSuccess} />
             )}
 
             <div className="flex justify-end gap-2">
@@ -875,29 +849,6 @@ function Modal({
 
         <div className="p-5">{children}</div>
       </div>
-    </div>
-  );
-}
-
-function ActionMessage({
-  type,
-  message,
-}: {
-  type: "error" | "success";
-  message: string;
-}) {
-  if (type === "success") {
-    return (
-      <div className="flex items-center gap-2 rounded-md border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-700">
-        <CheckCircle2 className="size-4 shrink-0" />
-        {message}
-      </div>
-    );
-  }
-
-  return (
-    <div className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-      {message}
     </div>
   );
 }

@@ -2,6 +2,8 @@
 
 import { useForm } from "@tanstack/react-form";
 import { useState } from "react";
+import { toast } from "sonner";
+
 import { useCreateShipment } from "@/hooks/use-create-shipment";
 import { useInitiatePayment } from "@/hooks/use-initiate-payment";
 import { useShipmentQuote } from "@/hooks/use-shipment-quote";
@@ -15,6 +17,7 @@ import {
 
 export default function CreateShipmentForm() {
   const { data, isLoading, isError } = useZones();
+
   const shipmentQuote = useShipmentQuote();
   const createShipmentMutation = useCreateShipment();
   const initiatePaymentMutation = useInitiatePayment();
@@ -78,7 +81,15 @@ export default function CreateShipmentForm() {
     setCurrentStep(3);
   };
 
-  const handleGetQuote = async () => {
+  /**
+   * Calculates the delivery quote and returns whether the request succeeded.
+   *
+   * Returning a boolean is important here because React Query's
+   * `shipmentQuote.data` state may not update synchronously immediately after
+   * `mutateAsync()` resolves. The caller can therefore use this direct result
+   * instead of checking potentially stale hook state.
+   */
+  const handleGetQuote = async (): Promise<boolean> => {
     const packageValues = {
       weight: form.getFieldValue("weight"),
       codAmount: form.getFieldValue("codAmount"),
@@ -87,26 +98,36 @@ export default function CreateShipmentForm() {
     const packageResult = shipmentPackageSchema.safeParse(packageValues);
 
     if (!packageResult.success) {
-      return;
+      return false;
     }
 
     try {
-      await shipmentQuote.mutateAsync({
+      const response = await shipmentQuote.mutateAsync({
         originZoneId: form.getFieldValue("originZoneId"),
         destinationZoneId: form.getFieldValue("destinationZoneId"),
         weight: form.getFieldValue("weight"),
         codAmount: form.getFieldValue("codAmount"),
       });
-    } catch {
-      // Quote error is already available through mutation state.
+
+      return response.success;
+    } catch (error) {
+      console.error("Quote calculation failed:", error);
+
+      toast.error("Failed to calculate delivery charge. Please try again.");
+
+      return false;
     }
   };
 
   const handleStepThreeNext = async () => {
+    /**
+     * Usually this button is visible only after a quote already exists.
+     * This fallback keeps the workflow safe if the quote is ever missing.
+     */
     if (!shipmentQuote.data?.success) {
-      await handleGetQuote();
+      const quoteSucceeded = await handleGetQuote();
 
-      if (!shipmentQuote.data?.success) {
+      if (!quoteSucceeded) {
         return;
       }
     }
@@ -128,8 +149,17 @@ export default function CreateShipmentForm() {
       return;
     }
 
+    /**
+     * Shipment creation and payment initiation are kept in separate try/catch
+     * blocks. This lets us tell the user exactly which operation failed.
+     *
+     * It also prevents payment initiation from running when shipment creation
+     * itself fails.
+     */
+    let shipmentResponse;
+
     try {
-      const shipmentResponse = await createShipmentMutation.mutateAsync({
+      shipmentResponse = await createShipmentMutation.mutateAsync({
         originZoneId: form.getFieldValue("originZoneId"),
         destinationZoneId: form.getFieldValue("destinationZoneId"),
         recipientName: form.getFieldValue("recipientName"),
@@ -139,14 +169,26 @@ export default function CreateShipmentForm() {
         weight: form.getFieldValue("weight"),
         codAmount: form.getFieldValue("codAmount"),
       });
+    } catch (error) {
+      console.error("Shipment creation failed:", error);
 
+      toast.error("Failed to create shipment. Please try again.");
+
+      return;
+    }
+
+    try {
       const paymentResponse = await initiatePaymentMutation.mutateAsync({
         shipmentId: shipmentResponse.data.id,
       });
 
+      toast.success("Shipment created. Redirecting to payment...");
+
       window.location.href = paymentResponse.data.paymentUrl;
     } catch (error) {
-      console.error("Shipment payment flow failed:", error);
+      console.error("Payment initiation failed:", error);
+
+      toast.error("Failed to start payment. Please try again.");
     }
   };
 
@@ -208,6 +250,7 @@ export default function CreateShipmentForm() {
         <div className="space-y-6 rounded-xl border p-6">
           <div>
             <h2 className="text-xl font-semibold">Delivery Zones</h2>
+
             <p className="mt-1 text-sm text-muted-foreground">
               Select the origin and destination zones.
             </p>
@@ -280,6 +323,7 @@ export default function CreateShipmentForm() {
         <div className="space-y-6 rounded-xl border p-6">
           <div>
             <h2 className="text-xl font-semibold">Package Details</h2>
+
             <p className="mt-1 text-sm text-muted-foreground">
               Enter the package weight and cash-on-delivery amount.
             </p>
@@ -356,6 +400,7 @@ export default function CreateShipmentForm() {
         <div className="space-y-6 rounded-xl border p-6">
           <div>
             <h2 className="text-xl font-semibold">Quote & Review</h2>
+
             <p className="mt-1 text-sm text-muted-foreground">
               Review your shipment details and calculate the delivery charge.
             </p>
@@ -364,6 +409,7 @@ export default function CreateShipmentForm() {
           <div className="grid gap-4 rounded-lg bg-muted/40 p-4 sm:grid-cols-2">
             <div>
               <p className="text-sm text-muted-foreground">Origin</p>
+
               <p className="font-medium">
                 {selectedOrigin?.name} ({selectedOrigin?.code})
               </p>
@@ -371,6 +417,7 @@ export default function CreateShipmentForm() {
 
             <div>
               <p className="text-sm text-muted-foreground">Destination</p>
+
               <p className="font-medium">
                 {selectedDestination?.name} ({selectedDestination?.code})
               </p>
@@ -378,22 +425,16 @@ export default function CreateShipmentForm() {
 
             <div>
               <p className="text-sm text-muted-foreground">Weight</p>
+
               <p className="font-medium">{form.getFieldValue("weight")} kg</p>
             </div>
 
             <div>
               <p className="text-sm text-muted-foreground">COD Amount</p>
+
               <p className="font-medium">৳{form.getFieldValue("codAmount")}</p>
             </div>
           </div>
-
-          {shipmentQuote.isError && (
-            <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-4">
-              <p className="text-sm text-destructive">
-                Failed to calculate delivery charge. Please try again.
-              </p>
-            </div>
-          )}
 
           {shipmentQuote.data?.success && (
             <div className="space-y-3 rounded-lg border p-4">
@@ -417,6 +458,7 @@ export default function CreateShipmentForm() {
               <div className="border-t pt-3">
                 <div className="flex justify-between font-semibold">
                   <span>Total Delivery Charge</span>
+
                   <span>৳{shipmentQuote.data.data.pricing.deliveryCharge}</span>
                 </div>
               </div>
@@ -608,22 +650,6 @@ export default function CreateShipmentForm() {
             >
               Back
             </button>
-
-            {createShipmentMutation.isError && (
-              <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-4">
-                <p className="text-sm text-destructive">
-                  Failed to create shipment. Please try again.
-                </p>
-              </div>
-            )}
-
-            {initiatePaymentMutation.isError && (
-              <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-4">
-                <p className="text-sm text-destructive">
-                  Failed to start payment. Please try again.
-                </p>
-              </div>
-            )}
 
             <button
               type="button"
