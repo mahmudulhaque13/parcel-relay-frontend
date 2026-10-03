@@ -5,16 +5,32 @@ import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 import { register } from "@/api/auth.api";
 import GoogleLoginComponent from "@/components/modules/google-login/GoogleLogin";
 import { registerSchema } from "@/validation/auth.validation";
 
+function getFieldErrorMessage(error: unknown): string {
+  if (typeof error === "string") {
+    return error;
+  }
+
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "message" in error &&
+    typeof error.message === "string"
+  ) {
+    return error.message;
+  }
+
+  return "Invalid value";
+}
+
 export default function RegisterForm() {
   const router = useRouter();
 
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -31,9 +47,6 @@ export default function RegisterForm() {
     },
 
     onSubmit: async ({ value }) => {
-      setErrorMessage("");
-      setSuccessMessage("");
-
       try {
         await register({
           name: value.name.trim(),
@@ -41,7 +54,7 @@ export default function RegisterForm() {
           password: value.password,
         });
 
-        setSuccessMessage(
+        toast.success(
           "Account created successfully. Redirecting to email verification...",
         );
 
@@ -53,7 +66,7 @@ export default function RegisterForm() {
       } catch (error) {
         console.error("Registration failed:", error);
 
-        setErrorMessage(
+        toast.error(
           "Registration failed. Please check your information and try again.",
         );
       }
@@ -70,21 +83,6 @@ export default function RegisterForm() {
         }}
         className="space-y-5"
       >
-        {errorMessage && (
-          <div
-            role="alert"
-            className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600"
-          >
-            {errorMessage}
-          </div>
-        )}
-
-        {successMessage && (
-          <output className="block rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-600">
-            {successMessage}
-          </output>
-        )}
-
         <form.Field name="name">
           {(field) => (
             <div className="space-y-2">
@@ -103,9 +101,12 @@ export default function RegisterForm() {
                 className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
               />
 
-              {field.state.meta.errors.map((error) => (
-                <p key={error?.toString()} className="text-sm text-red-600">
-                  {error?.toString()}
+              {field.state.meta.errors.map((error, index) => (
+                <p
+                  key={`${field.name}-error-${index}`}
+                  className="text-sm text-red-600"
+                >
+                  {getFieldErrorMessage(error)}
                 </p>
               ))}
             </div>
@@ -130,9 +131,12 @@ export default function RegisterForm() {
                 className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
               />
 
-              {field.state.meta.errors.map((error) => (
-                <p key={error?.toString()} className="text-sm text-red-600">
-                  {error?.toString()}
+              {field.state.meta.errors.map((error, index) => (
+                <p
+                  key={`${field.name}-error-${index}`}
+                  className="text-sm text-red-600"
+                >
+                  {getFieldErrorMessage(error)}
                 </p>
               ))}
             </div>
@@ -172,9 +176,12 @@ export default function RegisterForm() {
                 </button>
               </div>
 
-              {field.state.meta.errors.map((error) => (
-                <p key={error?.toString()} className="text-sm text-red-600">
-                  {error?.toString()}
+              {field.state.meta.errors.map((error, index) => (
+                <p
+                  key={`${field.name}-error-${index}`}
+                  className="text-sm text-red-600"
+                >
+                  {getFieldErrorMessage(error)}
                 </p>
               ))}
             </div>
@@ -218,9 +225,12 @@ export default function RegisterForm() {
                 </button>
               </div>
 
-              {field.state.meta.errors.map((error) => (
-                <p key={error?.toString()} className="text-sm text-red-600">
-                  {error?.toString()}
+              {field.state.meta.errors.map((error, index) => (
+                <p
+                  key={`${field.name}-error-${index}`}
+                  className="text-sm text-red-600"
+                >
+                  {getFieldErrorMessage(error)}
                 </p>
               ))}
             </div>
