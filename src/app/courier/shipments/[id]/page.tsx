@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowLeft, MapPin, Package, User } from "lucide-react";
+import { toast } from "sonner";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -19,8 +20,6 @@ export default function CourierShipmentDetailsPage() {
   const shipmentId = params.id;
 
   const [selectedStatus, setSelectedStatus] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
 
   const {
     data: shipmentResponse,
@@ -65,15 +64,15 @@ export default function CourierShipmentDetailsPage() {
   const shipment = shipmentResponse.data;
 
   const handleStatusUpdate = async () => {
-    if (!selectedStatus) return;
-
-    setSuccessMessage("");
-    setErrorMessage("");
+    if (!selectedStatus) {
+      toast.error("Please select a new shipment status.");
+      return;
+    }
 
     try {
       await updateStatusMutation.mutateAsync(selectedStatus);
 
-      setSuccessMessage(
+      toast.success(
         `Shipment status updated to ${getCourierShipmentStatusLabel(
           selectedStatus,
         )}.`,
@@ -81,7 +80,9 @@ export default function CourierShipmentDetailsPage() {
 
       setSelectedStatus("");
     } catch (error) {
-      setErrorMessage(
+      console.error("Shipment status update failed:", error);
+
+      toast.error(
         error instanceof Error
           ? error.message
           : "Unable to update shipment status.",
@@ -125,6 +126,7 @@ export default function CourierShipmentDetailsPage() {
           <select
             value={selectedStatus}
             onChange={(event) => setSelectedStatus(event.target.value)}
+            disabled={updateStatusMutation.isPending}
             className="h-10 rounded-md border bg-background px-3 text-sm sm:flex-1"
           >
             <option value="">Select new status</option>
@@ -147,14 +149,6 @@ export default function CourierShipmentDetailsPage() {
             {updateStatusMutation.isPending ? "Updating..." : "Update Status"}
           </button>
         </div>
-
-        {successMessage && (
-          <p className="mt-3 text-sm text-green-600">{successMessage}</p>
-        )}
-
-        {errorMessage && (
-          <p className="mt-3 text-sm text-destructive">{errorMessage}</p>
-        )}
       </section>
 
       {/* Shipment Summary */}
