@@ -5,6 +5,7 @@ import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 import { demoLogin, login } from "@/api/auth.api";
 import GoogleLoginComponent from "@/components/modules/google-login/GoogleLogin";
@@ -16,7 +17,6 @@ export default function LoginForm() {
   const router = useRouter();
   const { setUser } = useAuth();
 
-  const [errorMessage, setErrorMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm({
@@ -30,8 +30,6 @@ export default function LoginForm() {
     },
 
     onSubmit: async ({ value }) => {
-      setErrorMessage("");
-
       try {
         const response = await login({
           email: value.email.trim(),
@@ -44,7 +42,7 @@ export default function LoginForm() {
       } catch (error) {
         console.error("Login failed:", error);
 
-        setErrorMessage(
+        toast.error(
           "Invalid email or password. Please check your credentials and try again.",
         );
       }
@@ -52,8 +50,6 @@ export default function LoginForm() {
   });
 
   const handleDemoLogin = async (role: "CUSTOMER" | "COURIER" | "ADMIN") => {
-    setErrorMessage("");
-
     try {
       const response = await demoLogin(role);
 
@@ -63,7 +59,7 @@ export default function LoginForm() {
     } catch (error) {
       console.error("Demo login failed:", error);
 
-      setErrorMessage(
+      toast.error(
         "Demo login failed. Please make sure the backend is running.",
       );
     }
@@ -79,15 +75,6 @@ export default function LoginForm() {
         }}
         className="space-y-5"
       >
-        {errorMessage && (
-          <div
-            role="alert"
-            className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600"
-          >
-            {errorMessage}
-          </div>
-        )}
-
         <form.Field name="email">
           {(field) => (
             <div className="space-y-2">
