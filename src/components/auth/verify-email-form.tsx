@@ -3,19 +3,33 @@
 import { useForm } from "@tanstack/react-form";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { toast } from "sonner";
 
 import { verifyEmail } from "@/api/auth.api";
 import { verifyEmailSchema } from "@/validation/auth.validation";
+
+function getFieldErrorMessage(error: unknown): string {
+  if (typeof error === "string") {
+    return error;
+  }
+
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "message" in error &&
+    typeof error.message === "string"
+  ) {
+    return error.message;
+  }
+
+  return "Invalid value";
+}
 
 export default function VerifyEmailForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const email = searchParams.get("email") ?? "";
-
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
 
   const form = useForm({
     defaultValues: {
@@ -28,18 +42,13 @@ export default function VerifyEmailForm() {
     },
 
     onSubmit: async ({ value }) => {
-      setErrorMessage("");
-      setSuccessMessage("");
-
       try {
         await verifyEmail({
           email: value.email.trim(),
           otp: value.otp,
         });
 
-        setSuccessMessage(
-          "Email verified successfully. Redirecting to login...",
-        );
+        toast.success("Email verified successfully. Redirecting to login...");
 
         setTimeout(() => {
           router.push("/login");
@@ -47,7 +56,7 @@ export default function VerifyEmailForm() {
       } catch (error) {
         console.error("Email verification failed:", error);
 
-        setErrorMessage(
+        toast.error(
           "Verification failed. Please check your email and OTP and try again.",
         );
       }
@@ -64,21 +73,6 @@ export default function VerifyEmailForm() {
         }}
         className="space-y-5"
       >
-        {errorMessage && (
-          <div
-            role="alert"
-            className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600"
-          >
-            {errorMessage}
-          </div>
-        )}
-
-        {successMessage && (
-          <output className="block rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-600">
-            {successMessage}
-          </output>
-        )}
-
         <form.Field name="email">
           {(field) => (
             <div className="space-y-2">
@@ -97,9 +91,12 @@ export default function VerifyEmailForm() {
                 className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
               />
 
-              {field.state.meta.errors.map((error) => (
-                <p key={error?.toString()} className="text-sm text-red-600">
-                  {error?.toString()}
+              {field.state.meta.errors.map((error, index) => (
+                <p
+                  key={`${field.name}-error-${index}`}
+                  className="text-sm text-red-600"
+                >
+                  {getFieldErrorMessage(error)}
                 </p>
               ))}
             </div>
@@ -130,9 +127,12 @@ export default function VerifyEmailForm() {
                 className="w-full rounded-lg border border-input bg-background px-3 py-2 text-center text-lg tracking-[0.4em] outline-none focus:ring-2 focus:ring-ring"
               />
 
-              {field.state.meta.errors.map((error) => (
-                <p key={error?.toString()} className="text-sm text-red-600">
-                  {error?.toString()}
+              {field.state.meta.errors.map((error, index) => (
+                <p
+                  key={`${field.name}-error-${index}`}
+                  className="text-sm text-red-600"
+                >
+                  {getFieldErrorMessage(error)}
                 </p>
               ))}
             </div>
