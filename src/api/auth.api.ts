@@ -161,3 +161,16 @@ export async function googleLogin(payload: {
 
   return response;
 }
+
+export async function changePassword(payload: {
+  currentPassword: string;
+  newPassword: string;
+}): Promise<ApiResponse<{ email: string; message: string }>> {
+  return apiClient<ApiResponse<{ email: string; message: string }>>(
+    "/auth/change-password",
+    {
+      method: "POST",
+      body: payload,
+    },
+  );
+}

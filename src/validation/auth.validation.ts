@@ -50,3 +50,16 @@ export const resetPasswordSchema = z.object({
   otp: z.string().regex(/^\d{6}$/, "OTP must be 6 digits"),
   newPassword: strongPasswordSchema,
 });
+
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1, "Current password is required"),
+
+    newPassword: strongPasswordSchema,
+
+    confirmPassword: z.string().min(1, "Please confirm your new password"),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "Passwords do not match",
+  });
