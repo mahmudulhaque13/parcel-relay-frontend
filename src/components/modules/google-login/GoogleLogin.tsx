@@ -3,6 +3,8 @@
 import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
+import { toast } from "sonner";
+
 import { useAuth } from "@/hooks/use-auth";
 import { useGoogleOAuth } from "@/hooks/use-google-auth";
 import { getRoleHome } from "@/routes/role-routes";
@@ -18,6 +20,7 @@ export default function GoogleLoginComponent() {
 
       if (!idToken) {
         console.error("Google login failed: ID token missing");
+        toast.error("Google login failed. Please try again.");
         return;
       }
 
@@ -31,6 +34,12 @@ export default function GoogleLoginComponent() {
 
           onError: (error) => {
             console.error("Google login failed:", error);
+
+            toast.error(
+              error instanceof Error
+                ? error.message
+                : "Google login failed. Please try again.",
+            );
           },
         },
       );
@@ -40,6 +49,7 @@ export default function GoogleLoginComponent() {
 
   const handleGoogleError = useCallback(() => {
     console.error("Google OAuth failed");
+    toast.error("Google authentication failed. Please try again.");
   }, []);
 
   return (

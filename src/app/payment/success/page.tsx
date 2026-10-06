@@ -4,6 +4,7 @@ import { CheckCircle2, Loader2, XCircle } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import { getPaymentSuccess } from "@/api/payment.api";
 
@@ -18,7 +19,10 @@ function PaymentSuccessContent() {
 
   useEffect(() => {
     if (!sessionId) {
-      setError("Stripe payment session was not found.");
+      const message = "Stripe payment session was not found.";
+
+      toast.error(message);
+      setError(message);
       setIsLoading(false);
       return;
     }
@@ -28,8 +32,13 @@ function PaymentSuccessContent() {
         const response = await getPaymentSuccess(sessionId);
 
         setPaymentStatus(response.data.paymentStatus);
-      } catch {
-        setError("We could not verify your payment with Stripe.");
+      } catch (error) {
+        console.error("Payment verification failed:", error);
+
+        const message = "We could not verify your payment with Stripe.";
+
+        toast.error(message);
+        setError(message);
       } finally {
         setIsLoading(false);
       }

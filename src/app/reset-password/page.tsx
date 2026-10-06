@@ -4,6 +4,7 @@ import { useForm } from "@tanstack/react-form";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { toast } from "sonner";
 
 import { resetPassword } from "@/api/auth.api";
 import { resetPasswordSchema } from "@/validation/auth.validation";
@@ -36,6 +37,13 @@ function ResetPasswordForm() {
         router.push("/login");
       } catch (error) {
         console.error("Password reset failed:", error);
+
+        const message =
+          error instanceof Error
+            ? error.message
+            : "Password reset failed. Please check your OTP and try again.";
+
+        toast.error(message);
 
         form.setFieldMeta("otp", (meta) => ({
           ...meta,

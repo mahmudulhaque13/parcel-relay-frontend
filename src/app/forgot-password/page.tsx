@@ -3,6 +3,7 @@
 import { useForm } from "@tanstack/react-form";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import { forgotPassword } from "@/api/auth.api";
 import { forgotPasswordSchema } from "@/validation/auth.validation";
@@ -25,11 +26,22 @@ export default function ForgotPasswordPage() {
           email: value.email.trim(),
         });
 
+        toast.success(
+          "If an account exists with this email, a password reset OTP has been sent.",
+        );
+
         router.push(
           `/reset-password?email=${encodeURIComponent(response.data.email)}`,
         );
       } catch (error) {
         console.error("Forgot password failed:", error);
+
+        const message =
+          error instanceof Error
+            ? error.message
+            : "Unable to process password reset request. Please try again.";
+
+        toast.error(message);
 
         form.setFieldMeta("email", (meta) => ({
           ...meta,

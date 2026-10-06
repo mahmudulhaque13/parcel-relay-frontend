@@ -1,14 +1,18 @@
 "use client";
 
-import { ArrowLeft, MapPin, Package, Truck } from "lucide-react";
+import { ArrowLeft, CreditCard, MapPin, Package, Truck } from "lucide-react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { toast } from "sonner";
+import { useParams, useRouter } from "next/navigation";
+
+import { useInitiatePayment } from "@/hooks/use-initiate-payment";
 import { useShipmentDetails } from "@/hooks/use-shipment-details";
 import { useShipmentTimeline } from "@/hooks/use-shipment-timeline";
 import { getShipmentStatusLabel } from "@/lib/shipment-status";
 
 export default function ShipmentDetailsPage() {
   const params = useParams<{ id: string }>();
+  const router = useRouter();
   const shipmentId = params.id;
 
   const {
@@ -19,6 +23,12 @@ export default function ShipmentDetailsPage() {
 
   const { data: timelineResponse, isLoading: isTimelineLoading } =
     useShipmentTimeline(shipmentId);
+
+  const {
+    mutate: initiatePayment,
+    isPending: isPaymentInitiating,
+    error: paymentError,
+  } = useInitiatePayment();
 
   if (isShipmentLoading) {
     return (
@@ -58,6 +68,38 @@ export default function ShipmentDetailsPage() {
   const shipment = shipmentResponse.data;
   const events = timelineResponse?.data.events ?? [];
 
+  const isPaid = shipment.paymentStatus === "PAID";
+
+  const handlePayment = () => {
+    initiatePayment(
+      {
+        shipmentId,
+      },
+      {
+        onSuccess: (response) => {
+          const paymentUrl = response.data.paymentUrl;
+
+          if (!paymentUrl) {
+            toast.error("Payment URL was not returned. Please try again.");
+            return;
+          }
+
+          window.location.href = paymentUrl;
+        },
+
+        onError: (error) => {
+          console.error("Payment initiation failed:", error);
+
+          toast.error(
+            error instanceof Error
+              ? error.message
+              : "Failed to start payment. Please try again.",
+          );
+        },
+      },
+    );
+  };
+
   return (
     <main className="min-h-screen p-6">
       <div className="mx-auto max-w-5xl space-y-6">
@@ -87,6 +129,7 @@ export default function ShipmentDetailsPage() {
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <div className="rounded-lg border p-4">
               <p className="text-sm text-muted-foreground">Payment</p>
+
               <p className="mt-1 font-semibold">
                 {getShipmentStatusLabel(shipment.paymentStatus)}
               </p>
@@ -94,19 +137,59 @@ export default function ShipmentDetailsPage() {
 
             <div className="rounded-lg border p-4">
               <p className="text-sm text-muted-foreground">Delivery Charge</p>
+
               <p className="mt-1 font-semibold">৳{shipment.deliveryCharge}</p>
             </div>
 
             <div className="rounded-lg border p-4">
               <p className="text-sm text-muted-foreground">Weight</p>
+
               <p className="mt-1 font-semibold">{shipment.weight} kg</p>
             </div>
 
             <div className="rounded-lg border p-4">
               <p className="text-sm text-muted-foreground">COD</p>
+
               <p className="mt-1 font-semibold">৳{shipment.codAmount}</p>
             </div>
           </div>
+
+          {!isPaid && (
+            <div className="mt-6 rounded-lg border bg-muted/30 p-4">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p className="font-semibold">Payment Required</p>
+
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Complete the payment to continue processing this shipment.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handlePayment}
+                  disabled={isPaymentInitiating}
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <CreditCard className="h-4 w-4" />
+
+                  {isPaymentInitiating ? "Redirecting..." : "Pay Now"}
+                </button>
+              </div>
+
+              {paymentError && (
+                <p role="alert" className="mt-3 text-sm text-destructive">
+                  Failed to start payment. Please try again.
+                </p>
+              )}
+            </div>
+          )}
+
+          {isPaid && (
+            <div className="mt-6 rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-700">
+              Payment completed successfully.
+            </div>
+          )}
         </section>
 
         <section className="grid gap-6 lg:grid-cols-2">
