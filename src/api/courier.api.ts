@@ -115,3 +115,66 @@ export async function getCourierShipmentDetails(
     `/courier/shipments/${shipmentId}`,
   );
 }
+
+export interface CourierApplicationPayload {
+  name: string;
+  email: string;
+  password: string;
+  phone: string;
+  identityDocument: File;
+  profilePhoto: File;
+}
+
+export interface CourierApplicationResponse {
+  id: string;
+  name: string;
+  email: string;
+  role: "COURIER";
+  status: string;
+  applicationStatus: "PENDING";
+}
+
+export async function applyAsCourier(
+  payload: CourierApplicationPayload,
+): Promise<ApiResponse<CourierApplicationResponse>> {
+  const formData = new FormData();
+
+  formData.append("name", payload.name);
+  formData.append("email", payload.email);
+  formData.append("password", payload.password);
+  formData.append("phone", payload.phone);
+  formData.append("identityDocument", payload.identityDocument);
+  formData.append("profilePhoto", payload.profilePhoto);
+
+  return apiClient<ApiResponse<CourierApplicationResponse>>("/courier/apply", {
+    method: "POST",
+    body: formData,
+  });
+}
+
+export interface VerifyCourierEmailPayload {
+  email: string;
+  otp: string;
+}
+
+export interface VerifyCourierEmailResponse {
+  id: string;
+  name: string;
+  email: string;
+  role: "COURIER";
+  status: string;
+  emailVerified: boolean;
+  applicationStatus: "PENDING";
+}
+
+export async function verifyCourierEmail(
+  payload: VerifyCourierEmailPayload,
+): Promise<ApiResponse<VerifyCourierEmailResponse>> {
+  return apiClient<ApiResponse<VerifyCourierEmailResponse>>(
+    "/courier/verify-email",
+    {
+      method: "POST",
+      body: payload,
+    },
+  );
+}
