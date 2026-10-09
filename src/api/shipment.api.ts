@@ -161,3 +161,11 @@ export async function getShipmentTimeline(
     `/shipments/${shipmentId}/timeline`,
   );
 }
+
+export async function cancelShipment(
+  shipmentId: string,
+): Promise<ApiResponse<Shipment>> {
+  return apiClient<ApiResponse<Shipment>>(`/shipments/${shipmentId}/cancel`, {
+    method: "PATCH",
+  });
+}

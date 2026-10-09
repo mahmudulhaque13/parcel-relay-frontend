@@ -1,18 +1,25 @@
 "use client";
 
-import { ArrowLeft, CreditCard, MapPin, Package, Truck } from "lucide-react";
+import {
+  ArrowLeft,
+  Ban,
+  CreditCard,
+  MapPin,
+  Package,
+  Truck,
+} from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
 import { useInitiatePayment } from "@/hooks/use-initiate-payment";
+import { useCancelShipment } from "@/hooks/use-cancel-shipment";
 import { useShipmentDetails } from "@/hooks/use-shipment-details";
 import { useShipmentTimeline } from "@/hooks/use-shipment-timeline";
 import { getShipmentStatusLabel } from "@/lib/shipment-status";
 
 export default function ShipmentDetailsPage() {
   const params = useParams<{ id: string }>();
-  const router = useRouter();
   const shipmentId = params.id;
 
   const {
@@ -29,6 +36,9 @@ export default function ShipmentDetailsPage() {
     isPending: isPaymentInitiating,
     error: paymentError,
   } = useInitiatePayment();
+
+  const { mutate: cancelShipmentMutation, isPending: isCancelling } =
+    useCancelShipment(shipmentId);
 
   if (isShipmentLoading) {
     return (
@@ -70,11 +80,13 @@ export default function ShipmentDetailsPage() {
 
   const isPaid = shipment.paymentStatus === "PAID";
 
+  const canCancelShipment =
+    ["PENDING_PAYMENT", "READY_FOR_ASSIGNMENT"].includes(shipment.status) &&
+    shipment.paymentStatus === "PENDING";
+
   const handlePayment = () => {
     initiatePayment(
-      {
-        shipmentId,
-      },
+      { shipmentId },
       {
         onSuccess: (response) => {
           const paymentUrl = response.data.paymentUrl;
@@ -86,7 +98,6 @@ export default function ShipmentDetailsPage() {
 
           window.location.href = paymentUrl;
         },
-
         onError: (error) => {
           console.error("Payment initiation failed:", error);
 
@@ -98,6 +109,29 @@ export default function ShipmentDetailsPage() {
         },
       },
     );
+  };
+
+  const handleCancelShipment = () => {
+    if (isCancelling) return;
+
+    const confirmed = window.confirm(
+      `Are you sure you want to cancel shipment ${shipment.trackingNumber}? This action cannot be undone.`,
+    );
+
+    if (!confirmed) return;
+
+    cancelShipmentMutation(undefined, {
+      onSuccess: () => {
+        toast.success("Shipment cancelled successfully.");
+      },
+      onError: (error) => {
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : "Failed to cancel shipment. Please try again.",
+        );
+      },
+    });
   };
 
   return (
@@ -129,7 +163,6 @@ export default function ShipmentDetailsPage() {
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <div className="rounded-lg border p-4">
               <p className="text-sm text-muted-foreground">Payment</p>
-
               <p className="mt-1 font-semibold">
                 {getShipmentStatusLabel(shipment.paymentStatus)}
               </p>
@@ -137,29 +170,25 @@ export default function ShipmentDetailsPage() {
 
             <div className="rounded-lg border p-4">
               <p className="text-sm text-muted-foreground">Delivery Charge</p>
-
               <p className="mt-1 font-semibold">৳{shipment.deliveryCharge}</p>
             </div>
 
             <div className="rounded-lg border p-4">
               <p className="text-sm text-muted-foreground">Weight</p>
-
               <p className="mt-1 font-semibold">{shipment.weight} kg</p>
             </div>
 
             <div className="rounded-lg border p-4">
               <p className="text-sm text-muted-foreground">COD</p>
-
               <p className="mt-1 font-semibold">৳{shipment.codAmount}</p>
             </div>
           </div>
 
-          {!isPaid && (
+          {!isPaid && shipment.status !== "CANCELLED" && (
             <div className="mt-6 rounded-lg border bg-muted/30 p-4">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="font-semibold">Payment Required</p>
-
                   <p className="mt-1 text-sm text-muted-foreground">
                     Complete the payment to continue processing this shipment.
                   </p>
@@ -168,11 +197,10 @@ export default function ShipmentDetailsPage() {
                 <button
                   type="button"
                   onClick={handlePayment}
-                  disabled={isPaymentInitiating}
+                  disabled={isPaymentInitiating || isCancelling}
                   className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   <CreditCard className="h-4 w-4" />
-
                   {isPaymentInitiating ? "Redirecting..." : "Pay Now"}
                 </button>
               </div>
@@ -188,6 +216,33 @@ export default function ShipmentDetailsPage() {
           {isPaid && (
             <div className="mt-6 rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-700">
               Payment completed successfully.
+            </div>
+          )}
+
+          {canCancelShipment && (
+            <div className="mt-4 flex flex-col gap-3 rounded-lg border border-red-200 bg-red-50/50 p-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="font-semibold text-red-700">Cancel Shipment</p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  You can cancel this shipment before processing begins.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleCancelShipment}
+                disabled={isCancelling || isPaymentInitiating}
+                className="inline-flex items-center justify-center gap-2 rounded-lg border border-red-300 bg-white px-5 py-2.5 text-sm font-semibold text-red-700 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <Ban className="h-4 w-4" />
+                {isCancelling ? "Cancelling..." : "Cancel Shipment"}
+              </button>
+            </div>
+          )}
+
+          {shipment.status === "CANCELLED" && (
+            <div className="mt-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-700">
+              This shipment has been cancelled.
             </div>
           )}
         </section>

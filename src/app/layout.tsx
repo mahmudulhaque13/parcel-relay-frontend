@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Providers from "@/providers";
-import SiteNavbar from "@/components/layout/site-navbar";
-import SiteFooter from "@/components/layout/site-footer";
+import PublicSiteShell from "@/components/layout/public-site-shell";
 
 export const metadata: Metadata = {
   title: "ParcelRelay",
@@ -18,9 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Providers>
-          <SiteNavbar />
-          {children}
-          <SiteFooter />
+          <PublicSiteShell>{children}</PublicSiteShell>
         </Providers>
       </body>
     </html>
