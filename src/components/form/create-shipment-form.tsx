@@ -3,11 +3,12 @@
 import { useForm } from "@tanstack/react-form";
 import { useState } from "react";
 import { toast } from "sonner";
-
+import type { Shipment, ShipmentQuotePayload } from "@/api/shipment.api";
 import { useCreateShipment } from "@/hooks/use-create-shipment";
 import { useInitiatePayment } from "@/hooks/use-initiate-payment";
 import { useShipmentQuote } from "@/hooks/use-shipment-quote";
 import { useZones } from "@/hooks/use-zones";
+import type { ApiResponse } from "@/types/api";
 import {
   type ShipmentFormValues,
   shipmentPackageSchema,
@@ -23,6 +24,8 @@ export default function CreateShipmentForm() {
   const initiatePaymentMutation = useInitiatePayment();
 
   const [currentStep, setCurrentStep] = useState(1);
+  const [quotedPayload, setQuotedPayload] =
+    useState<ShipmentQuotePayload | null>(null);
 
   const zones = data?.data ?? [];
 
@@ -43,6 +46,22 @@ export default function CreateShipmentForm() {
     },
   });
 
+  const getCurrentQuotePayload = (): ShipmentQuotePayload => ({
+    originZoneId: form.getFieldValue("originZoneId"),
+    destinationZoneId: form.getFieldValue("destinationZoneId"),
+    weight: form.getFieldValue("weight"),
+    codAmount: form.getFieldValue("codAmount"),
+  });
+
+  const isQuoteCurrent =
+    quotedPayload !== null &&
+    quotedPayload.originZoneId === form.getFieldValue("originZoneId") &&
+    quotedPayload.destinationZoneId ===
+      form.getFieldValue("destinationZoneId") &&
+    quotedPayload.weight === form.getFieldValue("weight") &&
+    quotedPayload.codAmount === form.getFieldValue("codAmount") &&
+    shipmentQuote.data?.success === true;
+
   const selectedOrigin = zones.find(
     (zone) => zone.id === form.getFieldValue("originZoneId"),
   );
@@ -51,7 +70,12 @@ export default function CreateShipmentForm() {
     (zone) => zone.id === form.getFieldValue("destinationZoneId"),
   );
 
-  const handleStepOneNext = async () => {
+  const invalidateQuote = () => {
+    setQuotedPayload(null);
+    shipmentQuote.reset();
+  };
+
+  const handleStepOneNext = () => {
     const values = {
       originZoneId: form.getFieldValue("originZoneId"),
       destinationZoneId: form.getFieldValue("destinationZoneId"),
@@ -60,13 +84,16 @@ export default function CreateShipmentForm() {
     const result = shipmentZoneSchema.safeParse(values);
 
     if (!result.success) {
+      toast.error(
+        result.error.issues[0]?.message ?? "Please select valid zones.",
+      );
       return;
     }
 
     setCurrentStep(2);
   };
 
-  const handleStepTwoNext = async () => {
+  const handleStepTwoNext = () => {
     const values = {
       weight: form.getFieldValue("weight"),
       codAmount: form.getFieldValue("codAmount"),
@@ -75,56 +102,73 @@ export default function CreateShipmentForm() {
     const result = shipmentPackageSchema.safeParse(values);
 
     if (!result.success) {
+      toast.error(
+        result.error.issues[0]?.message ??
+          "Please enter valid package details.",
+      );
       return;
     }
 
     setCurrentStep(3);
   };
 
-  /**
-   * Calculates the delivery quote and returns whether the request succeeded.
-   *
-   * Returning a boolean is important here because React Query's
-   * `shipmentQuote.data` state may not update synchronously immediately after
-   * `mutateAsync()` resolves. The caller can therefore use this direct result
-   * instead of checking potentially stale hook state.
-   */
   const handleGetQuote = async (): Promise<boolean> => {
-    const packageValues = {
-      weight: form.getFieldValue("weight"),
-      codAmount: form.getFieldValue("codAmount"),
-    };
+    const payload = getCurrentQuotePayload();
 
-    const packageResult = shipmentPackageSchema.safeParse(packageValues);
+    const zoneResult = shipmentZoneSchema.safeParse({
+      originZoneId: payload.originZoneId,
+      destinationZoneId: payload.destinationZoneId,
+    });
 
-    if (!packageResult.success) {
+    const packageResult = shipmentPackageSchema.safeParse({
+      weight: payload.weight,
+      codAmount: payload.codAmount,
+    });
+
+    if (!zoneResult.success || !packageResult.success) {
+      const message =
+        zoneResult.error?.issues[0]?.message ??
+        packageResult.error?.issues[0]?.message ??
+        "Please check your shipment details.";
+
+      toast.error(message);
       return false;
     }
 
-    try {
-      const response = await shipmentQuote.mutateAsync({
-        originZoneId: form.getFieldValue("originZoneId"),
-        destinationZoneId: form.getFieldValue("destinationZoneId"),
-        weight: form.getFieldValue("weight"),
-        codAmount: form.getFieldValue("codAmount"),
-      });
+    setQuotedPayload(null);
+    shipmentQuote.reset();
 
-      return response.success;
+    try {
+      const response = await shipmentQuote.mutateAsync(payload);
+
+      const currentPayload = getCurrentQuotePayload();
+
+      const inputsUnchanged =
+        currentPayload.originZoneId === payload.originZoneId &&
+        currentPayload.destinationZoneId === payload.destinationZoneId &&
+        currentPayload.weight === payload.weight &&
+        currentPayload.codAmount === payload.codAmount;
+
+      if (!response.success) {
+        toast.error("Unable to calculate the delivery charge.");
+        return false;
+      }
+
+      if (!inputsUnchanged) {
+        return false;
+      }
+
+      setQuotedPayload(payload);
+      return true;
     } catch (error) {
       console.error("Quote calculation failed:", error);
-
       toast.error("Failed to calculate delivery charge. Please try again.");
-
       return false;
     }
   };
 
   const handleStepThreeNext = async () => {
-    /**
-     * Usually this button is visible only after a quote already exists.
-     * This fallback keeps the workflow safe if the quote is ever missing.
-     */
-    if (!shipmentQuote.data?.success) {
+    if (!isQuoteCurrent) {
       const quoteSucceeded = await handleGetQuote();
 
       if (!quoteSucceeded) {
@@ -136,27 +180,31 @@ export default function CreateShipmentForm() {
   };
 
   const handleStepFourSubmit = async () => {
-    const values = {
+    const recipientValues = {
       recipientName: form.getFieldValue("recipientName"),
       recipientPhone: form.getFieldValue("recipientPhone"),
       deliveryAddress: form.getFieldValue("deliveryAddress"),
       packageDescription: form.getFieldValue("packageDescription"),
     };
 
-    const result = shipmentRecipientSchema.safeParse(values);
+    const recipientResult = shipmentRecipientSchema.safeParse(recipientValues);
 
-    if (!result.success) {
+    if (!recipientResult.success) {
+      toast.error(
+        recipientResult.error.issues[0]?.message ??
+          "Please check the recipient details.",
+      );
       return;
     }
 
-    /**
-     * Shipment creation and payment initiation are kept in separate try/catch
-     * blocks. This lets us tell the user exactly which operation failed.
-     *
-     * It also prevents payment initiation from running when shipment creation
-     * itself fails.
-     */
-    let shipmentResponse;
+    // Recheck the quote before creating a shipment.
+    if (!isQuoteCurrent) {
+      toast.error("Your quote is outdated. Please calculate it again.");
+      setCurrentStep(3);
+      return;
+    }
+
+    let shipmentResponse: ApiResponse<Shipment>;
 
     try {
       shipmentResponse = await createShipmentMutation.mutateAsync({
@@ -171,9 +219,7 @@ export default function CreateShipmentForm() {
       });
     } catch (error) {
       console.error("Shipment creation failed:", error);
-
       toast.error("Failed to create shipment. Please try again.");
-
       return;
     }
 
@@ -183,11 +229,9 @@ export default function CreateShipmentForm() {
       });
 
       toast.success("Shipment created. Redirecting to payment...");
-
       window.location.href = paymentResponse.data.paymentUrl;
     } catch (error) {
       console.error("Payment initiation failed:", error);
-
       toast.error("Failed to start payment. Please try again.");
     }
   };
@@ -245,12 +289,11 @@ export default function CreateShipmentForm() {
         })}
       </div>
 
-      {/* Step 1 */}
+      {/* Step 1: Zones */}
       {currentStep === 1 && (
         <div className="space-y-6 rounded-xl border p-6">
           <div>
             <h2 className="text-xl font-semibold">Delivery Zones</h2>
-
             <p className="mt-1 text-sm text-muted-foreground">
               Select the origin and destination zones.
             </p>
@@ -266,11 +309,13 @@ export default function CreateShipmentForm() {
                 <select
                   id={field.name}
                   value={field.state.value}
-                  onChange={(event) => field.handleChange(event.target.value)}
+                  onChange={(event) => {
+                    invalidateQuote();
+                    field.handleChange(event.target.value);
+                  }}
                   className="w-full rounded-lg border px-3 py-2"
                 >
                   <option value="">Select origin zone</option>
-
                   {zones.map((zone) => (
                     <option key={zone.id} value={zone.id}>
                       {zone.name} ({zone.code})
@@ -291,11 +336,13 @@ export default function CreateShipmentForm() {
                 <select
                   id={field.name}
                   value={field.state.value}
-                  onChange={(event) => field.handleChange(event.target.value)}
+                  onChange={(event) => {
+                    invalidateQuote();
+                    field.handleChange(event.target.value);
+                  }}
                   className="w-full rounded-lg border px-3 py-2"
                 >
                   <option value="">Select destination zone</option>
-
                   {zones.map((zone) => (
                     <option key={zone.id} value={zone.id}>
                       {zone.name} ({zone.code})
@@ -318,12 +365,11 @@ export default function CreateShipmentForm() {
         </div>
       )}
 
-      {/* Step 2 */}
+      {/* Step 2: Package */}
       {currentStep === 2 && (
         <div className="space-y-6 rounded-xl border p-6">
           <div>
             <h2 className="text-xl font-semibold">Package Details</h2>
-
             <p className="mt-1 text-sm text-muted-foreground">
               Enter the package weight and cash-on-delivery amount.
             </p>
@@ -342,9 +388,10 @@ export default function CreateShipmentForm() {
                   min="0"
                   step="0.01"
                   value={field.state.value || ""}
-                  onChange={(event) =>
-                    field.handleChange(Number(event.target.value))
-                  }
+                  onChange={(event) => {
+                    invalidateQuote();
+                    field.handleChange(Number(event.target.value));
+                  }}
                   placeholder="e.g. 2.5"
                   className="w-full rounded-lg border px-3 py-2"
                 />
@@ -365,9 +412,10 @@ export default function CreateShipmentForm() {
                   min="0"
                   step="0.01"
                   value={field.state.value || ""}
-                  onChange={(event) =>
-                    field.handleChange(Number(event.target.value))
-                  }
+                  onChange={(event) => {
+                    invalidateQuote();
+                    field.handleChange(Number(event.target.value));
+                  }}
                   placeholder="e.g. 500"
                   className="w-full rounded-lg border px-3 py-2"
                 />
@@ -395,12 +443,11 @@ export default function CreateShipmentForm() {
         </div>
       )}
 
-      {/* Step 3 */}
+      {/* Step 3: Quote */}
       {currentStep === 3 && (
         <div className="space-y-6 rounded-xl border p-6">
           <div>
-            <h2 className="text-xl font-semibold">Quote & Review</h2>
-
+            <h2 className="text-xl font-semibold">Quote &amp; Review</h2>
             <p className="mt-1 text-sm text-muted-foreground">
               Review your shipment details and calculate the delivery charge.
             </p>
@@ -409,7 +456,6 @@ export default function CreateShipmentForm() {
           <div className="grid gap-4 rounded-lg bg-muted/40 p-4 sm:grid-cols-2">
             <div>
               <p className="text-sm text-muted-foreground">Origin</p>
-
               <p className="font-medium">
                 {selectedOrigin?.name} ({selectedOrigin?.code})
               </p>
@@ -417,7 +463,6 @@ export default function CreateShipmentForm() {
 
             <div>
               <p className="text-sm text-muted-foreground">Destination</p>
-
               <p className="font-medium">
                 {selectedDestination?.name} ({selectedDestination?.code})
               </p>
@@ -425,18 +470,16 @@ export default function CreateShipmentForm() {
 
             <div>
               <p className="text-sm text-muted-foreground">Weight</p>
-
               <p className="font-medium">{form.getFieldValue("weight")} kg</p>
             </div>
 
             <div>
               <p className="text-sm text-muted-foreground">COD Amount</p>
-
               <p className="font-medium">৳{form.getFieldValue("codAmount")}</p>
             </div>
           </div>
 
-          {shipmentQuote.data?.success && (
+          {isQuoteCurrent && shipmentQuote.data?.success && (
             <div className="space-y-3 rounded-lg border p-4">
               <h3 className="font-semibold">Delivery Charge</h3>
 
@@ -458,14 +501,13 @@ export default function CreateShipmentForm() {
               <div className="border-t pt-3">
                 <div className="flex justify-between font-semibold">
                   <span>Total Delivery Charge</span>
-
                   <span>৳{shipmentQuote.data.data.pricing.deliveryCharge}</span>
                 </div>
               </div>
             </div>
           )}
 
-          <div className="flex justify-between">
+          <div className="flex justify-between gap-3">
             <button
               type="button"
               onClick={() => setCurrentStep(2)}
@@ -475,7 +517,7 @@ export default function CreateShipmentForm() {
             </button>
 
             <div className="flex gap-3">
-              {!shipmentQuote.data?.success && (
+              {!isQuoteCurrent && (
                 <button
                   type="button"
                   onClick={handleGetQuote}
@@ -486,11 +528,12 @@ export default function CreateShipmentForm() {
                 </button>
               )}
 
-              {shipmentQuote.data?.success && (
+              {isQuoteCurrent && (
                 <button
                   type="button"
                   onClick={handleStepThreeNext}
-                  className="rounded-lg border px-5 py-2 font-medium"
+                  disabled={shipmentQuote.isPending}
+                  className="rounded-lg border px-5 py-2 font-medium disabled:opacity-50"
                 >
                   Continue
                 </button>
@@ -500,12 +543,11 @@ export default function CreateShipmentForm() {
         </div>
       )}
 
-      {/* Step 4 */}
+      {/* Step 4: Recipient */}
       {currentStep === 4 && (
         <div className="space-y-6 rounded-xl border p-6">
           <div>
             <h2 className="text-xl font-semibold">Recipient Details</h2>
-
             <p className="mt-1 text-sm text-muted-foreground">
               Enter the recipient information for this shipment.
             </p>
@@ -634,15 +676,21 @@ export default function CreateShipmentForm() {
               {form.getFieldValue("codAmount")}
             </div>
 
-            {shipmentQuote.data?.success && (
+            {isQuoteCurrent && shipmentQuote.data?.success && (
               <div className="text-sm font-semibold">
                 Delivery Charge: ৳
                 {shipmentQuote.data.data.pricing.deliveryCharge}
               </div>
             )}
+
+            {!isQuoteCurrent && (
+              <p className="text-sm text-destructive">
+                The quote is no longer valid. Go back and calculate it again.
+              </p>
+            )}
           </div>
 
-          <div className="flex justify-between">
+          <div className="flex justify-between gap-3">
             <button
               type="button"
               onClick={() => setCurrentStep(3)}
@@ -656,14 +704,15 @@ export default function CreateShipmentForm() {
               onClick={handleStepFourSubmit}
               disabled={
                 createShipmentMutation.isPending ||
-                initiatePaymentMutation.isPending
+                initiatePaymentMutation.isPending ||
+                !isQuoteCurrent
               }
               className="rounded-lg border px-5 py-2 font-medium disabled:cursor-not-allowed disabled:opacity-50"
             >
               {createShipmentMutation.isPending ||
               initiatePaymentMutation.isPending ? (
                 <>
-                  <span className="loading loading-ring loading-sm" />
+                  <span className="loading loading-ring loading-sm" />{" "}
                   Processing...
                 </>
               ) : (
