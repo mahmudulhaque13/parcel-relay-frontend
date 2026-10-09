@@ -10,8 +10,11 @@ import {
   Search,
   Weight,
 } from "lucide-react";
+
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
 import { useEffect, useMemo, useState } from "react";
+
 import {
   Bar,
   BarChart,
@@ -24,39 +27,61 @@ import {
 } from "recharts";
 
 import type { AdminShipmentReportQuery } from "@/api/admin.api";
+
 import { useAdminShipmentReports } from "@/hooks/use-admin-shipment-reports";
+
 import { useZones } from "@/hooks/use-zones";
 
 const shipmentStatuses = [
   "PENDING_PAYMENT",
+
   "READY_FOR_ASSIGNMENT",
+
   "ASSIGNED",
+
   "PICKUP_SCHEDULED",
+
   "PICKED_UP",
+
   "AT_ORIGIN_HUB",
+
   "IN_TRANSIT",
+
   "AT_DESTINATION_HUB",
+
   "OUT_FOR_DELIVERY",
+
   "DELIVERY_FAILED",
+
   "RETURN_INITIATED",
+
   "RETURN_IN_TRANSIT",
+
   "DELIVERED",
+
   "RETURNED_TO_SENDER",
+
   "CANCELLED",
 ] as const;
 
 function getStatusLabel(status: string) {
   return status
+
     .toLowerCase()
+
     .split("_")
+
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+
     .join(" ");
 }
 
 function formatCurrency(value: number) {
   return new Intl.NumberFormat("en-BD", {
     style: "currency",
+
     currency: "BDT",
+
     maximumFractionDigits: 0,
   }).format(value);
 }
@@ -67,12 +92,17 @@ function formatNumber(value: number) {
 
 export default function AdminReportsPage() {
   const router = useRouter();
+
   const pathname = usePathname();
+
   const searchParams = useSearchParams();
 
   const querySearch = searchParams.get("q") ?? "";
+
   const status = searchParams.get("status") ?? "";
+
   const originZoneId = searchParams.get("originZoneId") ?? "";
+
   const destinationZoneId = searchParams.get("destinationZoneId") ?? "";
 
   const sortByParam = searchParams.get("sortBy");
@@ -104,64 +134,101 @@ export default function AdminReportsPage() {
   const query = useMemo<AdminShipmentReportQuery>(
     () => ({
       page,
+
       limit: 10,
+
       q: querySearch || undefined,
+
       status: status || undefined,
+
       originZoneId: originZoneId || undefined,
+
       destinationZoneId: destinationZoneId || undefined,
+
       sortBy,
+
       sortOrder,
     }),
+
     [
       page,
+
       querySearch,
+
       status,
+
       originZoneId,
+
       destinationZoneId,
+
       sortBy,
+
       sortOrder,
     ],
   );
 
   const {
     data: reportsResponse,
+
     isLoading,
+
     isError,
+
     error,
   } = useAdminShipmentReports(query);
 
   const reportData = reportsResponse?.data;
 
   const totalPages = reportData?.meta.totalPage ?? 1;
+
   const totalResults = reportData?.meta.total ?? 0;
 
   /*
+
    * Chart data comes directly from the current API result.
+
    *
+
    * Important:
+
    * The backend report endpoint is paginated, so these charts
+
    * represent the currently loaded page of shipments.
+
    * The summary cards above still represent the full filtered dataset.
+
    */
+
   const chartData = useMemo(
     () =>
       (reportData?.data ?? []).map((shipment) => ({
         trackingNumber: shipment.trackingNumber,
+
         shortTrackingNumber: shipment.trackingNumber.slice(-8),
+
         deliveryCharge: shipment.deliveryCharge,
+
         codAmount: shipment.codAmount,
+
         weight: shipment.weight,
       })),
+
     [reportData?.data],
   );
 
   function updateUrl(updates: {
     q?: string;
+
     status?: string;
+
     originZoneId?: string;
+
     destinationZoneId?: string;
+
     sortBy?: AdminShipmentReportQuery["sortBy"];
+
     sortOrder?: AdminShipmentReportQuery["sortOrder"];
+
     page?: number;
   }) {
     const params = new URLSearchParams(searchParams.toString());
@@ -218,6 +285,7 @@ export default function AdminReportsPage() {
 
     updateUrl({
       q: search.trim(),
+
       page: 1,
     });
   }
@@ -225,6 +293,7 @@ export default function AdminReportsPage() {
   function handleStatusChange(value: string) {
     updateUrl({
       status: value,
+
       page: 1,
     });
   }
@@ -232,6 +301,7 @@ export default function AdminReportsPage() {
   function handleOriginZoneChange(value: string) {
     updateUrl({
       originZoneId: value,
+
       page: 1,
     });
   }
@@ -239,6 +309,7 @@ export default function AdminReportsPage() {
   function handleDestinationZoneChange(value: string) {
     updateUrl({
       destinationZoneId: value,
+
       page: 1,
     });
   }
@@ -248,6 +319,7 @@ export default function AdminReportsPage() {
 
     updateUrl({
       sortBy: value,
+
       page: 1,
     });
   }
@@ -255,6 +327,7 @@ export default function AdminReportsPage() {
   function toggleSortOrder() {
     updateUrl({
       sortOrder: sortOrder === "asc" ? "desc" : "asc",
+
       page: 1,
     });
   }
@@ -286,8 +359,9 @@ export default function AdminReportsPage() {
     sortOrder !== "desc";
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto w-full max-w-7xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
       {/* Header */}
+
       <div>
         <div className="mb-2 flex items-center gap-2 text-sm text-muted-foreground">
           <BarChart3 className="size-4" />
@@ -299,7 +373,9 @@ export default function AdminReportsPage() {
           <span>Reports</span>
         </div>
 
-        <h1 className="text-2xl font-bold tracking-tight">Shipment Reports</h1>
+        <h1 className="text-3xl font-black tracking-tight text-[#1D3557]">
+          Shipment Reports
+        </h1>
 
         <p className="mt-1 text-sm text-muted-foreground">
           Analyze shipment activity, delivery charges, COD amounts and total
@@ -308,6 +384,7 @@ export default function AdminReportsPage() {
       </div>
 
       {/* Summary */}
+
       {isLoading ? (
         <SummarySkeleton />
       ) : isError ? (
@@ -347,9 +424,11 @@ export default function AdminReportsPage() {
       )}
 
       {/* Filters */}
+
       <div className="rounded-xl border bg-card p-4">
         <div className="grid gap-4 xl:grid-cols-3">
           {/* Search */}
+
           <form onSubmit={handleSearch}>
             <label
               htmlFor="report-search"
@@ -382,6 +461,7 @@ export default function AdminReportsPage() {
           </form>
 
           {/* Status */}
+
           <div>
             <label
               htmlFor="report-status"
@@ -407,6 +487,7 @@ export default function AdminReportsPage() {
           </div>
 
           {/* Sort */}
+
           <div>
             <label
               htmlFor="report-sort"
@@ -453,6 +534,7 @@ export default function AdminReportsPage() {
           </div>
 
           {/* Origin Zone */}
+
           <div>
             <label
               htmlFor="origin-zone"
@@ -473,6 +555,7 @@ export default function AdminReportsPage() {
               {zones.map((zone) => (
                 <option key={zone.id} value={zone.id}>
                   {zone.name}
+
                   {zone.code ? ` (${zone.code})` : ""}
                 </option>
               ))}
@@ -480,6 +563,7 @@ export default function AdminReportsPage() {
           </div>
 
           {/* Destination Zone */}
+
           <div>
             <label
               htmlFor="destination-zone"
@@ -502,6 +586,7 @@ export default function AdminReportsPage() {
               {zones.map((zone) => (
                 <option key={zone.id} value={zone.id}>
                   {zone.name}
+
                   {zone.code ? ` (${zone.code})` : ""}
                 </option>
               ))}
@@ -509,6 +594,7 @@ export default function AdminReportsPage() {
           </div>
 
           {/* Clear */}
+
           <div className="flex items-end">
             <button
               type="button"
@@ -522,6 +608,7 @@ export default function AdminReportsPage() {
         </div>
 
         {/* Active Filters */}
+
         {hasActiveFilters ? (
           <div className="mt-4 flex flex-wrap gap-2 border-t pt-4">
             {querySearch ? (
@@ -564,10 +651,12 @@ export default function AdminReportsPage() {
       </div>
 
       {/* Analytics */}
+
       {!isLoading && !isError && chartData.length > 0 ? (
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Financial Chart */}
-          <div className="rounded-xl border bg-card p-5">
+
+          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
             <div className="mb-5">
               <h2 className="text-lg font-semibold">
                 Shipment Financial Overview
@@ -584,8 +673,11 @@ export default function AdminReportsPage() {
                   data={chartData}
                   margin={{
                     top: 10,
+
                     right: 10,
+
                     left: 0,
+
                     bottom: 10,
                   }}
                 >
@@ -624,6 +716,7 @@ export default function AdminReportsPage() {
           </div>
 
           {/* Weight Chart */}
+
           <div className="rounded-xl border bg-card p-5">
             <div className="mb-5">
               <h2 className="text-lg font-semibold">Shipment Weight</h2>
@@ -639,8 +732,11 @@ export default function AdminReportsPage() {
                   data={chartData}
                   margin={{
                     top: 10,
+
                     right: 10,
+
                     left: 0,
+
                     bottom: 10,
                   }}
                 >
@@ -678,6 +774,7 @@ export default function AdminReportsPage() {
       ) : null}
 
       {/* Report Table */}
+
       <div className="rounded-xl border bg-card">
         {isLoading ? (
           <TableSkeleton />
@@ -694,6 +791,7 @@ export default function AdminReportsPage() {
         ) : (
           <>
             {/* Desktop Table */}
+
             <div className="hidden overflow-x-auto md:block">
               <table className="w-full">
                 <thead>
@@ -767,6 +865,7 @@ export default function AdminReportsPage() {
             </div>
 
             {/* Mobile Cards */}
+
             <div className="divide-y md:hidden">
               {reportData.data.map((shipment) => (
                 <div key={shipment.id} className="space-y-4 p-5">
@@ -840,6 +939,7 @@ export default function AdminReportsPage() {
             </div>
 
             {/* Pagination */}
+
             <div className="flex flex-col gap-3 border-t p-4 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-muted-foreground">
                 Showing{" "}
@@ -889,16 +989,22 @@ export default function AdminReportsPage() {
 }
 
 /* -------------------------------------------------------------------------- */
+
 /* Components                                                                  */
+
 /* -------------------------------------------------------------------------- */
 
 function SummaryCard({
   title,
+
   value,
+
   icon,
 }: {
   title: string;
+
   value: string;
+
   icon: React.ReactNode;
 }) {
   return (
@@ -906,7 +1012,9 @@ function SummaryCard({
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">{title}</p>
 
-        <div className="rounded-lg bg-muted p-2">{icon}</div>
+        <div className="rounded-xl bg-[#1D3557]/10 p-2 text-[#1D3557]">
+          {icon}
+        </div>
       </div>
 
       <p className="mt-4 text-2xl font-bold tracking-tight">{value}</p>

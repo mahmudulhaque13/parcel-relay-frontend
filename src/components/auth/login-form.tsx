@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "@tanstack/react-form";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -66,7 +66,7 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-7">
       <form
         onSubmit={(event) => {
           event.preventDefault();
@@ -78,8 +78,11 @@ export default function LoginForm() {
         <form.Field name="email">
           {(field) => (
             <div className="space-y-2">
-              <label htmlFor={field.name} className="text-sm font-medium">
-                Email
+              <label
+                htmlFor={field.name}
+                className="block text-sm font-bold text-[#1D3557]"
+              >
+                Email address
               </label>
 
               <input
@@ -90,11 +93,15 @@ export default function LoginForm() {
                 value={field.state.value}
                 onChange={(event) => field.handleChange(event.target.value)}
                 placeholder="you@example.com"
-                className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+                aria-invalid={field.state.meta.errors.length > 0}
+                className="min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition duration-200 placeholder:text-slate-400 hover:border-slate-300 focus:border-[#1D3557] focus:ring-4 focus:ring-[#1D3557]/[0.08] aria-[invalid=true]:border-red-400 aria-[invalid=true]:focus:ring-red-100"
               />
 
               {field.state.meta.errors.map((error) => (
-                <p key={error?.toString()} className="text-sm text-red-600">
+                <p
+                  key={error?.toString()}
+                  className="text-sm font-medium text-red-600"
+                >
                   {error?.toString()}
                 </p>
               ))}
@@ -105,7 +112,10 @@ export default function LoginForm() {
         <form.Field name="password">
           {(field) => (
             <div className="space-y-2">
-              <label htmlFor={field.name} className="text-sm font-medium">
+              <label
+                htmlFor={field.name}
+                className="block text-sm font-bold text-[#1D3557]"
+              >
                 Password
               </label>
 
@@ -118,14 +128,16 @@ export default function LoginForm() {
                   value={field.state.value}
                   onChange={(event) => field.handleChange(event.target.value)}
                   placeholder="Enter your password"
-                  className="w-full rounded-lg border border-input bg-background px-3 py-2 pr-10 text-sm outline-none focus:ring-2 focus:ring-ring"
+                  aria-invalid={field.state.meta.errors.length > 0}
+                  className="min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 pr-12 text-sm text-slate-800 outline-none transition duration-200 placeholder:text-slate-400 hover:border-slate-300 focus:border-[#1D3557] focus:ring-4 focus:ring-[#1D3557]/[0.08] aria-[invalid=true]:border-red-400 aria-[invalid=true]:focus:ring-red-100"
                 />
 
                 <button
                   type="button"
                   onClick={() => setShowPassword((current) => !current)}
                   aria-label={showPassword ? "Hide password" : "Show password"}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+                  aria-pressed={showPassword}
+                  className="absolute right-3 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-[#1D3557] focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#E76F51]"
                 >
                   {showPassword ? (
                     <EyeOff className="size-4" />
@@ -136,7 +148,10 @@ export default function LoginForm() {
               </div>
 
               {field.state.meta.errors.map((error) => (
-                <p key={error?.toString()} className="text-sm text-red-600">
+                <p
+                  key={error?.toString()}
+                  className="text-sm font-medium text-red-600"
+                >
                   {error?.toString()}
                 </p>
               ))}
@@ -147,7 +162,7 @@ export default function LoginForm() {
         <div className="flex justify-end">
           <Link
             href="/forgot-password"
-            className="text-sm font-medium text-primary hover:underline"
+            className="text-sm font-semibold text-[#1D3557] underline decoration-transparent underline-offset-4 transition-colors hover:text-[#E76F51] hover:decoration-[#E76F51] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51]"
           >
             Forgot password?
           </Link>
@@ -160,7 +175,7 @@ export default function LoginForm() {
             <button
               type="submit"
               disabled={!canSubmit || isSubmitting}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#1D3557] px-4 py-3 text-sm font-bold text-white shadow-md shadow-[#1D3557]/10 transition duration-200 hover:-translate-y-0.5 hover:bg-[#29486f] hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
             >
               {isSubmitting ? (
                 <>
@@ -168,24 +183,24 @@ export default function LoginForm() {
                   Signing in...
                 </>
               ) : (
-                "Sign in"
+                <>
+                  Sign in
+                  <ArrowRight className="size-4" />
+                </>
               )}
             </button>
           )}
         </form.Subscribe>
       </form>
 
+      {/* Google login */}
       <div className="space-y-4">
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t border-border" />
-          </div>
-
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">
-              Or continue with
-            </span>
-          </div>
+        <div className="relative flex items-center justify-center">
+          <span className="h-px flex-1 bg-slate-200" />
+          <span className="px-3 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-400">
+            Or continue with
+          </span>
+          <span className="h-px flex-1 bg-slate-200" />
         </div>
 
         <div className="flex justify-center">
@@ -193,24 +208,21 @@ export default function LoginForm() {
         </div>
       </div>
 
-      <div className="space-y-3">
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t border-border" />
-          </div>
-
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">
-              Demo login
-            </span>
-          </div>
+      {/* Demo login */}
+      <div className="space-y-4">
+        <div className="relative flex items-center justify-center">
+          <span className="h-px flex-1 bg-slate-200" />
+          <span className="px-3 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-400">
+            Demo login
+          </span>
+          <span className="h-px flex-1 bg-slate-200" />
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <button
             type="button"
             onClick={() => handleDemoLogin("CUSTOMER")}
-            className="rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-muted"
+            className="flex min-h-12 items-center justify-center rounded-xl border border-slate-200 bg-slate-50/70 px-3 py-3 text-sm font-bold text-[#1D3557] transition duration-200 hover:border-[#1D3557]/25 hover:bg-[#1D3557]/[0.04] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E76F51]"
           >
             Demo Customer
           </button>
@@ -218,7 +230,7 @@ export default function LoginForm() {
           <button
             type="button"
             onClick={() => handleDemoLogin("COURIER")}
-            className="rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-muted"
+            className="flex min-h-12 items-center justify-center rounded-xl border border-slate-200 bg-slate-50/70 px-3 py-3 text-sm font-bold text-[#1D3557] transition duration-200 hover:border-[#1D3557]/25 hover:bg-[#1D3557]/[0.04] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E76F51]"
           >
             Demo Courier
           </button>
@@ -226,20 +238,22 @@ export default function LoginForm() {
           <button
             type="button"
             onClick={() => handleDemoLogin("ADMIN")}
-            className="rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-muted"
+            className="flex min-h-12 items-center justify-center rounded-xl border border-slate-200 bg-slate-50/70 px-3 py-3 text-sm font-bold text-[#1D3557] transition duration-200 hover:border-[#1D3557]/25 hover:bg-[#1D3557]/[0.04] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E76F51]"
           >
             Demo Admin
           </button>
         </div>
       </div>
 
-      <p className="text-center text-sm text-muted-foreground">
+      {/* Keep signup link here; do not duplicate it in the parent page */}
+      <p className="border-t border-slate-100 pt-5 text-center text-sm text-slate-600">
         Don&apos;t have an account?{" "}
         <Link
           href="/register"
-          className="font-medium text-primary hover:underline"
+          className="inline-flex items-center gap-1 font-bold text-[#1D3557] underline decoration-[#E76F51]/60 underline-offset-4 transition-colors hover:text-[#E76F51] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51]"
         >
           Create an account
+          <ArrowRight className="size-3.5" />
         </Link>
       </p>
     </div>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useForm } from "@tanstack/react-form";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
@@ -43,7 +42,7 @@ export default function VerifyCourierEmailForm() {
 
     onSubmit: async ({ value }) => {
       try {
-        const response = await verifyCourierEmail({
+        await verifyCourierEmail({
           email: value.email.trim(),
           otp: value.otp,
         });
@@ -52,11 +51,7 @@ export default function VerifyCourierEmailForm() {
           "Email verified successfully. Your courier application is now waiting for admin approval.",
         );
 
-        setTimeout(() => {
-          router.push("/login");
-        }, 1500);
-
-        console.log("Courier verification response:", response);
+        router.push("/login");
       } catch (error) {
         console.error("Courier email verification failed:", error);
 
@@ -70,119 +65,129 @@ export default function VerifyCourierEmailForm() {
   });
 
   return (
-    <div className="space-y-6">
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          form.handleSubmit();
-        }}
-        className="space-y-5"
-      >
-        <form.Field name="email">
-          {(field) => (
-            <div className="space-y-2">
-              <label htmlFor={field.name} className="text-sm font-medium">
-                Email
-              </label>
-
-              <input
-                id={field.name}
-                name={field.name}
-                type="email"
-                autoComplete="email"
-                value={field.state.value}
-                onChange={(event) => field.handleChange(event.target.value)}
-                placeholder="you@example.com"
-                className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
-              />
-
-              {field.state.meta.errors.map((error, index) => (
-                <p
-                  key={`${field.name}-error-${index}`}
-                  className="text-sm text-red-600"
-                >
-                  {getFieldErrorMessage(error)}
-                </p>
-              ))}
-            </div>
-          )}
-        </form.Field>
-
-        <form.Field name="otp">
-          {(field) => (
-            <div className="space-y-2">
-              <label htmlFor={field.name} className="text-sm font-medium">
-                Verification code
-              </label>
-
-              <input
-                id={field.name}
-                name={field.name}
-                type="text"
-                inputMode="numeric"
-                autoComplete="one-time-code"
-                maxLength={6}
-                value={field.state.value}
-                onChange={(event) =>
-                  field.handleChange(
-                    event.target.value.replace(/\D/g, "").slice(0, 6),
-                  )
-                }
-                placeholder="123456"
-                className="w-full rounded-lg border border-input bg-background px-3 py-2 text-center text-lg tracking-[0.4em] outline-none focus:ring-2 focus:ring-ring"
-              />
-
-              {field.state.meta.errors.map((error, index) => (
-                <p
-                  key={`${field.name}-error-${index}`}
-                  className="text-sm text-red-600"
-                >
-                  {getFieldErrorMessage(error)}
-                </p>
-              ))}
-            </div>
-          )}
-        </form.Field>
-
-        <form.Subscribe
-          selector={(state) => [state.canSubmit, state.isSubmitting]}
-        >
-          {([canSubmit, isSubmitting]) => (
-            <button
-              type="submit"
-              disabled={!canSubmit || isSubmitting}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        form.handleSubmit();
+      }}
+      className="space-y-5"
+    >
+      <form.Field name="email">
+        {(field) => (
+          <div className="space-y-2">
+            <label
+              htmlFor={field.name}
+              className="block text-sm font-semibold text-slate-700"
             >
-              {isSubmitting ? (
-                <>
-                  <span className="loading loading-ring loading-sm" />
-                  Verifying...
-                </>
-              ) : (
-                "Verify email"
-              )}
-            </button>
-          )}
-        </form.Subscribe>
-      </form>
+              Email address
+            </label>
 
-      <div className="rounded-lg border bg-muted/30 p-4 text-center">
-        <p className="text-sm text-muted-foreground">
-          After verification, your courier application will be reviewed by an
-          administrator.
+            <input
+              id={field.name}
+              name={field.name}
+              type="email"
+              autoComplete="email"
+              value={field.state.value}
+              onChange={(event) => field.handleChange(event.target.value)}
+              placeholder="you@example.com"
+              className="w-full rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-[#1D3557] focus:bg-white focus:ring-4 focus:ring-[#1D3557]/10"
+            />
+
+            {field.state.meta.errors.map((error, index) => (
+              <p
+                key={`${field.name}-error-${index}`}
+                role="alert"
+                className="text-xs font-medium text-red-600"
+              >
+                {getFieldErrorMessage(error)}
+              </p>
+            ))}
+          </div>
+        )}
+      </form.Field>
+
+      <form.Field name="otp">
+        {(field) => (
+          <div className="space-y-2">
+            <label
+              htmlFor={field.name}
+              className="block text-sm font-semibold text-slate-700"
+            >
+              6-digit verification code
+            </label>
+
+            <input
+              id={field.name}
+              name={field.name}
+              type="text"
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              maxLength={6}
+              value={field.state.value}
+              onChange={(event) =>
+                field.handleChange(
+                  event.target.value.replace(/\D/g, "").slice(0, 6),
+                )
+              }
+              placeholder="000000"
+              aria-describedby={`${field.name}-hint`}
+              className="w-full rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-4 text-center font-mono text-2xl font-bold tracking-[0.45em] text-[#1D3557] outline-none transition placeholder:font-normal placeholder:text-slate-300 placeholder:tracking-[0.45em] hover:border-slate-300 focus:border-[#1D3557] focus:bg-white focus:ring-4 focus:ring-[#1D3557]/10"
+            />
+
+            <p
+              id={`${field.name}-hint`}
+              className="text-xs leading-5 text-slate-500"
+            >
+              Enter the six-digit code sent to your email address.
+            </p>
+
+            {field.state.meta.errors.map((error, index) => (
+              <p
+                key={`${field.name}-error-${index}`}
+                role="alert"
+                className="text-xs font-medium text-red-600"
+              >
+                {getFieldErrorMessage(error)}
+              </p>
+            ))}
+          </div>
+        )}
+      </form.Field>
+
+      <form.Subscribe
+        selector={(state) => [state.canSubmit, state.isSubmitting]}
+      >
+        {([canSubmit, isSubmitting]) => (
+          <button
+            type="submit"
+            disabled={!canSubmit || isSubmitting}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#1D3557] px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-[#1D3557]/15 transition duration-200 hover:-translate-y-0.5 hover:bg-[#142942] hover:shadow-xl hover:shadow-[#1D3557]/20 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51] disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none"
+          >
+            {isSubmitting ? (
+              <>
+                <span
+                  className="loading loading-ring loading-sm"
+                  aria-hidden="true"
+                />
+                Verifying email...
+              </>
+            ) : (
+              "Verify email"
+            )}
+          </button>
+        )}
+      </form.Subscribe>
+
+      <div className="rounded-xl border border-[#1D3557]/10 bg-[#1D3557]/[0.035] p-4">
+        <p className="text-sm leading-6 text-slate-600">
+          <span className="font-semibold text-[#1D3557]">
+            What happens next?
+          </span>{" "}
+          After successful verification, your courier application will be
+          submitted for administrator review.
         </p>
       </div>
-
-      <p className="text-center text-sm text-muted-foreground">
-        Already verified?{" "}
-        <Link
-          href="/login"
-          className="font-medium text-primary hover:underline"
-        >
-          Sign in
-        </Link>
-      </p>
-    </div>
+    </form>
   );
 }

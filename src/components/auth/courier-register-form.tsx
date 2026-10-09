@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "@tanstack/react-form";
-import { Eye, EyeOff, FileText, ImagePlus } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, FileText, ImagePlus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -31,6 +31,39 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const identityDocumentTypes = ["application/pdf", "image/jpeg", "image/png"];
 
 const profilePhotoTypes = ["image/jpeg", "image/png"];
+
+const labelClassName = "block text-sm font-bold text-[#1D3557]";
+
+const inputClassName =
+  "min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition duration-200 placeholder:text-slate-400 hover:border-slate-300 focus:border-[#1D3557] focus:ring-4 focus:ring-[#1D3557]/[0.08] aria-[invalid=true]:border-red-400";
+
+const passwordInputClassName = `${inputClassName} pr-12`;
+
+const visibilityButtonClassName =
+  "absolute right-2 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-[#1D3557] focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#E76F51]";
+
+const uploadPanelClassName =
+  "rounded-xl border border-dashed border-slate-200 bg-slate-50/70 p-4 transition-colors hover:border-[#1D3557]/30";
+
+const uploadButtonClassName =
+  "cursor-pointer rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-[#1D3557] transition-colors hover:border-[#1D3557]/30 hover:bg-slate-50";
+
+function FieldErrors({ name, errors }: { name: string; errors: unknown[] }) {
+  if (errors.length === 0) return null;
+
+  return (
+    <div aria-live="polite" className="space-y-1">
+      {errors.map((error, index) => (
+        <p
+          key={`${name}-error-${index}`}
+          className="text-sm font-medium leading-5 text-red-600"
+        >
+          {getFieldErrorMessage(error)}
+        </p>
+      ))}
+    </div>
+  );
+}
 
 export default function CourierRegisterForm() {
   const router = useRouter();
@@ -101,11 +134,10 @@ export default function CourierRegisterForm() {
       }}
       className="space-y-5"
     >
-      {/* Name */}
       <form.Field name="name">
         {(field) => (
           <div className="space-y-2">
-            <label htmlFor={field.name} className="text-sm font-medium">
+            <label htmlFor={field.name} className={labelClassName}>
               Full name
             </label>
 
@@ -114,30 +146,24 @@ export default function CourierRegisterForm() {
               name={field.name}
               type="text"
               autoComplete="name"
+              required
               value={field.state.value}
               onChange={(event) => field.handleChange(event.target.value)}
               placeholder="Your full name"
-              className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+              aria-invalid={field.state.meta.errors.length > 0}
+              className={inputClassName}
             />
 
-            {field.state.meta.errors.map((error, index) => (
-              <p
-                key={`${field.name}-error-${index}`}
-                className="text-sm text-red-600"
-              >
-                {getFieldErrorMessage(error)}
-              </p>
-            ))}
+            <FieldErrors name={field.name} errors={field.state.meta.errors} />
           </div>
         )}
       </form.Field>
 
-      {/* Email */}
       <form.Field name="email">
         {(field) => (
           <div className="space-y-2">
-            <label htmlFor={field.name} className="text-sm font-medium">
-              Email
+            <label htmlFor={field.name} className={labelClassName}>
+              Email address
             </label>
 
             <input
@@ -145,29 +171,23 @@ export default function CourierRegisterForm() {
               name={field.name}
               type="email"
               autoComplete="email"
+              required
               value={field.state.value}
               onChange={(event) => field.handleChange(event.target.value)}
               placeholder="you@example.com"
-              className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+              aria-invalid={field.state.meta.errors.length > 0}
+              className={inputClassName}
             />
 
-            {field.state.meta.errors.map((error, index) => (
-              <p
-                key={`${field.name}-error-${index}`}
-                className="text-sm text-red-600"
-              >
-                {getFieldErrorMessage(error)}
-              </p>
-            ))}
+            <FieldErrors name={field.name} errors={field.state.meta.errors} />
           </div>
         )}
       </form.Field>
 
-      {/* Phone */}
       <form.Field name="phone">
         {(field) => (
           <div className="space-y-2">
-            <label htmlFor={field.name} className="text-sm font-medium">
+            <label htmlFor={field.name} className={labelClassName}>
               Phone number
             </label>
 
@@ -176,29 +196,23 @@ export default function CourierRegisterForm() {
               name={field.name}
               type="tel"
               autoComplete="tel"
+              required
               value={field.state.value}
               onChange={(event) => field.handleChange(event.target.value)}
               placeholder="01XXXXXXXXX"
-              className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+              aria-invalid={field.state.meta.errors.length > 0}
+              className={inputClassName}
             />
 
-            {field.state.meta.errors.map((error, index) => (
-              <p
-                key={`${field.name}-error-${index}`}
-                className="text-sm text-red-600"
-              >
-                {getFieldErrorMessage(error)}
-              </p>
-            ))}
+            <FieldErrors name={field.name} errors={field.state.meta.errors} />
           </div>
         )}
       </form.Field>
 
-      {/* Password */}
       <form.Field name="password">
         {(field) => (
           <div className="space-y-2">
-            <label htmlFor={field.name} className="text-sm font-medium">
+            <label htmlFor={field.name} className={labelClassName}>
               Password
             </label>
 
@@ -208,17 +222,20 @@ export default function CourierRegisterForm() {
                 name={field.name}
                 type={showPassword ? "text" : "password"}
                 autoComplete="new-password"
+                required
                 value={field.state.value}
                 onChange={(event) => field.handleChange(event.target.value)}
                 placeholder="Enter a strong password"
-                className="w-full rounded-lg border border-input bg-background px-3 py-2 pr-10 text-sm outline-none focus:ring-2 focus:ring-ring"
+                aria-invalid={field.state.meta.errors.length > 0}
+                className={passwordInputClassName}
               />
 
               <button
                 type="button"
                 onClick={() => setShowPassword((current) => !current)}
                 aria-label={showPassword ? "Hide password" : "Show password"}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                aria-pressed={showPassword}
+                className={visibilityButtonClassName}
               >
                 {showPassword ? (
                   <EyeOff className="size-4" />
@@ -228,23 +245,15 @@ export default function CourierRegisterForm() {
               </button>
             </div>
 
-            {field.state.meta.errors.map((error, index) => (
-              <p
-                key={`${field.name}-error-${index}`}
-                className="text-sm text-red-600"
-              >
-                {getFieldErrorMessage(error)}
-              </p>
-            ))}
+            <FieldErrors name={field.name} errors={field.state.meta.errors} />
           </div>
         )}
       </form.Field>
 
-      {/* Confirm Password */}
       <form.Field name="confirmPassword">
         {(field) => (
           <div className="space-y-2">
-            <label htmlFor={field.name} className="text-sm font-medium">
+            <label htmlFor={field.name} className={labelClassName}>
               Confirm password
             </label>
 
@@ -254,10 +263,12 @@ export default function CourierRegisterForm() {
                 name={field.name}
                 type={showConfirmPassword ? "text" : "password"}
                 autoComplete="new-password"
+                required
                 value={field.state.value}
                 onChange={(event) => field.handleChange(event.target.value)}
                 placeholder="Confirm your password"
-                className="w-full rounded-lg border border-input bg-background px-3 py-2 pr-10 text-sm outline-none focus:ring-2 focus:ring-ring"
+                aria-invalid={field.state.meta.errors.length > 0}
+                className={passwordInputClassName}
               />
 
               <button
@@ -268,7 +279,8 @@ export default function CourierRegisterForm() {
                     ? "Hide confirm password"
                     : "Show confirm password"
                 }
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                aria-pressed={showConfirmPassword}
+                className={visibilityButtonClassName}
               >
                 {showConfirmPassword ? (
                   <EyeOff className="size-4" />
@@ -278,41 +290,32 @@ export default function CourierRegisterForm() {
               </button>
             </div>
 
-            {field.state.meta.errors.map((error, index) => (
-              <p
-                key={`${field.name}-error-${index}`}
-                className="text-sm text-red-600"
-              >
-                {getFieldErrorMessage(error)}
-              </p>
-            ))}
+            <FieldErrors name={field.name} errors={field.state.meta.errors} />
           </div>
         )}
       </form.Field>
 
-      {/* Identity Document */}
       <form.Field name="identityDocument">
         {(field) => (
           <div className="space-y-2">
-            <label htmlFor={field.name} className="text-sm font-medium">
+            <label htmlFor={field.name} className={labelClassName}>
               Identity document
             </label>
 
-            <div className="rounded-lg border border-dashed border-input bg-muted/30 p-4">
+            <div className={uploadPanelClassName}>
               <div className="flex items-center gap-3">
-                <FileText className="size-5 text-muted-foreground" />
+                <FileText className="size-5 shrink-0 text-[#1D3557]" />
 
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium">NID / Passport</p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-sm font-bold text-[#1D3557]">
+                    NID / Passport
+                  </p>
+                  <p className="mt-1 text-xs leading-5 text-slate-500">
                     PDF, JPG or PNG · Maximum 5MB
                   </p>
                 </div>
 
-                <label
-                  htmlFor={field.name}
-                  className="cursor-pointer rounded-md border bg-background px-3 py-2 text-sm font-medium hover:bg-muted"
-                >
+                <label htmlFor={field.name} className={uploadButtonClassName}>
                   Choose file
                 </label>
               </div>
@@ -323,6 +326,7 @@ export default function CourierRegisterForm() {
                 type="file"
                 accept=".pdf,.jpg,.jpeg,.png"
                 className="sr-only"
+                aria-invalid={field.state.meta.errors.length > 0}
                 onChange={(event) => {
                   const file = event.target.files?.[0];
 
@@ -352,47 +356,39 @@ export default function CourierRegisterForm() {
               />
 
               {field.state.value && (
-                <p className="mt-3 truncate text-sm text-muted-foreground">
+                <p className="mt-3 flex items-center gap-2 break-all text-sm font-medium text-[#1D3557]">
+                  <FileText className="size-4 shrink-0 text-[#E76F51]" />
                   Selected: {field.state.value.name}
                 </p>
               )}
             </div>
 
-            {field.state.meta.errors.map((error, index) => (
-              <p
-                key={`${field.name}-error-${index}`}
-                className="text-sm text-red-600"
-              >
-                {getFieldErrorMessage(error)}
-              </p>
-            ))}
+            <FieldErrors name={field.name} errors={field.state.meta.errors} />
           </div>
         )}
       </form.Field>
 
-      {/* Profile Photo */}
       <form.Field name="profilePhoto">
         {(field) => (
           <div className="space-y-2">
-            <label htmlFor={field.name} className="text-sm font-medium">
+            <label htmlFor={field.name} className={labelClassName}>
               Profile photo
             </label>
 
-            <div className="rounded-lg border border-dashed border-input bg-muted/30 p-4">
+            <div className={uploadPanelClassName}>
               <div className="flex items-center gap-3">
-                <ImagePlus className="size-5 text-muted-foreground" />
+                <ImagePlus className="size-5 shrink-0 text-[#1D3557]" />
 
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium">Profile photo</p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-sm font-bold text-[#1D3557]">
+                    Profile photo
+                  </p>
+                  <p className="mt-1 text-xs leading-5 text-slate-500">
                     JPG or PNG · Maximum 5MB
                   </p>
                 </div>
 
-                <label
-                  htmlFor={field.name}
-                  className="cursor-pointer rounded-md border bg-background px-3 py-2 text-sm font-medium hover:bg-muted"
-                >
+                <label htmlFor={field.name} className={uploadButtonClassName}>
                   Choose photo
                 </label>
               </div>
@@ -403,6 +399,7 @@ export default function CourierRegisterForm() {
                 type="file"
                 accept=".jpg,.jpeg,.png"
                 className="sr-only"
+                aria-invalid={field.state.meta.errors.length > 0}
                 onChange={(event) => {
                   const file = event.target.files?.[0];
 
@@ -430,25 +427,18 @@ export default function CourierRegisterForm() {
               />
 
               {field.state.value && (
-                <p className="mt-3 truncate text-sm text-muted-foreground">
+                <p className="mt-3 flex items-center gap-2 break-all text-sm font-medium text-[#1D3557]">
+                  <ImagePlus className="size-4 shrink-0 text-[#E76F51]" />
                   Selected: {field.state.value.name}
                 </p>
               )}
             </div>
 
-            {field.state.meta.errors.map((error, index) => (
-              <p
-                key={`${field.name}-error-${index}`}
-                className="text-sm text-red-600"
-              >
-                {getFieldErrorMessage(error)}
-              </p>
-            ))}
+            <FieldErrors name={field.name} errors={field.state.meta.errors} />
           </div>
         )}
       </form.Field>
 
-      {/* Submit */}
       <form.Subscribe
         selector={(state) => [state.canSubmit, state.isSubmitting]}
       >
@@ -456,7 +446,7 @@ export default function CourierRegisterForm() {
           <button
             type="submit"
             disabled={!canSubmit || isSubmitting}
-            className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#1D3557] px-4 py-3 text-sm font-bold text-white shadow-md shadow-[#1D3557]/10 transition duration-200 hover:-translate-y-0.5 hover:bg-[#29486f] hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
           >
             {isSubmitting ? (
               <>
@@ -464,15 +454,21 @@ export default function CourierRegisterForm() {
                 Submitting application...
               </>
             ) : (
-              "Apply as Courier"
+              <>
+                Apply as Courier
+                <ArrowRight className="size-4" />
+              </>
             )}
           </button>
         )}
       </form.Subscribe>
 
-      <p className="text-center text-sm text-muted-foreground">
-        Already have a customer account?{" "}
-        <a href="/login" className="font-medium text-primary hover:underline">
+      <p className="border-t border-slate-100 pt-5 text-center text-sm text-slate-500">
+        Already have a courier account?{" "}
+        <a
+          href="/login"
+          className="font-bold text-[#1D3557] underline decoration-[#E76F51]/60 underline-offset-4 transition-colors hover:text-[#E76F51] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51]"
+        >
           Sign in
         </a>
       </p>

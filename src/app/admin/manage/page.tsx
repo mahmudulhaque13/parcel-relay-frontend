@@ -12,9 +12,11 @@ import {
   UserRound,
   X,
 } from "lucide-react";
-import Image from "next/image";
+
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
 import { useEffect, useMemo, useState } from "react";
+
 import { toast } from "sonner";
 
 import type {
@@ -22,19 +24,23 @@ import type {
   AdminUserRole,
   AdminUserStatus,
 } from "@/api/admin.api";
+
 import {
   useUpdateAdminUserRole,
   useUpdateAdminUserStatus,
 } from "@/hooks/use-admin-user-actions";
+
 import { useAdminUsers } from "@/hooks/use-admin-users";
-import CourierApplications from "@/components/admin/courier-applications";
 
 const adminUserRoles: AdminUserRole[] = ["CUSTOMER", "COURIER", "ADMIN"];
 
 const adminUserStatuses: AdminUserStatus[] = [
   "ACTIVE",
+
   "INACTIVE",
+
   "BLOCKED",
+
   "DELETED",
 ];
 
@@ -70,14 +76,19 @@ function formatDate(date: string) {
 
 export default function AdminManagePage() {
   const router = useRouter();
+
   const pathname = usePathname();
+
   const searchParams = useSearchParams();
 
   const pageParam = Number(searchParams.get("page") ?? "1");
+
   const page = Number.isFinite(pageParam) && pageParam > 0 ? pageParam : 1;
 
   const searchParam = searchParams.get("q") ?? "";
+
   const roleParam = searchParams.get("role") ?? "";
+
   const statusParam = searchParams.get("status") ?? "";
 
   const role: AdminUserRole | undefined = isAdminUserRole(roleParam)
@@ -91,43 +102,60 @@ export default function AdminManagePage() {
   const [search, setSearch] = useState(searchParam);
 
   const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
+
   const [selectedRole, setSelectedRole] = useState<AdminUserRole>("CUSTOMER");
+
   const [selectedStatus, setSelectedStatus] =
     useState<AdminUserStatus>("ACTIVE");
 
   const [phone, setPhone] = useState("");
 
   const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
+
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   const query = useMemo(
     () => ({
       page,
+
       limit: 10,
+
       q: searchParam || undefined,
+
       role,
+
       status,
+
       sortOrder: "desc" as const,
     }),
+
     [page, searchParam, role, status],
   );
 
   const {
     data: usersResponse,
+
     isLoading,
+
     isFetching,
+
     isError,
+
     error,
   } = useAdminUsers(query);
 
   const updateRoleMutation = useUpdateAdminUserRole();
+
   const updateStatusMutation = useUpdateAdminUserStatus();
 
   const users = usersResponse?.data.data ?? [];
+
   const meta = usersResponse?.data.meta;
 
   const totalPages = meta?.totalPage ?? 1;
+
   const totalUsers = meta?.total ?? 0;
 
   useEffect(() => {
@@ -153,6 +181,7 @@ export default function AdminManagePage() {
 
     updateUrl({
       q: search.trim() || undefined,
+
       page: "1",
     });
   }
@@ -160,6 +189,7 @@ export default function AdminManagePage() {
   function handleRoleFilter(value: string) {
     updateUrl({
       role: value || undefined,
+
       page: "1",
     });
   }
@@ -167,6 +197,7 @@ export default function AdminManagePage() {
   function handleStatusFilter(value: string) {
     updateUrl({
       status: value || undefined,
+
       page: "1",
     });
   }
@@ -183,7 +214,9 @@ export default function AdminManagePage() {
 
   function openRoleModal(user: AdminUser) {
     setSelectedUser(user);
+
     setSelectedRole(user.role);
+
     setPhone("");
 
     setIsRoleModalOpen(true);
@@ -191,7 +224,9 @@ export default function AdminManagePage() {
 
   function openStatusModal(user: AdminUser) {
     setSelectedUser(user);
+
     setSelectedStatus(user.status);
+
     setConfirmDelete(false);
 
     setIsStatusModalOpen(true);
@@ -203,10 +238,13 @@ export default function AdminManagePage() {
     }
 
     setSelectedUser(null);
+
     setPhone("");
 
     setConfirmDelete(false);
+
     setIsRoleModalOpen(false);
+
     setIsStatusModalOpen(false);
   }
 
@@ -217,19 +255,23 @@ export default function AdminManagePage() {
 
     if (selectedRole === selectedUser.role) {
       toast.error("Please select a different role.");
+
       return;
     }
 
     if (selectedRole === "COURIER" && phone.trim().length < 7) {
       toast.error("Phone number is required when changing role to COURIER.");
+
       return;
     }
 
     try {
       await updateRoleMutation.mutateAsync({
         userId: selectedUser.id,
+
         payload: {
           role: selectedRole,
+
           ...(selectedRole === "COURIER" ? { phone: phone.trim() } : {}),
         },
       });
@@ -251,17 +293,20 @@ export default function AdminManagePage() {
 
     if (selectedStatus === selectedUser.status) {
       toast.error("Please select a different status.");
+
       return;
     }
 
     if (selectedStatus === "DELETED" && !confirmDelete) {
       toast.error("Please confirm that you want to delete this user.");
+
       return;
     }
 
     try {
       await updateStatusMutation.mutateAsync({
         userId: selectedUser.id,
+
         payload: {
           status: selectedStatus,
         },
@@ -278,9 +323,9 @@ export default function AdminManagePage() {
   }
 
   return (
-    <div className="space-y-6">
-      <CourierApplications />
+    <div className="mx-auto w-full max-w-7xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
       {/* Header */}
+
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <div className="mb-2 flex items-center gap-2 text-sm text-muted-foreground">
@@ -299,11 +344,13 @@ export default function AdminManagePage() {
 
         <div className="rounded-lg border bg-card px-4 py-3">
           <p className="text-xs text-muted-foreground">Total Users</p>
+
           <p className="text-xl font-semibold">{totalUsers}</p>
         </div>
       </div>
 
       {/* Filters */}
+
       <div className="rounded-xl border bg-card p-4">
         <div className="flex flex-col gap-4 xl:flex-row xl:items-end">
           <form onSubmit={handleSearchSubmit} className="flex-1">
@@ -380,8 +427,11 @@ export default function AdminManagePage() {
             onClick={() =>
               updateUrl({
                 q: undefined,
+
                 role: undefined,
+
                 status: undefined,
+
                 page: undefined,
               })
             }
@@ -393,8 +443,10 @@ export default function AdminManagePage() {
       </div>
 
       {/* Content */}
+
       <div className="rounded-xl border bg-card">
         {/* Loading */}
+
         {isLoading ? (
           <LoadingState />
         ) : isError ? (
@@ -404,6 +456,7 @@ export default function AdminManagePage() {
         ) : (
           <>
             {/* Mobile cards */}
+
             <div className="divide-y md:hidden">
               {users.map((user) => (
                 <MobileUserCard
@@ -416,15 +469,21 @@ export default function AdminManagePage() {
             </div>
 
             {/* Desktop table */}
+
             <div className="hidden overflow-x-auto md:block">
               <table className="w-full">
                 <thead>
                   <tr className="border-b bg-muted/30 text-left text-sm">
                     <th className="px-5 py-4 font-medium">User</th>
+
                     <th className="px-5 py-4 font-medium">Role</th>
+
                     <th className="px-5 py-4 font-medium">Status</th>
+
                     <th className="px-5 py-4 font-medium">Provider</th>
+
                     <th className="px-5 py-4 font-medium">Created</th>
+
                     <th className="px-5 py-4 text-right font-medium">
                       Actions
                     </th>
@@ -495,6 +554,7 @@ export default function AdminManagePage() {
       </div>
 
       {/* Pagination */}
+
       {!isLoading && !isError && users.length > 0 && (
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-muted-foreground">
@@ -526,6 +586,7 @@ export default function AdminManagePage() {
       )}
 
       {/* Role Modal */}
+
       {isRoleModalOpen && selectedUser && (
         <Modal
           title="Change User Role"
@@ -611,6 +672,7 @@ export default function AdminManagePage() {
       )}
 
       {/* Status Modal */}
+
       {isStatusModalOpen && selectedUser && (
         <Modal
           title="Change User Status"
@@ -691,25 +753,44 @@ export default function AdminManagePage() {
 }
 
 /* -------------------------------------------------------------------------- */
+
 /* Components                                                                  */
+
 /* -------------------------------------------------------------------------- */
 
 function UserAvatar({ user }: { user: AdminUser }) {
-  if (user.imageUrl) {
+  const [imageError, setImageError] = useState(false);
+  const imageUrl = user.imageUrl?.trim();
+
+  const initials =
+    user.name
+      ?.trim()
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((part) => part.charAt(0))
+      .join("")
+      .toUpperCase() || "?";
+
+  if (imageUrl && !imageError) {
     return (
-      <Image
-        src={user.imageUrl}
-        alt={user.name}
+      <img
+        src={imageUrl}
+        alt={user.name || "User avatar"}
         width={40}
         height={40}
-        className="size-10 rounded-full object-cover"
+        className="size-10 shrink-0 rounded-full object-cover"
+        onError={() => setImageError(true)}
       />
     );
   }
 
   return (
-    <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-muted">
-      <UserRound className="size-5 text-muted-foreground" />
+    <div
+      role="img"
+      aria-label={`${user.name || "User"} avatar`}
+      className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#1D3557]/10 text-sm font-bold text-[#1D3557]"
+    >
+      {initials}
     </div>
   );
 }
@@ -743,11 +824,15 @@ function StatusBadge({ status }: { status: AdminUserStatus }) {
 
 function MobileUserCard({
   user,
+
   onRoleChange,
+
   onStatusChange,
 }: {
   user: AdminUser;
+
   onRoleChange: () => void;
+
   onStatusChange: () => void;
 }) {
   return (
@@ -757,6 +842,7 @@ function MobileUserCard({
 
         <div className="min-w-0 flex-1">
           <p className="truncate font-medium">{user.name}</p>
+
           <p className="truncate text-sm text-muted-foreground">{user.email}</p>
         </div>
       </div>
@@ -764,6 +850,7 @@ function MobileUserCard({
       <div className="grid grid-cols-2 gap-3 text-sm">
         <div>
           <p className="text-xs text-muted-foreground">Role</p>
+
           <div className="mt-1">
             <RoleBadge role={user.role} />
           </div>
@@ -771,6 +858,7 @@ function MobileUserCard({
 
         <div>
           <p className="text-xs text-muted-foreground">Status</p>
+
           <div className="mt-1">
             <StatusBadge status={user.status} />
           </div>
@@ -778,11 +866,13 @@ function MobileUserCard({
 
         <div>
           <p className="text-xs text-muted-foreground">Provider</p>
+
           <p className="mt-1">{user.authProvider}</p>
         </div>
 
         <div>
           <p className="text-xs text-muted-foreground">Created</p>
+
           <p className="mt-1">{formatDate(user.createdAt)}</p>
         </div>
       </div>
@@ -815,6 +905,7 @@ function UserModalHeader({ user }: { user: AdminUser }) {
 
       <div className="min-w-0">
         <p className="truncate font-medium">{user.name}</p>
+
         <p className="truncate text-sm text-muted-foreground">{user.email}</p>
       </div>
     </div>
@@ -823,13 +914,19 @@ function UserModalHeader({ user }: { user: AdminUser }) {
 
 function Modal({
   title,
+
   children,
+
   onClose,
+
   disabled,
 }: {
   title: string;
+
   children: React.ReactNode;
+
   onClose: () => void;
+
   disabled: boolean;
 }) {
   return (
@@ -864,6 +961,7 @@ function LoadingState() {
 
           <div className="flex-1 space-y-2">
             <div className="h-4 w-1/3 rounded bg-muted" />
+
             <div className="h-3 w-1/2 rounded bg-muted" />
           </div>
 

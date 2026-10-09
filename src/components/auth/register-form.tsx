@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "@tanstack/react-form";
-import { Eye, EyeOff } from "lucide-react";
+import { ArrowRight, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -26,6 +26,28 @@ function getFieldErrorMessage(error: unknown): string {
   }
 
   return "Invalid value";
+}
+
+const inputClassName =
+  "min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition duration-200 placeholder:text-slate-400 hover:border-slate-300 focus:border-[#1D3557] focus:ring-4 focus:ring-[#1D3557]/[0.08] aria-[invalid=true]:border-red-400 aria-[invalid=true]:focus:ring-red-100";
+
+const labelClassName = "block text-sm font-bold text-[#1D3557]";
+
+function FieldErrors({ name, errors }: { name: string; errors: unknown[] }) {
+  if (errors.length === 0) return null;
+
+  return (
+    <div aria-live="polite" className="space-y-1">
+      {errors.map((error, index) => (
+        <p
+          key={`${name}-error-${index}`}
+          className="text-sm font-medium leading-5 text-red-600"
+        >
+          {getFieldErrorMessage(error)}
+        </p>
+      ))}
+    </div>
+  );
 }
 
 export default function RegisterForm() {
@@ -74,7 +96,7 @@ export default function RegisterForm() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-7">
       <form
         onSubmit={(event) => {
           event.preventDefault();
@@ -86,8 +108,8 @@ export default function RegisterForm() {
         <form.Field name="name">
           {(field) => (
             <div className="space-y-2">
-              <label htmlFor={field.name} className="text-sm font-medium">
-                Name
+              <label htmlFor={field.name} className={labelClassName}>
+                Full name
               </label>
 
               <input
@@ -95,20 +117,15 @@ export default function RegisterForm() {
                 name={field.name}
                 type="text"
                 autoComplete="name"
+                required
                 value={field.state.value}
                 onChange={(event) => field.handleChange(event.target.value)}
-                placeholder="Your name"
-                className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+                placeholder="Your full name"
+                aria-invalid={field.state.meta.errors.length > 0}
+                className={inputClassName}
               />
 
-              {field.state.meta.errors.map((error, index) => (
-                <p
-                  key={`${field.name}-error-${index}`}
-                  className="text-sm text-red-600"
-                >
-                  {getFieldErrorMessage(error)}
-                </p>
-              ))}
+              <FieldErrors name={field.name} errors={field.state.meta.errors} />
             </div>
           )}
         </form.Field>
@@ -116,8 +133,8 @@ export default function RegisterForm() {
         <form.Field name="email">
           {(field) => (
             <div className="space-y-2">
-              <label htmlFor={field.name} className="text-sm font-medium">
-                Email
+              <label htmlFor={field.name} className={labelClassName}>
+                Email address
               </label>
 
               <input
@@ -125,20 +142,15 @@ export default function RegisterForm() {
                 name={field.name}
                 type="email"
                 autoComplete="email"
+                required
                 value={field.state.value}
                 onChange={(event) => field.handleChange(event.target.value)}
                 placeholder="you@example.com"
-                className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+                aria-invalid={field.state.meta.errors.length > 0}
+                className={inputClassName}
               />
 
-              {field.state.meta.errors.map((error, index) => (
-                <p
-                  key={`${field.name}-error-${index}`}
-                  className="text-sm text-red-600"
-                >
-                  {getFieldErrorMessage(error)}
-                </p>
-              ))}
+              <FieldErrors name={field.name} errors={field.state.meta.errors} />
             </div>
           )}
         </form.Field>
@@ -146,7 +158,7 @@ export default function RegisterForm() {
         <form.Field name="password">
           {(field) => (
             <div className="space-y-2">
-              <label htmlFor={field.name} className="text-sm font-medium">
+              <label htmlFor={field.name} className={labelClassName}>
                 Password
               </label>
 
@@ -156,17 +168,20 @@ export default function RegisterForm() {
                   name={field.name}
                   type={showPassword ? "text" : "password"}
                   autoComplete="new-password"
+                  required
                   value={field.state.value}
                   onChange={(event) => field.handleChange(event.target.value)}
                   placeholder="Enter a strong password"
-                  className="w-full rounded-lg border border-input bg-background px-3 py-2 pr-10 text-sm outline-none focus:ring-2 focus:ring-ring"
+                  aria-invalid={field.state.meta.errors.length > 0}
+                  className={`${inputClassName} pr-12`}
                 />
 
                 <button
                   type="button"
                   onClick={() => setShowPassword((current) => !current)}
                   aria-label={showPassword ? "Hide password" : "Show password"}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+                  aria-pressed={showPassword}
+                  className="absolute right-2 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-[#1D3557] focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#E76F51]"
                 >
                   {showPassword ? (
                     <EyeOff className="size-4" />
@@ -176,14 +191,7 @@ export default function RegisterForm() {
                 </button>
               </div>
 
-              {field.state.meta.errors.map((error, index) => (
-                <p
-                  key={`${field.name}-error-${index}`}
-                  className="text-sm text-red-600"
-                >
-                  {getFieldErrorMessage(error)}
-                </p>
-              ))}
+              <FieldErrors name={field.name} errors={field.state.meta.errors} />
             </div>
           )}
         </form.Field>
@@ -191,8 +199,8 @@ export default function RegisterForm() {
         <form.Field name="confirmPassword">
           {(field) => (
             <div className="space-y-2">
-              <label htmlFor={field.name} className="text-sm font-medium">
-                Confirm Password
+              <label htmlFor={field.name} className={labelClassName}>
+                Confirm password
               </label>
 
               <div className="relative">
@@ -201,10 +209,12 @@ export default function RegisterForm() {
                   name={field.name}
                   type={showConfirmPassword ? "text" : "password"}
                   autoComplete="new-password"
+                  required
                   value={field.state.value}
                   onChange={(event) => field.handleChange(event.target.value)}
                   placeholder="Confirm your password"
-                  className="w-full rounded-lg border border-input bg-background px-3 py-2 pr-10 text-sm outline-none focus:ring-2 focus:ring-ring"
+                  aria-invalid={field.state.meta.errors.length > 0}
+                  className={`${inputClassName} pr-12`}
                 />
 
                 <button
@@ -215,7 +225,8 @@ export default function RegisterForm() {
                       ? "Hide confirm password"
                       : "Show confirm password"
                   }
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+                  aria-pressed={showConfirmPassword}
+                  className="absolute right-2 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-[#1D3557] focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#E76F51]"
                 >
                   {showConfirmPassword ? (
                     <EyeOff className="size-4" />
@@ -225,14 +236,7 @@ export default function RegisterForm() {
                 </button>
               </div>
 
-              {field.state.meta.errors.map((error, index) => (
-                <p
-                  key={`${field.name}-error-${index}`}
-                  className="text-sm text-red-600"
-                >
-                  {getFieldErrorMessage(error)}
-                </p>
-              ))}
+              <FieldErrors name={field.name} errors={field.state.meta.errors} />
             </div>
           )}
         </form.Field>
@@ -244,7 +248,7 @@ export default function RegisterForm() {
             <button
               type="submit"
               disabled={!canSubmit || isSubmitting}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#1D3557] px-4 py-3 text-sm font-bold text-white shadow-md shadow-[#1D3557]/10 transition duration-200 hover:-translate-y-0.5 hover:bg-[#29486f] hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
             >
               {isSubmitting ? (
                 <>
@@ -252,7 +256,10 @@ export default function RegisterForm() {
                   Creating account...
                 </>
               ) : (
-                "Create account"
+                <>
+                  Create account
+                  <ArrowRight className="size-4" />
+                </>
               )}
             </button>
           )}
@@ -260,16 +267,12 @@ export default function RegisterForm() {
       </form>
 
       <div className="space-y-4">
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t border-border" />
-          </div>
-
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">
-              Or continue with
-            </span>
-          </div>
+        <div className="relative flex items-center justify-center">
+          <span className="h-px flex-1 bg-slate-200" />
+          <span className="px-3 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-400">
+            Or continue with
+          </span>
+          <span className="h-px flex-1 bg-slate-200" />
         </div>
 
         <div className="flex justify-center">
@@ -277,13 +280,14 @@ export default function RegisterForm() {
         </div>
       </div>
 
-      <p className="text-center text-sm text-muted-foreground">
+      <p className="border-t border-slate-100 pt-5 text-center text-sm text-slate-600">
         Already have an account?{" "}
         <Link
           href="/login"
-          className="font-medium text-primary hover:underline"
+          className="inline-flex items-center gap-1 font-bold text-[#1D3557] underline decoration-[#E76F51]/60 underline-offset-4 transition-colors hover:text-[#E76F51] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51]"
         >
           Sign in
+          <ArrowRight className="size-3.5" />
         </Link>
       </p>
     </div>

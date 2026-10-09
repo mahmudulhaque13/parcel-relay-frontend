@@ -372,7 +372,7 @@ export default function CourierApplications() {
               key={application.id}
               application={application}
               onReview={handleReview}
-              isReviewing={reviewingUserId !== null}
+              isReviewing={reviewingUserId === application.user.id}
             />
           ))}
         </div>

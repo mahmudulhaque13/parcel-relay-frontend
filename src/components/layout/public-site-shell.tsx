@@ -17,7 +17,7 @@ export default function PublicSiteShell({
     pathname === "/dashboard" ||
     pathname.startsWith("/dashboard/") ||
     pathname === "/courier" ||
-    pathname.startsWith("/courier/");
+    pathname.startsWith("/courier/shipments/");
 
   if (isDashboardRoute) {
     return <>{children}</>;
