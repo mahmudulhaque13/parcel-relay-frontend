@@ -178,3 +178,50 @@ export async function verifyCourierEmail(
     },
   );
 }
+
+export interface CourierApplication {
+  id: string;
+  phone: string;
+  applicationStatus: "PENDING" | "APPROVED" | "REJECTED";
+  identityDocumentUrl: string | null;
+  profilePhotoUrl: string | null;
+  createdAt: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    status: string;
+    emailVerified: boolean;
+    createdAt: string;
+  };
+}
+
+export type ReviewCourierApplicationPayload = {
+  action: "APPROVE" | "REJECT";
+};
+
+export async function getCourierApplications(): Promise<
+  ApiResponse<CourierApplication[]>
+> {
+  return apiClient<ApiResponse<CourierApplication[]>>("/courier/applications");
+}
+
+export async function reviewCourierApplication(
+  applicationId: string,
+  payload: ReviewCourierApplicationPayload,
+): Promise<
+  ApiResponse<{
+    id: string;
+    name: string;
+    email: string;
+    role: "COURIER";
+    status: string;
+    emailVerified: boolean;
+    applicationStatus: "APPROVED" | "REJECTED";
+  }>
+> {
+  return apiClient(`/courier/applications/${applicationId}/review`, {
+    method: "PATCH",
+    body: payload,
+  });
+}

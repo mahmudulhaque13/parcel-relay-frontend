@@ -27,6 +27,7 @@ import {
   useUpdateAdminUserStatus,
 } from "@/hooks/use-admin-user-actions";
 import { useAdminUsers } from "@/hooks/use-admin-users";
+import CourierApplications from "@/components/admin/courier-applications";
 
 const adminUserRoles: AdminUserRole[] = ["CUSTOMER", "COURIER", "ADMIN"];
 
@@ -278,6 +279,7 @@ export default function AdminManagePage() {
 
   return (
     <div className="space-y-6">
+      <CourierApplications />
       {/* Header */}
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>

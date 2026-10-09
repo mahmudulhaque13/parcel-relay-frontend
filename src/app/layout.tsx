@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Providers from "@/providers";
+import SiteNavbar from "@/components/layout/site-navbar";
+import SiteFooter from "@/components/layout/site-footer";
 
 export const metadata: Metadata = {
   title: "ParcelRelay",
@@ -15,7 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <SiteNavbar />
+          {children}
+          <SiteFooter />
+        </Providers>
       </body>
     </html>
   );

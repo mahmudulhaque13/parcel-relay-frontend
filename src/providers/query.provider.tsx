@@ -12,7 +12,11 @@ import { toast } from "sonner";
 function makeQueryClient() {
   return new QueryClient({
     queryCache: new QueryCache({
-      onError: (error) => {
+      onError: (error, query) => {
+        if (query.queryKey[0] === "shipment-tracking") {
+          return;
+        }
+
         toast.error(
           error instanceof Error
             ? error.message
