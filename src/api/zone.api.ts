@@ -7,6 +7,7 @@ export interface Zone {
   code: string;
   description?: string | null;
   isActive: boolean;
+  isDeleted?: boolean;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -17,43 +18,24 @@ export interface ZonePayload {
   description?: string;
 }
 
-export async function getZones(): Promise<ApiResponse<Zone[]>> {
-  return apiClient<ApiResponse<Zone[]>>("/zones");
-}
+export const getZones = () =>
+  apiClient<ApiResponse<Zone[]>>("/zones");
 
+// Admin-only endpoint: includes active and inactive zones.
 export const getAdminZones = () =>
   apiClient<ApiResponse<Zone[]>>("/zones/admin/all");
 
-export async function createZone(
-  payload: ZonePayload,
-): Promise<ApiResponse<Zone>> {
-  return apiClient<ApiResponse<Zone>>("/zones", {
-    method: "POST",
-    body: payload,
-  });
-}
+export const createZone = (payload: ZonePayload) =>
+  apiClient<ApiResponse<Zone>>("/zones", { method: "POST", body: payload });
 
-export async function updateZone(
-  id: string,
-  payload: Partial<ZonePayload>,
-): Promise<ApiResponse<Zone>> {
-  return apiClient<ApiResponse<Zone>>(`/zones/${id}`, {
-    method: "PATCH",
-    body: payload,
-  });
-}
-
-export async function deactivateZone(id: string): Promise<ApiResponse<Zone>> {
-  return apiClient<ApiResponse<Zone>>(`/zones/${id}/deactivate`, {
-    method: "PATCH",
-  });
-}
+export const updateZone = (id: string, payload: Partial<ZonePayload>) =>
+  apiClient<ApiResponse<Zone>>(`/zones/${id}`, { method: "PATCH", body: payload });
 
 export const activateZone = (id: string) =>
-  apiClient(`/zones/${id}/activate`, {
-    method: "PATCH",
-  });
+  apiClient<ApiResponse<Zone>>(`/zones/${id}/activate`, { method: "PATCH" });
 
-export async function deleteZone(id: string): Promise<ApiResponse<Zone>> {
-  return apiClient<ApiResponse<Zone>>(`/zones/${id}`, { method: "DELETE" });
-}
+export const deactivateZone = (id: string) =>
+  apiClient<ApiResponse<Zone>>(`/zones/${id}/deactivate`, { method: "PATCH" });
+
+export const deleteZone = (id: string) =>
+  apiClient<ApiResponse<Zone>>(`/zones/${id}`, { method: "DELETE" });

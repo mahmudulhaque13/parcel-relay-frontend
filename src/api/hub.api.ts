@@ -7,8 +7,9 @@ export interface Hub {
   code: string;
   address: string;
   zoneId: string;
-  zone?: { id: string; name: string; code: string };
   isActive: boolean;
+  isDeleted?: boolean;
+  zone?: { id: string; name: string; code: string; isActive: boolean };
   createdAt?: string;
   updatedAt?: string;
 }
@@ -20,40 +21,20 @@ export interface HubPayload {
   zoneId: string;
 }
 
-export async function getHubs(): Promise<ApiResponse<Hub[]>> {
-  return apiClient<ApiResponse<Hub[]>>("/hubs");
-}
+export const getHubs = () =>
+  apiClient<ApiResponse<Hub[]>>("/hubs/admin/all");
 
-export async function createHub(
-  payload: HubPayload,
-): Promise<ApiResponse<Hub>> {
-  return apiClient<ApiResponse<Hub>>("/hubs", {
-    method: "POST",
-    body: payload,
-  });
-}
+export const createHub = (payload: HubPayload) =>
+  apiClient<ApiResponse<Hub>>("/hubs", { method: "POST", body: payload });
 
-export async function updateHub(
-  id: string,
-  payload: Partial<HubPayload>,
-): Promise<ApiResponse<Hub>> {
-  return apiClient<ApiResponse<Hub>>(`/hubs/${id}`, {
-    method: "PATCH",
-    body: payload,
-  });
-}
-
-export async function deactivateHub(id: string): Promise<ApiResponse<Hub>> {
-  return apiClient<ApiResponse<Hub>>(`/hubs/${id}/deactivate`, {
-    method: "PATCH",
-  });
-}
+export const updateHub = (id: string, payload: Partial<HubPayload>) =>
+  apiClient<ApiResponse<Hub>>(`/hubs/${id}`, { method: "PATCH", body: payload });
 
 export const activateHub = (id: string) =>
-  apiClient(`/hubs/${id}/activate`, {
-    method: "PATCH",
-  });
+  apiClient<ApiResponse<Hub>>(`/hubs/${id}/activate`, { method: "PATCH" });
 
-export async function deleteHub(id: string): Promise<ApiResponse<Hub>> {
-  return apiClient<ApiResponse<Hub>>(`/hubs/${id}`, { method: "DELETE" });
-}
+export const deactivateHub = (id: string) =>
+  apiClient<ApiResponse<Hub>>(`/hubs/${id}/deactivate`, { method: "PATCH" });
+
+export const deleteHub = (id: string) =>
+  apiClient<ApiResponse<Hub>>(`/hubs/${id}`, { method: "DELETE" });
