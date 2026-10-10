@@ -1,8 +1,11 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { ArrowLeft, MailCheck, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 
 import VerifyCourierEmailForm from "@/components/auth/verify-courier-email-form";
+
+export const metadata: Metadata = { title: "Verify Courier Email | ParcelRelay", description: "Verify the email address associated with your ParcelRelay courier application." };
 
 export default function VerifyCourierEmailPage() {
   return (

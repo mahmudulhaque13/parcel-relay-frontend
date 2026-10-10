@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -14,6 +15,8 @@ const benefits = [
   "Track delivery progress",
   "Access your personalized dashboard",
 ];
+
+export const metadata: Metadata = { title: "Create Account | ParcelRelay", description: "Create a ParcelRelay customer account to book shipments and track deliveries." };
 
 export default function RegisterPage() {
   return (

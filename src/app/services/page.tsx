@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -104,6 +105,8 @@ const lifecycle = [
       "Shipment status and timeline events remain available to follow the delivery journey.",
   },
 ];
+
+export const metadata: Metadata = { title: "Services | ParcelRelay", description: "Explore ParcelRelay shipment creation, delivery quotes, online payment, courier operations, and shipment tracking." };
 
 export default function ServicesPage() {
   return (

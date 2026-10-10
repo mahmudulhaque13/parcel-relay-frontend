@@ -1,6 +1,9 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, PackageCheck, ShieldCheck } from "lucide-react";
 import LoginForm from "@/components/auth/login-form";
+
+export const metadata: Metadata = { title: "Sign In | ParcelRelay", description: "Sign in to ParcelRelay to manage shipments, payments, and delivery operations." };
 
 export default function LoginPage() {
   return (

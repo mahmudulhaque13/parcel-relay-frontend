@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -14,6 +15,8 @@ const benefits = [
   "Verify your email address",
   "Get reviewed by the administration team",
 ];
+
+export const metadata: Metadata = { title: "Become a Courier | ParcelRelay", description: "Apply to join ParcelRelay as a courier and submit your application for administrator review." };
 
 export default function CourierRegisterPage() {
   return (
