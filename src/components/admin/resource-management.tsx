@@ -1,9 +1,6 @@
 "use client";
-
 import { useMemo, useState } from "react";
-
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-
 import {
   AlertCircle,
   Building2,
@@ -17,7 +14,6 @@ import {
   Search,
   X,
 } from "lucide-react";
-
 import {
   activateZone,
   createZone,
@@ -29,7 +25,6 @@ import {
   type Zone,
   type ZonePayload,
 } from "@/api/zone.api";
-
 import {
   activateHub,
   createHub,
@@ -40,7 +35,6 @@ import {
   type Hub,
   type HubPayload,
 } from "@/api/hub.api";
-
 import {
   createPricingRule,
   deactivatePricingRule,
@@ -50,38 +44,26 @@ import {
   type PricingRule,
   type PricingPayload,
 } from "@/api/pricing.api";
-
 type ModuleKind = "zones" | "hubs" | "pricing";
-
 type Resource = Zone | Hub | PricingRule;
-
 type FormValues = Record<string, string>;
-
 const inputClass =
   "mt-1.5 h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-900 outline-none transition focus:border-[#1D3557] focus:ring-2 focus:ring-[#1D3557]/10";
-
 const buttonClass =
   "inline-flex min-h-9 items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-50";
-
 function unwrap<T>(response: unknown): T {
   const root = response as { data?: unknown };
-
   const nested = root?.data;
-
   if (nested && typeof nested === "object" && "data" in (nested as object)) {
     return (nested as { data: T }).data;
   }
-
   return nested as T;
 }
-
 function messageFrom(error: unknown): string {
   if (error && typeof error === "object" && "message" in error)
     return String((error as { message: unknown }).message);
-
   return "Something went wrong. Please try again.";
 }
-
 const moduleMeta: Record<
   ModuleKind,
   { title: string; subtitle: string; singular: string }
@@ -91,13 +73,11 @@ const moduleMeta: Record<
     subtitle: "Manage delivery zones and their identifiers.",
     singular: "Zone",
   },
-
   hubs: {
     title: "Hub Management",
     subtitle: "Manage hubs and assign each hub to a delivery zone.",
     singular: "Hub",
   },
-
   pricing: {
     title: "Pricing Management",
     subtitle:
@@ -105,69 +85,59 @@ const moduleMeta: Record<
     singular: "Pricing Rule",
   },
 };
-
 export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
   const queryClient = useQueryClient();
-
   const [search, setSearch] = useState("");
-
   const [editing, setEditing] = useState<Resource | null>(null);
-
   const [formOpen, setFormOpen] = useState(false);
-
   const [errorText, setErrorText] = useState("");
-
   const [successText, setSuccessText] = useState("");
-
   const [values, setValues] = useState<FormValues>({});
-
   const meta = moduleMeta[kind];
-
+  // Admin Zone Management must include inactive zones.
+  const adminZonesQuery = useQuery({
+    queryKey: ["admin-zones"],
+    queryFn: getAdminZones,
+    enabled: kind === "zones",
+  });
+  // Hub form dropdown should only offer active zones.
   const zonesQuery = useQuery({
     queryKey: ["zones"],
     queryFn: getZones,
-    enabled: kind === "zones" || kind === "hubs",
+    enabled: kind === "hubs",
   });
-
   const hubsQuery = useQuery({
     queryKey: ["hubs"],
     queryFn: getHubs,
     enabled: kind === "hubs",
   });
-
   const pricingQuery = useQuery({
     queryKey: ["pricing"],
     queryFn: getPricingRules,
     enabled: kind === "pricing",
   });
-
   const query =
-    kind === "zones" ? zonesQuery : kind === "hubs" ? hubsQuery : pricingQuery;
-
+    kind === "zones"
+      ? adminZonesQuery
+      : kind === "hubs"
+        ? hubsQuery
+        : pricingQuery;
   const resources = useMemo(() => {
     const raw = query.data ? unwrap<Resource[]>(query.data) : [];
-
     return Array.isArray(raw) ? raw : [];
   }, [query.data]);
-
   const zones = useMemo(() => {
     const raw = zonesQuery.data ? unwrap<Zone[]>(zonesQuery.data) : [];
-
     return Array.isArray(raw) ? raw : [];
   }, [zonesQuery.data]);
-
   const invalidate = async () => {
     await Promise.all([
-      queryClient.invalidateQueries({ queryKey: [kind] }),
-
+      queryClient.invalidateQueries({ queryKey: ["admin-zones"] }),
       queryClient.invalidateQueries({ queryKey: ["zones"] }),
-
       queryClient.invalidateQueries({ queryKey: ["hubs"] }),
-
       queryClient.invalidateQueries({ queryKey: ["pricing"] }),
     ]);
   };
-
   const saveMutation = useMutation({
     mutationFn: async () => {
       if (kind === "zones") {
@@ -176,10 +146,8 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
           code: values.code?.trim() ?? "",
           description: values.description?.trim() ?? "",
         };
-
         return editing ? updateZone(editing.id, payload) : createZone(payload);
       }
-
       if (kind === "hubs") {
         const payload: HubPayload = {
           name: values.name?.trim() ?? "",
@@ -187,69 +155,50 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
           address: values.address?.trim() ?? "",
           zoneId: values.zoneId ?? "",
         };
-
         return editing ? updateHub(editing.id, payload) : createHub(payload);
       }
-
       const payload: PricingPayload = {
         name: values.name?.trim() ?? "",
         basePrice: Number(values.basePrice),
         perKgPrice: Number(values.perKgPrice),
         codPercentage: Number(values.codPercentage),
       };
-
       return editing
         ? updatePricingRule(editing.id, payload)
         : createPricingRule(payload);
     },
-
     onSuccess: async () => {
       setErrorText("");
-
       setSuccessText(
         `${meta.singular} ${editing ? "updated" : "created"} successfully.`,
       );
-
       setFormOpen(false);
-
       setEditing(null);
-
       await invalidate();
     },
-
     onError: (error) => {
       setSuccessText("");
       setErrorText(messageFrom(error));
     },
   });
-
   const statusMutation = useMutation({
     mutationFn: async (resource: Resource) => {
       if (!window.confirm(`Deactivate ${resource.name}?`)) return null;
-
       if (kind === "zones") return deactivateZone(resource.id);
-
       if (kind === "hubs") return deactivateHub(resource.id);
-
       return deactivatePricingRule(resource.id);
     },
-
     onSuccess: async (result) => {
       if (!result) return;
-
       setErrorText("");
-
       setSuccessText("Item deactivated successfully.");
-
       await invalidate();
     },
-
     onError: (error) => {
       setSuccessText("");
       setErrorText(messageFrom(error));
     },
   });
-
   const activateMutation = useMutation({
     mutationFn: async (resource: Resource) => {
       if (!window.confirm(`Activate "${resource.name}"?`)) return null;
@@ -268,7 +217,6 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
       setErrorText(messageFrom(error));
     },
   });
-
   const deleteMutation = useMutation({
     mutationFn: async (resource: Resource) => {
       if (
@@ -277,33 +225,23 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
         )
       )
         return null;
-
       if (kind === "zones") return deleteZone(resource.id);
-
       if (kind === "hubs") return deleteHub(resource.id);
-
       return deletePricingRule(resource.id);
     },
-
     onSuccess: async (result) => {
       if (!result) return;
-
       setErrorText("");
-
       setSuccessText("Item deleted successfully.");
-
       await invalidate();
     },
-
     onError: (error) => {
       setSuccessText("");
       setErrorText(messageFrom(error));
     },
   });
-
   function openCreate() {
     setEditing(null);
-
     setValues(
       kind === "zones"
         ? { name: "", code: "", description: "" }
@@ -311,20 +249,14 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
           ? { name: "", code: "", address: "", zoneId: zones[0]?.id ?? "" }
           : { name: "", basePrice: "0", perKgPrice: "0", codPercentage: "0" },
     );
-
     setErrorText("");
-
     setSuccessText("");
-
     setFormOpen(true);
   }
-
   function openEdit(resource: Resource) {
     setEditing(resource);
-
     if (kind === "zones") {
       const item = resource as Zone;
-
       setValues({
         name: item.name,
         code: item.code,
@@ -332,7 +264,6 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
       });
     } else if (kind === "hubs") {
       const item = resource as Hub;
-
       setValues({
         name: item.name,
         code: item.code,
@@ -341,7 +272,6 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
       });
     } else {
       const item = resource as PricingRule;
-
       setValues({
         name: item.name,
         basePrice: String(item.basePrice),
@@ -349,67 +279,51 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
         codPercentage: String(item.codPercentage),
       });
     }
-
     setErrorText("");
-
     setSuccessText("");
-
     setFormOpen(true);
   }
-
   function updateField(key: string, value: string) {
     setValues((current) => ({ ...current, [key]: value }));
   }
-
   function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
     setErrorText("");
-
     if (values.name?.trim().length < 2) {
       setErrorText("Name must be at least 2 characters.");
       return;
     }
-
     if (kind === "zones" && values.code?.trim().length < 2) {
       setErrorText("Zone code must be at least 2 characters.");
       return;
     }
-
     if (kind === "hubs" && values.code?.trim().length < 2) {
       setErrorText("Hub code must be at least 2 characters.");
       return;
     }
-
     if (kind === "hubs" && values.address?.trim().length < 5) {
       setErrorText("Address must be at least 5 characters.");
       return;
     }
-
     if (kind === "hubs" && !values.zoneId) {
       setErrorText("Select a zone.");
       return;
     }
-
     if (kind === "pricing") {
       for (const field of ["basePrice", "perKgPrice", "codPercentage"]) {
         const number = Number(values[field]);
-
         if (!Number.isFinite(number) || number < 0) {
           setErrorText(`${field} must be a non-negative number.`);
           return;
         }
       }
-
       if (Number(values.codPercentage) > 100) {
         setErrorText("COD percentage cannot exceed 100.");
         return;
       }
     }
-
     saveMutation.mutate();
   }
-
   const filtered = resources.filter((item) => {
     const haystack = [
       item.name,
@@ -419,19 +333,13 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
     ]
       .join(" ")
       .toLowerCase();
-
     return haystack.includes(search.toLowerCase());
   });
-
   const Icon =
     kind === "zones" ? MapPin : kind === "hubs" ? Building2 : CircleDollarSign;
-
   const loading = query.isLoading;
-
   const isError = query.isError;
-
   const queryError = query.error ? messageFrom(query.error) : "";
-
   return (
     <div className="mx-auto w-full max-w-7xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -439,14 +347,11 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
           <div className="mb-2 flex items-center gap-2 text-sm text-slate-500">
             <Icon className="size-4" /> Admin <span>/</span> {meta.title}
           </div>
-
           <h1 className="text-2xl font-bold tracking-tight text-slate-900">
             {meta.title}
           </h1>
-
           <p className="mt-1 text-sm text-slate-600">{meta.subtitle}</p>
         </div>
-
         <button
           type="button"
           onClick={openCreate}
@@ -455,7 +360,6 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
           <Plus className="size-4" /> Add {meta.singular}
         </button>
       </div>
-
       {successText && (
         <div
           role="status"
@@ -465,7 +369,6 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
           {successText}
         </div>
       )}
-
       {(errorText || (isError && queryError)) && (
         <div
           role="alert"
@@ -475,7 +378,6 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
           {errorText || queryError}
         </div>
       )}
-
       <div className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative w-full sm:max-w-sm">
           <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
@@ -486,7 +388,6 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
             className="h-10 w-full rounded-lg border border-slate-200 pl-9 pr-3 text-sm outline-none focus:border-[#1D3557]"
           />
         </div>
-
         <div className="flex items-center gap-3 text-sm text-slate-500">
           <span>
             {filtered.length} item{filtered.length === 1 ? "" : "s"}
@@ -500,7 +401,6 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
           </button>
         </div>
       </div>
-
       {formOpen && (
         <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
           <div className="mb-5 flex items-center justify-between">
@@ -518,7 +418,6 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
               <X className="size-4" />
             </button>
           </div>
-
           <form onSubmit={submit} className="grid gap-4 sm:grid-cols-2">
             <label className="text-sm font-medium text-slate-700">
               Name
@@ -530,7 +429,6 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
                 className={inputClass}
               />
             </label>
-
             {kind !== "pricing" && (
               <label className="text-sm font-medium text-slate-700">
                 Code
@@ -545,7 +443,6 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
                 />
               </label>
             )}
-
             {kind === "zones" && (
               <label className="text-sm font-medium text-slate-700 sm:col-span-2">
                 Description{" "}
@@ -558,7 +455,6 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
                 />
               </label>
             )}
-
             {kind === "hubs" && (
               <>
                 <label className="text-sm font-medium text-slate-700 sm:col-span-2">
@@ -571,7 +467,6 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
                     className={inputClass}
                   />
                 </label>
-
                 <label className="text-sm font-medium text-slate-700 sm:col-span-2">
                   Zone
                   <select
@@ -597,7 +492,6 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
                 </label>
               </>
             )}
-
             {kind === "pricing" && (
               <>
                 <label className="text-sm font-medium text-slate-700">
@@ -612,7 +506,6 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
                     className={inputClass}
                   />
                 </label>
-
                 <label className="text-sm font-medium text-slate-700">
                   Per kg price (BDT)
                   <input
@@ -625,7 +518,6 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
                     className={inputClass}
                   />
                 </label>
-
                 <label className="text-sm font-medium text-slate-700">
                   COD percentage (%)
                   <input
@@ -643,7 +535,6 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
                 </label>
               </>
             )}
-
             <div className="flex flex-wrap justify-end gap-2 sm:col-span-2">
               <button
                 type="button"
@@ -670,7 +561,6 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
           </form>
         </div>
       )}
-
       <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
         {loading ? (
           <div className="space-y-4 p-6">
@@ -735,15 +625,11 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
                   </th>
                 </tr>
               </thead>
-
               <tbody className="divide-y divide-slate-100">
                 {filtered.map((resource) => {
                   const active = resource.isActive !== false;
-
                   const hub = resource as Hub;
-
                   const price = resource as PricingRule;
-
                   return (
                     <tr
                       key={resource.id}
@@ -842,7 +728,6 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
           </div>
         )}
       </div>
-
       <p className="text-xs leading-5 text-slate-500">
         Administrative changes are sent to the backend API. Inactive zones and
         hubs can be reactivated. Deleted items cannot be restored from this
