@@ -9,7 +9,7 @@ import {
   useState,
 } from "react";
 
-import { getMe, refreshToken } from "@/api/auth.api";
+import { getMe, logout, refreshToken } from "@/api/auth.api";
 import { clearAccessToken, getAccessToken } from "@/lib/auth-storage";
 import type { AuthUser } from "@/types/auth";
 
@@ -18,7 +18,7 @@ interface AuthContextValue {
   isLoading: boolean;
   isAuthenticated: boolean;
   setUser: (user: AuthUser | null) => void;
-  logoutUser: () => void;
+  logoutUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -69,9 +69,13 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       isLoading,
       isAuthenticated: Boolean(user),
       setUser,
-      logoutUser: () => {
-        clearAccessToken();
-        setUser(null);
+      logoutUser: async () => {
+        try {
+          await logout();
+        } finally {
+          clearAccessToken();
+          setUser(null);
+        }
       },
     }),
     [user, isLoading],
