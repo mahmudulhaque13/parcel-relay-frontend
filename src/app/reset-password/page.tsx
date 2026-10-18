@@ -140,9 +140,9 @@ function ResetPasswordForm() {
                   />
                 </div>
 
-                {field.state.meta.errors.map((error, index) => (
+                {field.state.meta.errors.map((error) => (
                   <p
-                    key={`email-error-${index}`}
+                    key={String(error)}
                     className="text-sm font-medium text-red-600"
                   >
                     {error?.toString()}
@@ -179,9 +179,9 @@ function ResetPasswordForm() {
                   className="min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-center text-base font-bold tracking-[0.35em] text-slate-800 outline-none transition duration-200 placeholder:text-sm placeholder:font-normal placeholder:tracking-normal placeholder:text-slate-400 hover:border-slate-300 focus:border-[#1D3557] focus:ring-4 focus:ring-[#1D3557]/[0.08] aria-[invalid=true]:border-red-400"
                 />
 
-                {field.state.meta.errors.map((error, index) => (
+                {field.state.meta.errors.map((error) => (
                   <p
-                    key={`otp-error-${index}`}
+                    key={String(error)}
                     className="text-sm font-medium text-red-600"
                   >
                     {error?.toString()}
@@ -232,9 +232,9 @@ function ResetPasswordForm() {
                   </button>
                 </div>
 
-                {field.state.meta.errors.map((error, index) => (
+                {field.state.meta.errors.map((error) => (
                   <p
-                    key={`password-error-${index}`}
+                    key={String(error)}
                     className="text-sm font-medium text-red-600"
                   >
                     {error?.toString()}
@@ -297,10 +297,9 @@ export default function ResetPasswordPage() {
 
       <Suspense
         fallback={
-          <div
-            className="loading loading-ring loading-lg text-[#1D3557]"
-            aria-label="Loading password reset form"
-          />
+          <output className="loading loading-ring loading-lg text-[#1D3557]">
+            <span className="sr-only">Loading password reset form</span>
+          </output>
         }
       >
         <ResetPasswordForm />

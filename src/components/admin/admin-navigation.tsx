@@ -1,20 +1,24 @@
 "use client";
 
+import {
+  Building2,
+  ChartNoAxesCombined,
+  CircleDollarSign,
+  ClipboardList,
+  LayoutDashboard,
+  MapPin,
+  Users,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  LayoutDashboard,
-  ClipboardList,
-  ChartNoAxesCombined,
-  Users,
-  MapPin,
-  Building2,
-  CircleDollarSign,
-} from "lucide-react";
 
 const adminLinks = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard },
-  { href: "/admin/courier-applications", label: "Courier Applications", icon: ClipboardList },
+  {
+    href: "/admin/courier-applications",
+    label: "Courier Applications",
+    icon: ClipboardList,
+  },
   { href: "/admin/manage", label: "Manage Users", icon: Users },
   { href: "/admin/zones", label: "Zones", icon: MapPin },
   { href: "/admin/hubs", label: "Hubs", icon: Building2 },
@@ -26,11 +30,15 @@ export default function AdminNavigation() {
   const pathname = usePathname();
 
   return (
-    <nav aria-label="Admin navigation" className="flex flex-wrap items-center gap-2">
+    <nav
+      aria-label="Admin navigation"
+      className="flex flex-wrap items-center gap-2"
+    >
       {adminLinks.map(({ href, label, icon: Icon }) => {
-        const isActive = href === "/admin"
-          ? pathname === href
-          : pathname === href || pathname.startsWith(`${href}/`);
+        const isActive =
+          href === "/admin"
+            ? pathname === href
+            : pathname === href || pathname.startsWith(`${href}/`);
 
         return (
           <Link

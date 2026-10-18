@@ -1,6 +1,3 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import TrackingForm from "@/components/tracking/tracking-form";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -12,6 +9,9 @@ import {
   ShieldCheck,
   Truck,
 } from "lucide-react";
+import type { Metadata } from "next";
+import Link from "next/link";
+import TrackingForm from "@/components/tracking/tracking-form";
 
 export const metadata: Metadata = {
   title: "ParcelRelay | Smarter Courier & Delivery Management",

@@ -1,8 +1,8 @@
 "use client";
 
+import { Truck } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Truck } from "lucide-react";
 
 const courierLinks = [
   {

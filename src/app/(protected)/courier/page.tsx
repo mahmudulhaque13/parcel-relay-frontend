@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import type { ChangeEvent, FormEvent } from "react";
+import { MapPin, Package, Search, Truck } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { MapPin, Package, Search, Truck } from "lucide-react";
+import type { ChangeEvent, FormEvent } from "react";
+import { useEffect, useState } from "react";
 
 import { useCourierShipments } from "@/hooks/use-courier-shipments";
 import { getShipmentStatusLabel } from "@/lib/shipment-status";
@@ -130,9 +130,12 @@ export default function CourierPage() {
           <div className="h-4 w-80 max-w-full animate-pulse rounded bg-slate-200" />
 
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            {Array.from({ length: 6 }).map((_, index) => (
+            {Array.from(
+              { length: 6 },
+              (_, index) => `shipment-skeleton-${index}`,
+            ).map((key) => (
               <div
-                key={index}
+                key={key}
                 className="h-72 animate-pulse rounded-2xl border border-slate-200 bg-white"
               />
             ))}

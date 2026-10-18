@@ -1,11 +1,15 @@
-import type { Metadata } from "next";
-import { Suspense } from "react";
 import { ArrowLeft, MailCheck, ShieldCheck } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 
 import VerifyCourierEmailForm from "@/components/auth/verify-courier-email-form";
 
-export const metadata: Metadata = { title: "Verify Courier Email | ParcelRelay", description: "Verify the email address associated with your ParcelRelay courier application." };
+export const metadata: Metadata = {
+  title: "Verify Courier Email | ParcelRelay",
+  description:
+    "Verify the email address associated with your ParcelRelay courier application.",
+};
 
 export default function VerifyCourierEmailPage() {
   return (
@@ -57,8 +61,9 @@ export default function VerifyCourierEmailPage() {
                 <div className="flex min-h-24 items-center justify-center gap-3 rounded-xl border border-slate-100 bg-slate-50/70 p-5 text-sm text-slate-500">
                   <span
                     className="loading loading-ring loading-md text-[#1D3557]"
-                    aria-label="Loading verification form"
+                    aria-hidden="true"
                   />
+                  <output className="sr-only">Loading verification form</output>
                   Loading verification form...
                 </div>
               }

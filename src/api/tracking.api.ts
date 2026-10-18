@@ -1,14 +1,6 @@
 import apiClient from "@/lib/apiClient";
 import type { ApiResponse } from "@/types/api";
 
-export interface TrackingShipment {
-  recipientName: string;
-  deliveryAddress: string;
-  weight: string;
-  deliveryCharge: string;
-  codAmount: string;
-}
-
 export interface TrackingZone {
   name: string;
   code: string;
@@ -24,7 +16,6 @@ export interface TrackingEvent {
 export interface TrackingInfo {
   trackingNumber: string;
   currentStatus: string;
-  shipment: TrackingShipment;
   originZone: TrackingZone;
   destinationZone: TrackingZone;
   timeline: TrackingEvent[];

@@ -1,8 +1,8 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import SiteNavbar from "@/components/layout/site-navbar";
 import SiteFooter from "@/components/layout/site-footer";
+import SiteNavbar from "@/components/layout/site-navbar";
 
 export default function PublicSiteShell({
   children,

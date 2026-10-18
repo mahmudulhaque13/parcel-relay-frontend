@@ -21,14 +21,16 @@ export interface HubPayload {
   zoneId: string;
 }
 
-export const getHubs = () =>
-  apiClient<ApiResponse<Hub[]>>("/hubs/admin/all");
+export const getHubs = () => apiClient<ApiResponse<Hub[]>>("/hubs/admin/all");
 
 export const createHub = (payload: HubPayload) =>
   apiClient<ApiResponse<Hub>>("/hubs", { method: "POST", body: payload });
 
 export const updateHub = (id: string, payload: Partial<HubPayload>) =>
-  apiClient<ApiResponse<Hub>>(`/hubs/${id}`, { method: "PATCH", body: payload });
+  apiClient<ApiResponse<Hub>>(`/hubs/${id}`, {
+    method: "PATCH",
+    body: payload,
+  });
 
 export const activateHub = (id: string) =>
   apiClient<ApiResponse<Hub>>(`/hubs/${id}/activate`, { method: "PATCH" });

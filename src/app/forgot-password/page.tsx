@@ -145,9 +145,9 @@ export default function ForgotPasswordPage() {
                     />
                   </div>
 
-                  {field.state.meta.errors.map((error, index) => (
+                  {field.state.meta.errors.map((error) => (
                     <p
-                      key={`email-error-${index}`}
+                      key={String(error)}
                       className="text-sm font-medium text-red-600"
                     >
                       {typeof error === "string"

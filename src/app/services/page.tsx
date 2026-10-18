@@ -1,5 +1,3 @@
-import type { Metadata } from "next";
-import Link from "next/link";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -12,6 +10,8 @@ import {
   ShieldCheck,
   Truck,
 } from "lucide-react";
+import type { Metadata } from "next";
+import Link from "next/link";
 
 const services = [
   {
@@ -106,7 +106,11 @@ const lifecycle = [
   },
 ];
 
-export const metadata: Metadata = { title: "Services | ParcelRelay", description: "Explore ParcelRelay shipment creation, delivery quotes, online payment, courier operations, and shipment tracking." };
+export const metadata: Metadata = {
+  title: "Services | ParcelRelay",
+  description:
+    "Explore ParcelRelay shipment creation, delivery quotes, online payment, courier operations, and shipment tracking.",
+};
 
 export default function ServicesPage() {
   return (

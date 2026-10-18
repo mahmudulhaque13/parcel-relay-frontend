@@ -1,5 +1,3 @@
-import type { Metadata } from "next";
-import Link from "next/link";
 import {
   ArrowLeft,
   CheckCircle2,
@@ -7,6 +5,8 @@ import {
   ShieldCheck,
   Truck,
 } from "lucide-react";
+import type { Metadata } from "next";
+import Link from "next/link";
 
 import CourierRegisterForm from "@/components/auth/courier-register-form";
 
@@ -16,7 +16,11 @@ const benefits = [
   "Get reviewed by the administration team",
 ];
 
-export const metadata: Metadata = { title: "Become a Courier | ParcelRelay", description: "Apply to join ParcelRelay as a courier and submit your application for administrator review." };
+export const metadata: Metadata = {
+  title: "Become a Courier | ParcelRelay",
+  description:
+    "Apply to join ParcelRelay as a courier and submit your application for administrator review.",
+};
 
 export default function CourierRegisterPage() {
   return (

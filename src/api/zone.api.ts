@@ -18,8 +18,7 @@ export interface ZonePayload {
   description?: string;
 }
 
-export const getZones = () =>
-  apiClient<ApiResponse<Zone[]>>("/zones");
+export const getZones = () => apiClient<ApiResponse<Zone[]>>("/zones");
 
 // Admin-only endpoint: includes active and inactive zones.
 export const getAdminZones = () =>
@@ -29,7 +28,10 @@ export const createZone = (payload: ZonePayload) =>
   apiClient<ApiResponse<Zone>>("/zones", { method: "POST", body: payload });
 
 export const updateZone = (id: string, payload: Partial<ZonePayload>) =>
-  apiClient<ApiResponse<Zone>>(`/zones/${id}`, { method: "PATCH", body: payload });
+  apiClient<ApiResponse<Zone>>(`/zones/${id}`, {
+    method: "PATCH",
+    body: payload,
+  });
 
 export const activateZone = (id: string) =>
   apiClient<ApiResponse<Zone>>(`/zones/${id}/activate`, { method: "PATCH" });

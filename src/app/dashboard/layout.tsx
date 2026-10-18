@@ -1,9 +1,8 @@
-import type { ReactNode } from "react";
 import Link from "next/link";
-import CustomerNavigation from "@/components/dashboard/customer-navigation";
-
+import type { ReactNode } from "react";
 import LogoutButton from "@/components/auth/logout-button";
 import RoleGuard from "@/components/auth/role-guard";
+import CustomerNavigation from "@/components/dashboard/customer-navigation";
 
 export default function CustomerLayout({ children }: { children: ReactNode }) {
   return (

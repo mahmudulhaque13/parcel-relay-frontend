@@ -20,11 +20,11 @@ import { useAuth } from "@/hooks/use-auth";
 
 import { useMyProfile } from "@/hooks/use-my-profile";
 import { useUpdateMyProfile } from "@/hooks/use-update-my-profile";
+import { changePasswordSchema } from "@/validation/auth.validation";
 import {
   type ProfileFormValues,
   profileSchema,
 } from "@/validation/profile.validation";
-import { changePasswordSchema } from "@/validation/auth.validation";
 
 export default function CustomerProfilePage() {
   const router = useRouter();

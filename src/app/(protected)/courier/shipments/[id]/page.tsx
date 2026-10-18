@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   ArrowLeft,
   CheckCircle2,
@@ -9,9 +8,10 @@ import {
   Package,
   User,
 } from "lucide-react";
-import { toast } from "sonner";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
 import { useCourierShipmentDetails } from "@/hooks/use-courier-shipment-details";
 import { useUpdateCourierShipmentStatus } from "@/hooks/use-update-courier-shipment-status";
@@ -78,9 +78,12 @@ export default function CourierShipmentDetailsPage() {
           <div className="h-36 animate-pulse rounded-2xl bg-slate-200" />
           <div className="h-48 animate-pulse rounded-2xl bg-white" />
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {Array.from({ length: 4 }).map((_, index) => (
+            {Array.from(
+              { length: 4 },
+              (_, index) => `shipment-detail-skeleton-${index}`,
+            ).map((key) => (
               <div
-                key={index}
+                key={key}
                 className="h-28 animate-pulse rounded-2xl bg-slate-200"
               />
             ))}

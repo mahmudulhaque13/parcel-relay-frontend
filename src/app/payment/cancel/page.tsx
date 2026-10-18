@@ -1,8 +1,12 @@
-import type { Metadata } from "next";
 import { CircleX } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = { title: "Payment Cancelled | ParcelRelay", description: "Review your cancelled ParcelRelay payment and return to your shipment." };
+export const metadata: Metadata = {
+  title: "Payment Cancelled | ParcelRelay",
+  description:
+    "Review your cancelled ParcelRelay payment and return to your shipment.",
+};
 
 export default function PaymentCancelPage() {
   return (

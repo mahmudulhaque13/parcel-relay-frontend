@@ -8,9 +8,12 @@ export default function CourierApplicationsLoading() {
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {Array.from({ length: 3 }).map((_, index) => (
+          {Array.from(
+            { length: 3 },
+            (_, index) => `application-card-skeleton-${index}`,
+          ).map((key) => (
             <div
-              key={index}
+              key={key}
               className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
             >
               <div className="mb-4 size-10 animate-pulse rounded-xl bg-slate-200" />
@@ -27,9 +30,12 @@ export default function CourierApplicationsLoading() {
           </div>
 
           <div className="space-y-4 p-5">
-            {Array.from({ length: 5 }).map((_, index) => (
+            {Array.from(
+              { length: 5 },
+              (_, index) => `application-row-skeleton-${index}`,
+            ).map((key) => (
               <div
-                key={index}
+                key={key}
                 className="flex items-center gap-4 rounded-xl border border-slate-100 p-4"
               >
                 <div className="size-11 shrink-0 animate-pulse rounded-full bg-slate-200" />

@@ -1,13 +1,12 @@
-import type { Metadata } from "next";
-import Link from "next/link";
 import {
   ArrowLeft,
-  ArrowRight,
   CheckCircle2,
   PackageCheck,
   ShieldCheck,
   Truck,
 } from "lucide-react";
+import type { Metadata } from "next";
+import Link from "next/link";
 import RegisterForm from "@/components/auth/register-form";
 
 const benefits = [
@@ -16,7 +15,11 @@ const benefits = [
   "Access your personalized dashboard",
 ];
 
-export const metadata: Metadata = { title: "Create Account | ParcelRelay", description: "Create a ParcelRelay customer account to book shipments and track deliveries." };
+export const metadata: Metadata = {
+  title: "Create Account | ParcelRelay",
+  description:
+    "Create a ParcelRelay customer account to book shipments and track deliveries.",
+};
 
 export default function RegisterPage() {
   return (

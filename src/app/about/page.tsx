@@ -1,5 +1,3 @@
-import type { Metadata } from "next";
-import Link from "next/link";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -11,6 +9,8 @@ import {
   Truck,
   Users,
 } from "lucide-react";
+import type { Metadata } from "next";
+import Link from "next/link";
 
 const features = [
   {
@@ -86,7 +86,11 @@ const highlights = [
   },
 ];
 
-export const metadata: Metadata = { title: "About ParcelRelay | Courier & Logistics", description: "Learn how ParcelRelay connects customers, couriers, and administrators through shipment management, delivery tracking, and online payments." };
+export const metadata: Metadata = {
+  title: "About ParcelRelay | Courier & Logistics",
+  description:
+    "Learn how ParcelRelay connects customers, couriers, and administrators through shipment management, delivery tracking, and online payments.",
+};
 
 export default function AboutPage() {
   return (

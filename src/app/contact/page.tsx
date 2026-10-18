@@ -1,5 +1,3 @@
-import type { Metadata } from "next";
-import Link from "next/link";
 import {
   ArrowRight,
   CircleHelp,
@@ -8,6 +6,8 @@ import {
   ShieldCheck,
   Truck,
 } from "lucide-react";
+import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Contact & Support | ParcelRelay",
@@ -64,35 +64,39 @@ export default function ContactPage() {
             </h1>
             <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg">
               Choose the support path that matches your question. ParcelRelay
-              keeps shipment tracking, account activity, and courier applications
-              connected to their relevant workflows.
+              keeps shipment tracking, account activity, and courier
+              applications connected to their relevant workflows.
             </p>
           </div>
         </div>
       </section>
 
       <section className="mx-auto grid w-full max-w-[1440px] gap-5 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-3 lg:px-10">
-        {supportOptions.map(({ icon: Icon, title, description, href, action }) => (
-          <article
-            key={title}
-            className="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-[#1D3557]/20 hover:shadow-lg sm:p-7"
-          >
-            <span className="flex size-12 items-center justify-center rounded-xl bg-orange-50 text-[#E76F51] ring-1 ring-orange-100">
-              <Icon className="size-6" />
-            </span>
-            <h2 className="mt-5 text-xl font-extrabold text-[#1D3557]">{title}</h2>
-            <p className="mt-3 flex-1 text-sm leading-7 text-slate-600">
-              {description}
-            </p>
-            <Link
-              href={href}
-              className="mt-6 inline-flex min-h-11 items-center gap-2 self-start rounded-xl bg-[#1D3557] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#29486f] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51]"
+        {supportOptions.map(
+          ({ icon: Icon, title, description, href, action }) => (
+            <article
+              key={title}
+              className="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-[#1D3557]/20 hover:shadow-lg sm:p-7"
             >
-              {action}
-              <ArrowRight className="size-4" />
-            </Link>
-          </article>
-        ))}
+              <span className="flex size-12 items-center justify-center rounded-xl bg-orange-50 text-[#E76F51] ring-1 ring-orange-100">
+                <Icon className="size-6" />
+              </span>
+              <h2 className="mt-5 text-xl font-extrabold text-[#1D3557]">
+                {title}
+              </h2>
+              <p className="mt-3 flex-1 text-sm leading-7 text-slate-600">
+                {description}
+              </p>
+              <Link
+                href={href}
+                className="mt-6 inline-flex min-h-11 items-center gap-2 self-start rounded-xl bg-[#1D3557] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#29486f] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51]"
+              >
+                {action}
+                <ArrowRight className="size-4" />
+              </Link>
+            </article>
+          ),
+        )}
       </section>
 
       <section className="border-t border-slate-100 bg-slate-50">
@@ -100,7 +104,9 @@ export default function ContactPage() {
           <div className="flex items-start gap-3">
             <MailCheck className="mt-1 size-5 shrink-0 text-[#E76F51]" />
             <div>
-              <h2 className="font-extrabold text-[#1D3557]">Still need help?</h2>
+              <h2 className="font-extrabold text-[#1D3557]">
+                Still need help?
+              </h2>
               <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-600">
                 Sign in and use the relevant shipment or account workflow so
                 support questions can be tied to the correct account and record.

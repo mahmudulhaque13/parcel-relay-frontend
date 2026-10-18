@@ -1,5 +1,3 @@
-import type { Metadata } from "next";
-import Link from "next/link";
 import {
   ArrowRight,
   Calculator,
@@ -9,6 +7,8 @@ import {
   Scale,
   ShieldCheck,
 } from "lucide-react";
+import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Delivery Pricing & Quotes | ParcelRelay",
@@ -102,8 +102,12 @@ export default function PricingPage() {
               <span className="flex size-12 items-center justify-center rounded-xl bg-orange-50 text-[#E76F51] ring-1 ring-orange-100">
                 <Icon className="size-6" />
               </span>
-              <h3 className="mt-5 text-lg font-extrabold text-[#1D3557]">{title}</h3>
-              <p className="mt-3 text-sm leading-7 text-slate-600">{description}</p>
+              <h3 className="mt-5 text-lg font-extrabold text-[#1D3557]">
+                {title}
+              </h3>
+              <p className="mt-3 text-sm leading-7 text-slate-600">
+                {description}
+              </p>
             </article>
           ))}
         </div>

@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  CheckCircle2,
   ChevronLeft,
   ChevronRight,
   Edit3,

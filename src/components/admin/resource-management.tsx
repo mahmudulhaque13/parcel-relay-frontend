@@ -1,5 +1,4 @@
 "use client";
-import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   AlertCircle,
@@ -14,6 +13,26 @@ import {
   Search,
   X,
 } from "lucide-react";
+import { useMemo, useState } from "react";
+import {
+  activateHub,
+  createHub,
+  deactivateHub,
+  deleteHub,
+  getHubs,
+  type Hub,
+  type HubPayload,
+  updateHub,
+} from "@/api/hub.api";
+import {
+  createPricingRule,
+  deactivatePricingRule,
+  deletePricingRule,
+  getPricingRules,
+  type PricingPayload,
+  type PricingRule,
+  updatePricingRule,
+} from "@/api/pricing.api";
 import {
   activateZone,
   createZone,
@@ -25,25 +44,7 @@ import {
   type Zone,
   type ZonePayload,
 } from "@/api/zone.api";
-import {
-  activateHub,
-  createHub,
-  deactivateHub,
-  deleteHub,
-  getHubs,
-  updateHub,
-  type Hub,
-  type HubPayload,
-} from "@/api/hub.api";
-import {
-  createPricingRule,
-  deactivatePricingRule,
-  deletePricingRule,
-  getPricingRules,
-  updatePricingRule,
-  type PricingRule,
-  type PricingPayload,
-} from "@/api/pricing.api";
+
 type ModuleKind = "zones" | "hubs" | "pricing";
 type Resource = Zone | Hub | PricingRule;
 type FormValues = Record<string, string>;
@@ -361,13 +362,10 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
         </button>
       </div>
       {successText && (
-        <div
-          role="status"
-          className="flex items-start gap-2 rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800"
-        >
+        <output className="flex items-start gap-2 rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800">
           <Check className="mt-0.5 size-4 shrink-0" />
           {successText}
-        </div>
+        </output>
       )}
       {(errorText || (isError && queryError)) && (
         <div

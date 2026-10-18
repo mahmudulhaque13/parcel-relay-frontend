@@ -33,7 +33,17 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     async function loadCurrentUser() {
       try {
         if (!getAccessToken()) {
-          await refreshToken();
+          try {
+            await refreshToken();
+          } catch {
+            clearAccessToken();
+
+            if (mounted) {
+              setUser(null);
+            }
+
+            return;
+          }
         }
 
         const response = await getMe();

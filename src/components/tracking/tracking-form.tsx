@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { useTracking } from "@/hooks/use-tracking";
 import {
   AlertCircle,
   ArrowRight,
@@ -11,6 +9,8 @@ import {
   PackageSearch,
   Truck,
 } from "lucide-react";
+import { useState } from "react";
+import { useTracking } from "@/hooks/use-tracking";
 
 function formatStatus(status: string) {
   return status
@@ -111,16 +111,13 @@ export default function TrackingForm() {
 
         <div className="p-6 sm:p-9">
           {trackingQuery.isFetching && (
-            <div
-              role="status"
-              className="flex items-center gap-3 py-5 text-sm text-slate-600"
-            >
+            <output className="flex items-center gap-3 py-5 text-sm text-slate-600">
               <span
                 className="size-6 animate-spin rounded-full border-2 border-slate-200 border-t-[#E76F51]"
                 aria-hidden="true"
               />
               Searching for your shipment...
-            </div>
+            </output>
           )}
 
           {trackingQuery.isError && !trackingQuery.isFetching && (

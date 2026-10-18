@@ -1,14 +1,13 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import {
+  CreditCard,
   LayoutDashboard,
   PackagePlus,
-  CreditCard,
   UserRound,
-  Package,
 } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const customerLinks = [
   { href: "/dashboard", label: "Overview", icon: LayoutDashboard },

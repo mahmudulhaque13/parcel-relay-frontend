@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
 import Link from "next/link";
+import type { ReactNode } from "react";
 
 import LogoutButton from "@/components/auth/logout-button";
 import RoleGuard from "@/components/auth/role-guard";

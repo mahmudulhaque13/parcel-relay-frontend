@@ -55,7 +55,7 @@ function FieldErrors({ name, errors }: { name: string; errors: unknown[] }) {
     <div aria-live="polite" className="space-y-1">
       {errors.map((error, index) => (
         <p
-          key={`${name}-error-${index}`}
+          key={`${name}-${getFieldErrorMessage(error)}-${index}`}
           className="text-sm font-medium leading-5 text-red-600"
         >
           {getFieldErrorMessage(error)}
