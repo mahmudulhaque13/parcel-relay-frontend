@@ -13,11 +13,14 @@ import { useAuth } from "@/hooks/use-auth";
 import { getRoleHome } from "@/routes/role-routes";
 import { loginSchema } from "@/validation/auth.validation";
 
+type DemoRole = "CUSTOMER" | "COURIER" | "ADMIN";
+
 export default function LoginForm() {
   const router = useRouter();
   const { setUser } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [demoLoadingRole, setDemoLoadingRole] = useState<DemoRole | null>(null);
 
   const form = useForm({
     defaultValues: {
@@ -48,7 +51,12 @@ export default function LoginForm() {
     },
   });
 
-  const handleDemoLogin = async (role: "CUSTOMER" | "COURIER" | "ADMIN") => {
+  const handleDemoLogin = async (role: DemoRole) => {
+    // Prevent multiple demo login requests at the same time.
+    if (demoLoadingRole !== null) return;
+
+    setDemoLoadingRole(role);
+
     try {
       const response = await demoLogin(role);
 
@@ -60,6 +68,8 @@ export default function LoginForm() {
       toast.error(
         "Demo login failed. Please make sure the backend is running.",
       );
+    } finally {
+      setDemoLoadingRole(null);
     }
   };
 
@@ -78,7 +88,7 @@ export default function LoginForm() {
     "px-3 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-400 dark:text-slate-400";
 
   const demoButtonClassName =
-    "flex min-h-12 items-center justify-center rounded-xl border border-slate-200 bg-slate-50/70 px-3 py-3 text-sm font-bold text-[#1D3557] transition duration-200 hover:border-[#1D3557]/25 hover:bg-[#1D3557]/[0.04] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E76F51] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:border-slate-500 dark:hover:bg-slate-700";
+    "flex min-h-12 items-center justify-center rounded-xl border border-slate-200 bg-slate-50/70 px-3 py-3 text-sm font-bold text-[#1D3557] transition duration-200 hover:border-[#1D3557]/25 hover:bg-[#1D3557]/[0.04] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E76F51] disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:border-slate-500 dark:hover:bg-slate-700";
 
   return (
     <div className="space-y-7">
@@ -171,7 +181,7 @@ export default function LoginForm() {
         <div className="flex justify-end">
           <Link
             href="/forgot-password"
-            className="text-sm font-semibold text-[#1D3557] underline decoration-transparent underline-offset-4 transition-colors hover:text-[#E76F51] hover:decoration-[#E76F51] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51] dark:text-sky-300 dark:hover:text-orange-300 dark:text-foreground"
+            className="text-sm font-semibold text-[#1D3557] underline decoration-transparent underline-offset-4 transition-colors hover:text-[#E76F51] hover:decoration-[#E76F51] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51] dark:text-sky-300 dark:hover:text-orange-300"
           >
             Forgot password?
           </Link>
@@ -183,7 +193,7 @@ export default function LoginForm() {
           {([canSubmit, isSubmitting]) => (
             <button
               type="submit"
-              disabled={!canSubmit || isSubmitting}
+              disabled={!canSubmit || isSubmitting || demoLoadingRole !== null}
               className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#1D3557] px-4 py-3 text-sm font-bold text-white shadow-md shadow-[#1D3557]/10 transition duration-200 hover:-translate-y-0.5 hover:bg-[#29486f] hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
             >
               {isSubmitting ? (
@@ -227,35 +237,41 @@ export default function LoginForm() {
           <button
             type="button"
             onClick={() => handleDemoLogin("CUSTOMER")}
+            disabled={demoLoadingRole !== null}
+            aria-busy={demoLoadingRole === "CUSTOMER"}
             className={demoButtonClassName}
           >
-            Demo Customer
+            {demoLoadingRole === "CUSTOMER" ? "Signing in..." : "Demo Customer"}
           </button>
 
           <button
             type="button"
             onClick={() => handleDemoLogin("COURIER")}
+            disabled={demoLoadingRole !== null}
+            aria-busy={demoLoadingRole === "COURIER"}
             className={demoButtonClassName}
           >
-            Demo Courier
+            {demoLoadingRole === "COURIER" ? "Signing in..." : "Demo Courier"}
           </button>
 
           <button
             type="button"
             onClick={() => handleDemoLogin("ADMIN")}
+            disabled={demoLoadingRole !== null}
+            aria-busy={demoLoadingRole === "ADMIN"}
             className={demoButtonClassName}
           >
-            Demo Admin
+            {demoLoadingRole === "ADMIN" ? "Signing in..." : "Demo Admin"}
           </button>
         </div>
       </div>
 
       {/* Keep signup link here; do not duplicate it in the parent page */}
-      <p className="border-t border-slate-100 pt-5 text-center text-sm text-slate-600 dark:border-slate-700 dark:text-slate-300 dark:border-slate-800">
+      <p className="border-t border-slate-100 pt-5 text-center text-sm text-slate-600 dark:border-slate-700 dark:text-slate-300">
         Don&apos;t have an account?{" "}
         <Link
           href="/register"
-          className="inline-flex items-center gap-1 font-bold text-[#1D3557] underline decoration-[#E76F51]/60 underline-offset-4 transition-colors hover:text-[#E76F51] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51] dark:text-sky-300 dark:hover:text-orange-300 dark:text-foreground"
+          className="inline-flex items-center gap-1 font-bold text-[#1D3557] underline decoration-[#E76F51]/60 underline-offset-4 transition-colors hover:text-[#E76F51] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51] dark:text-sky-300 dark:hover:text-orange-300"
         >
           Create an account
           <ArrowRight className="size-3.5" />
