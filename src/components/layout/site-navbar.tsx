@@ -52,6 +52,14 @@ export default function SiteNavbar() {
   const profileRef = useRef<HTMLDivElement>(null);
   const dashboardPath = getDashboardPath(user?.role);
 
+  // Safely handle missing, empty, or malformed user names.
+  const displayName =
+    typeof user?.name === "string" && user.name.trim()
+      ? user.name.trim()
+      : "User";
+
+  const avatarInitial = displayName.charAt(0).toUpperCase();
+
   const isActive = (href: string) =>
     href === "/"
       ? pathname === "/"
@@ -189,10 +197,10 @@ export default function SiteNavbar() {
                 className="inline-flex min-h-10 max-w-56 items-center gap-2 rounded-xl border border-border bg-background px-3 py-2 text-sm font-semibold transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
               >
                 <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-foreground">
-                  {user.name.trim().charAt(0).toUpperCase() || "U"}
+                  {avatarInitial}
                 </span>
 
-                <span className="max-w-28 truncate">{user.name}</span>
+                <span className="max-w-28 truncate">{displayName}</span>
 
                 <ChevronDown
                   aria-hidden="true"
@@ -209,10 +217,12 @@ export default function SiteNavbar() {
                   className="absolute right-0 top-full mt-2 w-64 overflow-hidden rounded-2xl border border-border bg-background p-2 text-foreground shadow-xl"
                 >
                   <div className="border-b border-border px-3 py-3">
-                    <p className="truncate text-sm font-bold">{user.name}</p>
+                    <p className="truncate text-sm font-bold">{displayName}</p>
+
                     <p className="mt-1 truncate text-xs text-muted-foreground">
                       {user.email}
                     </p>
+
                     <p className="mt-2 inline-flex rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-foreground">
                       {user.role === "ADMIN"
                         ? "Administrator"
@@ -328,10 +338,12 @@ export default function SiteNavbar() {
               ) : isAuthenticated && user ? (
                 <div className="space-y-2">
                   <div className="rounded-xl bg-muted/60 px-4 py-3">
-                    <p className="truncate text-sm font-bold">{user.name}</p>
+                    <p className="truncate text-sm font-bold">{displayName}</p>
+
                     <p className="mt-1 truncate text-xs text-muted-foreground">
                       {user.email}
                     </p>
+
                     <p className="mt-2 text-xs font-semibold text-muted-foreground">
                       {user.role === "ADMIN"
                         ? "Administrator"
