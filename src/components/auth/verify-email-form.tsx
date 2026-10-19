@@ -79,13 +79,13 @@ export default function VerifyEmailForm() {
             <div className="space-y-2">
               <label
                 htmlFor={field.name}
-                className="block text-sm font-bold text-[#1D3557]"
+                className="block text-sm font-bold text-[#1D3557] dark:text-foreground"
               >
                 Email address
               </label>
 
               <div className="relative">
-                <Mail className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
+                <Mail className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
 
                 <input
                   id={field.name}
@@ -97,7 +97,7 @@ export default function VerifyEmailForm() {
                   onChange={(event) => field.handleChange(event.target.value)}
                   placeholder="you@example.com"
                   aria-invalid={field.state.meta.errors.length > 0}
-                  className="min-h-12 w-full rounded-xl border border-slate-200 bg-white py-3 pl-10 pr-4 text-sm text-slate-800 outline-none transition duration-200 placeholder:text-slate-400 hover:border-slate-300 focus:border-[#1D3557] focus:ring-4 focus:ring-[#1D3557]/[0.08] aria-[invalid=true]:border-red-400"
+                  className="min-h-12 w-full rounded-xl border border-slate-200 bg-white py-3 pl-10 pr-4 text-sm text-slate-800 outline-none transition duration-200 placeholder:text-slate-400 hover:border-slate-300 focus:border-[#1D3557] focus:ring-4 focus:ring-[#1D3557]/[0.08] aria-[invalid=true]:border-red-400 dark:border-slate-700 dark:text-slate-100 dark:bg-slate-900"
                 />
               </div>
 
@@ -118,7 +118,7 @@ export default function VerifyEmailForm() {
             <div className="space-y-2">
               <label
                 htmlFor={field.name}
-                className="block text-sm font-bold text-[#1D3557]"
+                className="block text-sm font-bold text-[#1D3557] dark:text-foreground"
               >
                 Verification code (OTP)
               </label>
@@ -139,10 +139,10 @@ export default function VerifyEmailForm() {
                 }
                 placeholder="Enter 6-digit code"
                 aria-invalid={field.state.meta.errors.length > 0}
-                className="min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-center text-lg font-bold tracking-[0.4em] text-[#1D3557] outline-none transition duration-200 placeholder:text-sm placeholder:font-normal placeholder:tracking-normal placeholder:text-slate-400 hover:border-slate-300 focus:border-[#1D3557] focus:ring-4 focus:ring-[#1D3557]/[0.08] aria-[invalid=true]:border-red-400"
+                className="min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-center text-lg font-bold tracking-[0.4em] text-[#1D3557] outline-none transition duration-200 placeholder:text-sm placeholder:font-normal placeholder:tracking-normal placeholder:text-slate-400 hover:border-slate-300 focus:border-[#1D3557] focus:ring-4 focus:ring-[#1D3557]/[0.08] aria-[invalid=true]:border-red-400 dark:border-slate-700 dark:text-foreground dark:bg-slate-900"
               />
 
-              <p className="text-xs leading-5 text-slate-500">
+              <p className="text-xs leading-5 text-slate-500 dark:text-slate-400">
                 Enter the six-digit code sent to your email address.
               </p>
 
@@ -158,10 +158,10 @@ export default function VerifyEmailForm() {
           )}
         </form.Field>
 
-        <div className="flex items-start gap-3 rounded-xl border border-slate-100 bg-slate-50/80 p-3.5">
+        <div className="flex items-start gap-3 rounded-xl border border-slate-100 bg-slate-50/80 p-3.5 dark:border-slate-800 dark:bg-slate-950/80">
           <ShieldCheck className="mt-0.5 size-5 shrink-0 text-[#E76F51]" />
 
-          <p className="text-xs leading-5 text-slate-600">
+          <p className="text-xs leading-5 text-slate-600 dark:text-slate-300">
             Keep your verification code private. It helps confirm that you own
             this email address.
           </p>
@@ -192,11 +192,11 @@ export default function VerifyEmailForm() {
         </form.Subscribe>
       </form>
 
-      <p className="border-t border-slate-100 pt-5 text-center text-sm text-slate-500">
+      <p className="border-t border-slate-100 pt-5 text-center text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400">
         Already verified?{" "}
         <Link
           href="/login"
-          className="font-bold text-[#1D3557] underline decoration-[#E76F51]/60 underline-offset-4 transition-colors hover:text-[#E76F51] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51]"
+          className="font-bold text-[#1D3557] underline decoration-[#E76F51]/60 underline-offset-4 transition-colors hover:text-[#E76F51] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51] dark:text-foreground"
         >
           Sign in
         </Link>

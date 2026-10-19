@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import ThemeToggle from "@/components/layout/theme-toggle";
 
 const customerLinks = [
   { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
@@ -39,13 +40,16 @@ export default function CustomerNavigation() {
               isActive
                 ? "border-[#1D3557] bg-[#1D3557] text-white"
                 : "border-slate-200 text-slate-700 hover:border-[#1D3557] hover:bg-slate-50 hover:text-[#1D3557]"
-            }`}
+            } dark:hover:bg-slate-800 dark:text-slate-200`}
           >
             <Icon className="size-4" />
             {label}
           </Link>
         );
       })}
+      <div className="ml-auto flex items-center">
+        <ThemeToggle />
+      </div>
     </nav>
   );
 }

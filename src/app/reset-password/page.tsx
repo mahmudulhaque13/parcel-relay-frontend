@@ -71,15 +71,15 @@ function ResetPasswordForm() {
     <div className="w-full max-w-md">
       <Link
         href="/forgot-password"
-        className="mb-7 inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition-colors hover:text-[#1D3557] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51]"
+        className="mb-7 inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition-colors hover:text-[#1D3557] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51] dark:text-slate-400"
       >
         <ArrowLeft className="size-4" />
         Back to forgot password
       </Link>
 
-      <section className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 p-6 shadow-xl shadow-[#1D3557]/[0.06] sm:p-9">
+      <section className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 p-6 shadow-xl shadow-[#1D3557]/[0.06] sm:p-9 dark:bg-slate-900/95">
         <div className="flex flex-col items-center text-center">
-          <div className="flex size-16 items-center justify-center rounded-2xl bg-[#1D3557]/[0.06] text-[#1D3557] ring-1 ring-[#1D3557]/10">
+          <div className="flex size-16 items-center justify-center rounded-2xl bg-[#1D3557]/[0.06] text-[#1D3557] ring-1 ring-[#1D3557]/10 dark:text-foreground">
             <KeyRound className="size-7" strokeWidth={1.8} />
           </div>
 
@@ -87,19 +87,19 @@ function ResetPasswordForm() {
             Account recovery
           </p>
 
-          <h1 className="mt-3 text-2xl font-black tracking-tight text-[#1D3557] sm:text-3xl">
+          <h1 className="mt-3 text-2xl font-black tracking-tight text-[#1D3557] sm:text-3xl dark:text-foreground">
             Reset your password
           </h1>
 
-          <p className="mt-3 text-sm leading-6 text-slate-500">
+          <p className="mt-3 text-sm leading-6 text-slate-500 dark:text-slate-400">
             Enter the verification code sent to your email and choose a new
             password.
           </p>
         </div>
 
-        <div className="mt-7 flex items-start gap-3 rounded-xl border border-slate-100 bg-slate-50/80 p-3.5">
+        <div className="mt-7 flex items-start gap-3 rounded-xl border border-slate-100 bg-slate-50/80 p-3.5 dark:border-slate-800 dark:bg-slate-950/80">
           <ShieldCheck className="mt-0.5 size-5 shrink-0 text-[#E76F51]" />
-          <p className="text-xs leading-5 text-slate-600">
+          <p className="text-xs leading-5 text-slate-600 dark:text-slate-300">
             For your security, use the OTP sent to your registered email
             address.
           </p>
@@ -118,13 +118,13 @@ function ResetPasswordForm() {
               <div className="space-y-2">
                 <label
                   htmlFor={field.name}
-                  className="block text-sm font-bold text-[#1D3557]"
+                  className="block text-sm font-bold text-[#1D3557] dark:text-foreground"
                 >
                   Email address
                 </label>
 
                 <div className="relative">
-                  <Mail className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
+                  <Mail className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
 
                   <input
                     id={field.name}
@@ -136,7 +136,7 @@ function ResetPasswordForm() {
                     onChange={(event) => field.handleChange(event.target.value)}
                     readOnly={Boolean(email)}
                     aria-invalid={field.state.meta.errors.length > 0}
-                    className="min-h-12 w-full rounded-xl border border-slate-200 bg-white py-3 pl-10 pr-4 text-sm text-slate-800 outline-none transition duration-200 read-only:bg-slate-50 read-only:text-slate-500 focus:border-[#1D3557] focus:ring-4 focus:ring-[#1D3557]/[0.08] aria-[invalid=true]:border-red-400"
+                    className="min-h-12 w-full rounded-xl border border-slate-200 bg-white py-3 pl-10 pr-4 text-sm text-slate-800 outline-none transition duration-200 read-only:bg-slate-50 read-only:text-slate-500 focus:border-[#1D3557] focus:ring-4 focus:ring-[#1D3557]/[0.08] aria-[invalid=true]:border-red-400 dark:border-slate-700 dark:text-slate-100 dark:bg-slate-900"
                   />
                 </div>
 
@@ -157,7 +157,7 @@ function ResetPasswordForm() {
               <div className="space-y-2">
                 <label
                   htmlFor={field.name}
-                  className="block text-sm font-bold text-[#1D3557]"
+                  className="block text-sm font-bold text-[#1D3557] dark:text-foreground"
                 >
                   Verification code (OTP)
                 </label>
@@ -176,7 +176,7 @@ function ResetPasswordForm() {
                   }
                   placeholder="Enter 6-digit OTP"
                   aria-invalid={field.state.meta.errors.length > 0}
-                  className="min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-center text-base font-bold tracking-[0.35em] text-slate-800 outline-none transition duration-200 placeholder:text-sm placeholder:font-normal placeholder:tracking-normal placeholder:text-slate-400 hover:border-slate-300 focus:border-[#1D3557] focus:ring-4 focus:ring-[#1D3557]/[0.08] aria-[invalid=true]:border-red-400"
+                  className="min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-center text-base font-bold tracking-[0.35em] text-slate-800 outline-none transition duration-200 placeholder:text-sm placeholder:font-normal placeholder:tracking-normal placeholder:text-slate-400 hover:border-slate-300 focus:border-[#1D3557] focus:ring-4 focus:ring-[#1D3557]/[0.08] aria-[invalid=true]:border-red-400 dark:border-slate-700 dark:text-slate-100 dark:bg-slate-900"
                 />
 
                 {field.state.meta.errors.map((error) => (
@@ -196,7 +196,7 @@ function ResetPasswordForm() {
               <div className="space-y-2">
                 <label
                   htmlFor={field.name}
-                  className="block text-sm font-bold text-[#1D3557]"
+                  className="block text-sm font-bold text-[#1D3557] dark:text-foreground"
                 >
                   New password
                 </label>
@@ -212,7 +212,7 @@ function ResetPasswordForm() {
                     onChange={(event) => field.handleChange(event.target.value)}
                     placeholder="Enter your new password"
                     aria-invalid={field.state.meta.errors.length > 0}
-                    className="min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 pr-12 text-sm text-slate-800 outline-none transition duration-200 placeholder:text-slate-400 hover:border-slate-300 focus:border-[#1D3557] focus:ring-4 focus:ring-[#1D3557]/[0.08] aria-[invalid=true]:border-red-400"
+                    className="min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 pr-12 text-sm text-slate-800 outline-none transition duration-200 placeholder:text-slate-400 hover:border-slate-300 focus:border-[#1D3557] focus:ring-4 focus:ring-[#1D3557]/[0.08] aria-[invalid=true]:border-red-400 dark:border-slate-700 dark:text-slate-100 dark:bg-slate-900"
                   />
 
                   <button
@@ -222,7 +222,7 @@ function ResetPasswordForm() {
                       showPassword ? "Hide password" : "Show password"
                     }
                     aria-pressed={showPassword}
-                    className="absolute right-2 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-[#1D3557] focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#E76F51]"
+                    className="absolute right-2 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-[#1D3557] focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#E76F51] dark:hover:bg-slate-800 dark:text-slate-500"
                   >
                     {showPassword ? (
                       <EyeOff className="size-4" />
@@ -269,12 +269,12 @@ function ResetPasswordForm() {
           </form.Subscribe>
         </form>
 
-        <div className="mt-7 border-t border-slate-100 pt-5 text-center">
-          <p className="text-sm text-slate-500">
+        <div className="mt-7 border-t border-slate-100 pt-5 text-center dark:border-slate-800">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
             Remember your password?{" "}
             <Link
               href="/login"
-              className="font-bold text-[#1D3557] underline decoration-[#E76F51]/60 underline-offset-4 transition-colors hover:text-[#E76F51] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51]"
+              className="font-bold text-[#1D3557] underline decoration-[#E76F51]/60 underline-offset-4 transition-colors hover:text-[#E76F51] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51] dark:text-foreground"
             >
               Sign in
             </Link>
@@ -282,7 +282,7 @@ function ResetPasswordForm() {
         </div>
       </section>
 
-      <p className="mt-5 text-center text-xs leading-5 text-slate-400">
+      <p className="mt-5 text-center text-xs leading-5 text-slate-400 dark:text-slate-500">
         ParcelRelay · Secure account recovery
       </p>
     </div>
@@ -291,13 +291,13 @@ function ResetPasswordForm() {
 
 export default function ResetPasswordPage() {
   return (
-    <main className="relative isolate flex min-h-[calc(100vh-76px)] items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 via-white to-orange-50/60 px-4 py-10 sm:px-6 sm:py-14">
+    <main className="relative isolate flex min-h-[calc(100vh-76px)] items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 via-white to-orange-50/60 px-4 py-10 sm:px-6 sm:py-14 dark:to-slate-950 dark:from-slate-950 dark:via-slate-900">
       <div className="absolute -right-24 top-10 -z-10 size-80 rounded-full bg-orange-200/20 blur-3xl" />
       <div className="absolute -bottom-24 -left-24 -z-10 size-80 rounded-full bg-blue-100/30 blur-3xl" />
 
       <Suspense
         fallback={
-          <output className="loading loading-ring loading-lg text-[#1D3557]">
+          <output className="loading loading-ring loading-lg text-[#1D3557] dark:text-foreground">
             <span className="sr-only">Loading password reset form</span>
           </output>
         }

@@ -49,8 +49,8 @@ const supportOptions = [
 
 export default function ContactPage() {
   return (
-    <main className="min-h-[70vh] bg-white text-slate-700">
-      <section className="border-b border-slate-100 bg-gradient-to-br from-slate-50 via-white to-orange-50/70">
+    <main className="min-h-[70vh] bg-white text-slate-700 dark:text-slate-200 dark:bg-slate-900">
+      <section className="border-b border-slate-100 bg-gradient-to-br from-slate-50 via-white to-orange-50/70 dark:border-slate-800 dark:to-slate-950 dark:from-slate-950 dark:via-slate-900">
         <div className="mx-auto w-full max-w-[1440px] px-4 py-16 sm:px-6 sm:py-20 lg:px-10 lg:py-24">
           <div className="mx-auto max-w-3xl text-center">
             <span className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-[#1D3557] text-white shadow-lg shadow-[#1D3557]/15">
@@ -59,10 +59,10 @@ export default function ContactPage() {
             <p className="mt-6 text-xs font-extrabold uppercase tracking-[0.2em] text-[#E76F51] sm:text-sm">
               Contact & Support
             </p>
-            <h1 className="mt-3 text-4xl font-black tracking-tight text-[#1D3557] sm:text-5xl">
+            <h1 className="mt-3 text-4xl font-black tracking-tight text-[#1D3557] sm:text-5xl dark:text-foreground">
               How can we help?
             </h1>
-            <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg">
+            <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg dark:text-slate-300">
               Choose the support path that matches your question. ParcelRelay
               keeps shipment tracking, account activity, and courier
               applications connected to their relevant workflows.
@@ -76,15 +76,15 @@ export default function ContactPage() {
           ({ icon: Icon, title, description, href, action }) => (
             <article
               key={title}
-              className="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-[#1D3557]/20 hover:shadow-lg sm:p-7"
+              className="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-[#1D3557]/20 hover:shadow-lg sm:p-7 dark:border-slate-700 dark:bg-slate-900"
             >
               <span className="flex size-12 items-center justify-center rounded-xl bg-orange-50 text-[#E76F51] ring-1 ring-orange-100">
                 <Icon className="size-6" />
               </span>
-              <h2 className="mt-5 text-xl font-extrabold text-[#1D3557]">
+              <h2 className="mt-5 text-xl font-extrabold text-[#1D3557] dark:text-foreground">
                 {title}
               </h2>
-              <p className="mt-3 flex-1 text-sm leading-7 text-slate-600">
+              <p className="mt-3 flex-1 text-sm leading-7 text-slate-600 dark:text-slate-300">
                 {description}
               </p>
               <Link
@@ -99,15 +99,15 @@ export default function ContactPage() {
         )}
       </section>
 
-      <section className="border-t border-slate-100 bg-slate-50">
+      <section className="border-t border-slate-100 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-4 px-4 py-10 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-10">
           <div className="flex items-start gap-3">
             <MailCheck className="mt-1 size-5 shrink-0 text-[#E76F51]" />
             <div>
-              <h2 className="font-extrabold text-[#1D3557]">
+              <h2 className="font-extrabold text-[#1D3557] dark:text-foreground">
                 Still need help?
               </h2>
-              <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-600">
+              <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300">
                 Sign in and use the relevant shipment or account workflow so
                 support questions can be tied to the correct account and record.
                 Do not send passwords, OTPs, or payment secrets.
@@ -116,7 +116,7 @@ export default function ContactPage() {
           </div>
           <Link
             href="/login"
-            className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-[#1D3557] transition hover:border-[#1D3557]/30 hover:bg-slate-100"
+            className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-[#1D3557] transition hover:border-[#1D3557]/30 hover:bg-slate-100 dark:hover:bg-slate-800 dark:border-slate-700 dark:text-foreground dark:bg-slate-900"
           >
             Open account access
             <ArrowRight className="size-4" />

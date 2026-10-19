@@ -32,21 +32,22 @@ const identityDocumentTypes = ["application/pdf", "image/jpeg", "image/png"];
 
 const profilePhotoTypes = ["image/jpeg", "image/png"];
 
-const labelClassName = "block text-sm font-bold text-[#1D3557]";
+const labelClassName =
+  "block text-sm font-bold text-slate-800 dark:text-slate-100";
 
 const inputClassName =
-  "min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition duration-200 placeholder:text-slate-400 hover:border-slate-300 focus:border-[#1D3557] focus:ring-4 focus:ring-[#1D3557]/[0.08] aria-[invalid=true]:border-red-400";
+  "min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition duration-200 placeholder:text-slate-400 hover:border-slate-300 focus:border-[#1D3557] focus:ring-4 focus:ring-[#1D3557]/[0.08] aria-[invalid=true]:border-red-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-orange-400 dark:focus:ring-orange-400/10 dark:aria-[invalid=true]:border-red-400";
 
 const passwordInputClassName = `${inputClassName} pr-12`;
 
 const visibilityButtonClassName =
-  "absolute right-2 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-[#1D3557] focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#E76F51]";
+  "absolute right-2 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-[#1D3557] focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#E76F51] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100";
 
 const uploadPanelClassName =
-  "rounded-xl border border-dashed border-slate-200 bg-slate-50/70 p-4 transition-colors hover:border-[#1D3557]/30";
+  "rounded-xl border border-dashed border-slate-200 bg-slate-50/70 p-4 transition-colors hover:border-[#1D3557]/30 dark:border-slate-700 dark:bg-slate-900/70 dark:hover:border-orange-400/50 dark:focus-within:border-orange-400/70 dark:focus-within:ring-2 dark:focus-within:ring-orange-400/10";
 
 const uploadButtonClassName =
-  "cursor-pointer rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-[#1D3557] transition-colors hover:border-[#1D3557]/30 hover:bg-slate-50";
+  "cursor-pointer rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-[#1D3557] transition-colors hover:border-[#1D3557]/30 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E76F51] dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:border-orange-400/60 dark:hover:bg-slate-700";
 
 function FieldErrors({ name, errors }: { name: string; errors: unknown[] }) {
   if (errors.length === 0) return null;
@@ -56,7 +57,7 @@ function FieldErrors({ name, errors }: { name: string; errors: unknown[] }) {
       {errors.map((error, index) => (
         <p
           key={`${name}-${getFieldErrorMessage(error)}-${index}`}
-          className="text-sm font-medium leading-5 text-red-600"
+          className="text-sm font-medium leading-5 text-red-600 dark:text-red-400"
         >
           {getFieldErrorMessage(error)}
         </p>
@@ -304,13 +305,13 @@ export default function CourierRegisterForm() {
 
             <div className={uploadPanelClassName}>
               <div className="flex items-center gap-3">
-                <FileText className="size-5 shrink-0 text-[#1D3557]" />
+                <FileText className="size-5 shrink-0 text-[#1D3557] dark:text-foreground" />
 
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-bold text-[#1D3557]">
+                  <p className="text-sm font-bold text-[#1D3557] dark:text-foreground">
                     NID / Passport
                   </p>
-                  <p className="mt-1 text-xs leading-5 text-slate-500">
+                  <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
                     PDF, JPG or PNG · Maximum 5MB
                   </p>
                 </div>
@@ -356,7 +357,7 @@ export default function CourierRegisterForm() {
               />
 
               {field.state.value && (
-                <p className="mt-3 flex items-center gap-2 break-all text-sm font-medium text-[#1D3557]">
+                <p className="mt-3 flex items-center gap-2 break-all text-sm font-medium text-[#1D3557] dark:text-foreground">
                   <FileText className="size-4 shrink-0 text-[#E76F51]" />
                   Selected: {field.state.value.name}
                 </p>
@@ -377,13 +378,13 @@ export default function CourierRegisterForm() {
 
             <div className={uploadPanelClassName}>
               <div className="flex items-center gap-3">
-                <ImagePlus className="size-5 shrink-0 text-[#1D3557]" />
+                <ImagePlus className="size-5 shrink-0 text-[#1D3557] dark:text-foreground" />
 
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-bold text-[#1D3557]">
+                  <p className="text-sm font-bold text-[#1D3557] dark:text-foreground">
                     Profile photo
                   </p>
-                  <p className="mt-1 text-xs leading-5 text-slate-500">
+                  <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
                     JPG or PNG · Maximum 5MB
                   </p>
                 </div>
@@ -427,7 +428,7 @@ export default function CourierRegisterForm() {
               />
 
               {field.state.value && (
-                <p className="mt-3 flex items-center gap-2 break-all text-sm font-medium text-[#1D3557]">
+                <p className="mt-3 flex items-center gap-2 break-all text-sm font-medium text-[#1D3557] dark:text-foreground">
                   <ImagePlus className="size-4 shrink-0 text-[#E76F51]" />
                   Selected: {field.state.value.name}
                 </p>
@@ -463,11 +464,11 @@ export default function CourierRegisterForm() {
         )}
       </form.Subscribe>
 
-      <p className="border-t border-slate-100 pt-5 text-center text-sm text-slate-500">
+      <p className="border-t border-slate-100 pt-5 text-center text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400">
         Already have a courier account?{" "}
         <a
           href="/login"
-          className="font-bold text-[#1D3557] underline decoration-[#E76F51]/60 underline-offset-4 transition-colors hover:text-[#E76F51] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51]"
+          className="font-bold text-[#1D3557] underline decoration-[#E76F51]/60 underline-offset-4 transition-colors hover:text-[#E76F51] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51] dark:text-foreground"
         >
           Sign in
         </a>

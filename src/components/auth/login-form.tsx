@@ -37,7 +37,6 @@ export default function LoginForm() {
         });
 
         setUser(response.data.user);
-
         router.push(getRoleHome(response.data.user.role));
       } catch (error) {
         console.error("Login failed:", error);
@@ -54,7 +53,6 @@ export default function LoginForm() {
       const response = await demoLogin(role);
 
       setUser(response.data.user);
-
       router.push(getRoleHome(response.data.user.role));
     } catch (error) {
       console.error("Demo login failed:", error);
@@ -64,6 +62,23 @@ export default function LoginForm() {
       );
     }
   };
+
+  const inputClassName =
+    "min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition duration-200 placeholder:text-slate-400 hover:border-slate-300 focus:border-[#1D3557] focus:ring-4 focus:ring-[#1D3557]/[0.08] aria-[invalid=true]:border-red-400 aria-[invalid=true]:focus:ring-red-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 dark:hover:border-slate-500 dark:focus:border-sky-400 dark:focus:ring-sky-400/10 dark:aria-[invalid=true]:border-red-400";
+
+  const labelClassName =
+    "block text-sm font-bold text-[#1D3557] dark:text-slate-100";
+
+  const visibilityButtonClassName =
+    "absolute right-3 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-[#1D3557] focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#E76F51] dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white";
+
+  const dividerClassName = "h-px flex-1 bg-slate-200 dark:bg-slate-700";
+
+  const dividerLabelClassName =
+    "px-3 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-400 dark:text-slate-400";
+
+  const demoButtonClassName =
+    "flex min-h-12 items-center justify-center rounded-xl border border-slate-200 bg-slate-50/70 px-3 py-3 text-sm font-bold text-[#1D3557] transition duration-200 hover:border-[#1D3557]/25 hover:bg-[#1D3557]/[0.04] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E76F51] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:border-slate-500 dark:hover:bg-slate-700";
 
   return (
     <div className="space-y-7">
@@ -78,10 +93,7 @@ export default function LoginForm() {
         <form.Field name="email">
           {(field) => (
             <div className="space-y-2">
-              <label
-                htmlFor={field.name}
-                className="block text-sm font-bold text-[#1D3557]"
-              >
+              <label htmlFor={field.name} className={labelClassName}>
                 Email address
               </label>
 
@@ -94,13 +106,13 @@ export default function LoginForm() {
                 onChange={(event) => field.handleChange(event.target.value)}
                 placeholder="you@example.com"
                 aria-invalid={field.state.meta.errors.length > 0}
-                className="min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition duration-200 placeholder:text-slate-400 hover:border-slate-300 focus:border-[#1D3557] focus:ring-4 focus:ring-[#1D3557]/[0.08] aria-[invalid=true]:border-red-400 aria-[invalid=true]:focus:ring-red-100"
+                className={inputClassName}
               />
 
               {field.state.meta.errors.map((error) => (
                 <p
                   key={error?.toString()}
-                  className="text-sm font-medium text-red-600"
+                  className="text-sm font-medium text-red-600 dark:text-red-400"
                 >
                   {error?.toString()}
                 </p>
@@ -112,10 +124,7 @@ export default function LoginForm() {
         <form.Field name="password">
           {(field) => (
             <div className="space-y-2">
-              <label
-                htmlFor={field.name}
-                className="block text-sm font-bold text-[#1D3557]"
-              >
+              <label htmlFor={field.name} className={labelClassName}>
                 Password
               </label>
 
@@ -129,7 +138,7 @@ export default function LoginForm() {
                   onChange={(event) => field.handleChange(event.target.value)}
                   placeholder="Enter your password"
                   aria-invalid={field.state.meta.errors.length > 0}
-                  className="min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 pr-12 text-sm text-slate-800 outline-none transition duration-200 placeholder:text-slate-400 hover:border-slate-300 focus:border-[#1D3557] focus:ring-4 focus:ring-[#1D3557]/[0.08] aria-[invalid=true]:border-red-400 aria-[invalid=true]:focus:ring-red-100"
+                  className={`${inputClassName} pr-12`}
                 />
 
                 <button
@@ -137,7 +146,7 @@ export default function LoginForm() {
                   onClick={() => setShowPassword((current) => !current)}
                   aria-label={showPassword ? "Hide password" : "Show password"}
                   aria-pressed={showPassword}
-                  className="absolute right-3 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-[#1D3557] focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#E76F51]"
+                  className={visibilityButtonClassName}
                 >
                   {showPassword ? (
                     <EyeOff className="size-4" />
@@ -150,7 +159,7 @@ export default function LoginForm() {
               {field.state.meta.errors.map((error) => (
                 <p
                   key={error?.toString()}
-                  className="text-sm font-medium text-red-600"
+                  className="text-sm font-medium text-red-600 dark:text-red-400"
                 >
                   {error?.toString()}
                 </p>
@@ -162,7 +171,7 @@ export default function LoginForm() {
         <div className="flex justify-end">
           <Link
             href="/forgot-password"
-            className="text-sm font-semibold text-[#1D3557] underline decoration-transparent underline-offset-4 transition-colors hover:text-[#E76F51] hover:decoration-[#E76F51] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51]"
+            className="text-sm font-semibold text-[#1D3557] underline decoration-transparent underline-offset-4 transition-colors hover:text-[#E76F51] hover:decoration-[#E76F51] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51] dark:text-sky-300 dark:hover:text-orange-300 dark:text-foreground"
           >
             Forgot password?
           </Link>
@@ -196,11 +205,9 @@ export default function LoginForm() {
       {/* Google login */}
       <div className="space-y-4">
         <div className="relative flex items-center justify-center">
-          <span className="h-px flex-1 bg-slate-200" />
-          <span className="px-3 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-400">
-            Or continue with
-          </span>
-          <span className="h-px flex-1 bg-slate-200" />
+          <span className={dividerClassName} />
+          <span className={dividerLabelClassName}>Or continue with</span>
+          <span className={dividerClassName} />
         </div>
 
         <div className="flex justify-center">
@@ -211,18 +218,16 @@ export default function LoginForm() {
       {/* Demo login */}
       <div className="space-y-4">
         <div className="relative flex items-center justify-center">
-          <span className="h-px flex-1 bg-slate-200" />
-          <span className="px-3 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-400">
-            Demo login
-          </span>
-          <span className="h-px flex-1 bg-slate-200" />
+          <span className={dividerClassName} />
+          <span className={dividerLabelClassName}>Demo login</span>
+          <span className={dividerClassName} />
         </div>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <button
             type="button"
             onClick={() => handleDemoLogin("CUSTOMER")}
-            className="flex min-h-12 items-center justify-center rounded-xl border border-slate-200 bg-slate-50/70 px-3 py-3 text-sm font-bold text-[#1D3557] transition duration-200 hover:border-[#1D3557]/25 hover:bg-[#1D3557]/[0.04] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E76F51]"
+            className={demoButtonClassName}
           >
             Demo Customer
           </button>
@@ -230,7 +235,7 @@ export default function LoginForm() {
           <button
             type="button"
             onClick={() => handleDemoLogin("COURIER")}
-            className="flex min-h-12 items-center justify-center rounded-xl border border-slate-200 bg-slate-50/70 px-3 py-3 text-sm font-bold text-[#1D3557] transition duration-200 hover:border-[#1D3557]/25 hover:bg-[#1D3557]/[0.04] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E76F51]"
+            className={demoButtonClassName}
           >
             Demo Courier
           </button>
@@ -238,7 +243,7 @@ export default function LoginForm() {
           <button
             type="button"
             onClick={() => handleDemoLogin("ADMIN")}
-            className="flex min-h-12 items-center justify-center rounded-xl border border-slate-200 bg-slate-50/70 px-3 py-3 text-sm font-bold text-[#1D3557] transition duration-200 hover:border-[#1D3557]/25 hover:bg-[#1D3557]/[0.04] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E76F51]"
+            className={demoButtonClassName}
           >
             Demo Admin
           </button>
@@ -246,11 +251,11 @@ export default function LoginForm() {
       </div>
 
       {/* Keep signup link here; do not duplicate it in the parent page */}
-      <p className="border-t border-slate-100 pt-5 text-center text-sm text-slate-600">
+      <p className="border-t border-slate-100 pt-5 text-center text-sm text-slate-600 dark:border-slate-700 dark:text-slate-300 dark:border-slate-800">
         Don&apos;t have an account?{" "}
         <Link
           href="/register"
-          className="inline-flex items-center gap-1 font-bold text-[#1D3557] underline decoration-[#E76F51]/60 underline-offset-4 transition-colors hover:text-[#E76F51] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51]"
+          className="inline-flex items-center gap-1 font-bold text-[#1D3557] underline decoration-[#E76F51]/60 underline-offset-4 transition-colors hover:text-[#E76F51] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51] dark:text-sky-300 dark:hover:text-orange-300 dark:text-foreground"
         >
           Create an account
           <ArrowRight className="size-3.5" />

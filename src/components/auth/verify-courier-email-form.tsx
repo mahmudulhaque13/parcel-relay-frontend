@@ -78,7 +78,7 @@ export default function VerifyCourierEmailForm() {
           <div className="space-y-2">
             <label
               htmlFor={field.name}
-              className="block text-sm font-semibold text-slate-700"
+              className="block text-sm font-semibold text-slate-700 dark:text-slate-200"
             >
               Email address
             </label>
@@ -91,7 +91,7 @@ export default function VerifyCourierEmailForm() {
               value={field.state.value}
               onChange={(event) => field.handleChange(event.target.value)}
               placeholder="you@example.com"
-              className="w-full rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-[#1D3557] focus:bg-white focus:ring-4 focus:ring-[#1D3557]/10"
+              className="w-full rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-[#1D3557] focus:bg-white focus:ring-4 focus:ring-[#1D3557]/10 dark:border-slate-700 dark:text-slate-100"
             />
 
             {field.state.meta.errors.map((error, index) => (
@@ -112,7 +112,7 @@ export default function VerifyCourierEmailForm() {
           <div className="space-y-2">
             <label
               htmlFor={field.name}
-              className="block text-sm font-semibold text-slate-700"
+              className="block text-sm font-semibold text-slate-700 dark:text-slate-200"
             >
               6-digit verification code
             </label>
@@ -132,12 +132,12 @@ export default function VerifyCourierEmailForm() {
               }
               placeholder="000000"
               aria-describedby={`${field.name}-hint`}
-              className="w-full rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-4 text-center font-mono text-2xl font-bold tracking-[0.45em] text-[#1D3557] outline-none transition placeholder:font-normal placeholder:text-slate-300 placeholder:tracking-[0.45em] hover:border-slate-300 focus:border-[#1D3557] focus:bg-white focus:ring-4 focus:ring-[#1D3557]/10"
+              className="w-full rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-4 text-center font-mono text-2xl font-bold tracking-[0.45em] text-[#1D3557] outline-none transition placeholder:font-normal placeholder:text-slate-300 placeholder:tracking-[0.45em] hover:border-slate-300 focus:border-[#1D3557] focus:bg-white focus:ring-4 focus:ring-[#1D3557]/10 dark:border-slate-700 dark:text-foreground"
             />
 
             <p
               id={`${field.name}-hint`}
-              className="text-xs leading-5 text-slate-500"
+              className="text-xs leading-5 text-slate-500 dark:text-slate-400"
             >
               Enter the six-digit code sent to your email address.
             </p>
@@ -180,8 +180,8 @@ export default function VerifyCourierEmailForm() {
       </form.Subscribe>
 
       <div className="rounded-xl border border-[#1D3557]/10 bg-[#1D3557]/[0.035] p-4">
-        <p className="text-sm leading-6 text-slate-600">
-          <span className="font-semibold text-[#1D3557]">
+        <p className="text-sm leading-6 text-slate-600 dark:text-slate-300">
+          <span className="font-semibold text-[#1D3557] dark:text-foreground">
             What happens next?
           </span>{" "}
           After successful verification, your courier application will be

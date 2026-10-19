@@ -49,7 +49,7 @@ type ModuleKind = "zones" | "hubs" | "pricing";
 type Resource = Zone | Hub | PricingRule;
 type FormValues = Record<string, string>;
 const inputClass =
-  "mt-1.5 h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-900 outline-none transition focus:border-[#1D3557] focus:ring-2 focus:ring-[#1D3557]/10";
+  "mt-1.5 h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#1D3557] focus:ring-2 focus:ring-[#1D3557]/10 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-slate-500";
 const buttonClass =
   "inline-flex min-h-9 items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-50";
 function unwrap<T>(response: unknown): T {
@@ -345,13 +345,15 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
     <div className="mx-auto w-full max-w-7xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <div className="mb-2 flex items-center gap-2 text-sm text-slate-500">
+          <div className="mb-2 flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
             <Icon className="size-4" /> Admin <span>/</span> {meta.title}
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
             {meta.title}
           </h1>
-          <p className="mt-1 text-sm text-slate-600">{meta.subtitle}</p>
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+            {meta.subtitle}
+          </p>
         </div>
         <button
           type="button"
@@ -376,33 +378,33 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
           {errorText || queryError}
         </div>
       )}
-      <div className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-between dark:border-slate-700 dark:bg-slate-900">
         <div className="relative w-full sm:max-w-sm">
-          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder={`Search ${meta.title.toLowerCase()}...`}
-            className="h-10 w-full rounded-lg border border-slate-200 pl-9 pr-3 text-sm outline-none focus:border-[#1D3557]"
+            className="h-10 w-full rounded-lg border border-slate-200 bg-white pl-9 pr-3 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:border-[#1D3557] dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-500"
           />
         </div>
-        <div className="flex items-center gap-3 text-sm text-slate-500">
+        <div className="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
           <span>
             {filtered.length} item{filtered.length === 1 ? "" : "s"}
           </span>
           <button
             type="button"
             onClick={() => void query.refetch()}
-            className={`${buttonClass} border border-slate-200 text-slate-700 hover:bg-slate-50`}
+            className={`${buttonClass} border border-slate-200 text-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 dark:border-slate-700 dark:text-slate-200`}
           >
             <RefreshCw className="size-4" /> Refresh
           </button>
         </div>
       </div>
       {formOpen && (
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 dark:border-slate-700 dark:bg-slate-900">
           <div className="mb-5 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-slate-900">
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
               {editing ? "Edit" : "Create"} {meta.singular}
             </h2>
             <button
@@ -411,13 +413,13 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
               onClick={() => {
                 if (!saveMutation.isPending) setFormOpen(false);
               }}
-              className="rounded-lg p-2 text-slate-500 hover:bg-slate-100"
+              className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-400"
             >
               <X className="size-4" />
             </button>
           </div>
           <form onSubmit={submit} className="grid gap-4 sm:grid-cols-2">
-            <label className="text-sm font-medium text-slate-700">
+            <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
               Name
               <input
                 required
@@ -428,7 +430,7 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
               />
             </label>
             {kind !== "pricing" && (
-              <label className="text-sm font-medium text-slate-700">
+              <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
                 Code
                 <input
                   required
@@ -442,20 +444,22 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
               </label>
             )}
             {kind === "zones" && (
-              <label className="text-sm font-medium text-slate-700 sm:col-span-2">
+              <label className="text-sm font-medium text-slate-700 sm:col-span-2 dark:text-slate-200">
                 Description{" "}
-                <span className="font-normal text-slate-400">(optional)</span>
+                <span className="font-normal text-slate-400 dark:text-slate-500">
+                  (optional)
+                </span>
                 <textarea
                   value={values.description ?? ""}
                   onChange={(e) => updateField("description", e.target.value)}
                   rows={3}
-                  className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-[#1D3557]"
+                  className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-[#1D3557] dark:border-slate-700 dark:bg-slate-900"
                 />
               </label>
             )}
             {kind === "hubs" && (
               <>
-                <label className="text-sm font-medium text-slate-700 sm:col-span-2">
+                <label className="text-sm font-medium text-slate-700 sm:col-span-2 dark:text-slate-200">
                   Address
                   <input
                     required
@@ -465,7 +469,7 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
                     className={inputClass}
                   />
                 </label>
-                <label className="text-sm font-medium text-slate-700 sm:col-span-2">
+                <label className="text-sm font-medium text-slate-700 sm:col-span-2 dark:text-slate-200">
                   Zone
                   <select
                     required
@@ -492,7 +496,7 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
             )}
             {kind === "pricing" && (
               <>
-                <label className="text-sm font-medium text-slate-700">
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
                   Base price (BDT)
                   <input
                     required
@@ -504,7 +508,7 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
                     className={inputClass}
                   />
                 </label>
-                <label className="text-sm font-medium text-slate-700">
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
                   Per kg price (BDT)
                   <input
                     required
@@ -516,7 +520,7 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
                     className={inputClass}
                   />
                 </label>
-                <label className="text-sm font-medium text-slate-700">
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
                   COD percentage (%)
                   <input
                     required
@@ -538,7 +542,7 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
                 type="button"
                 onClick={() => setFormOpen(false)}
                 disabled={saveMutation.isPending}
-                className={`${buttonClass} border border-slate-200 text-slate-700 hover:bg-slate-50`}
+                className={`${buttonClass} border border-slate-200 text-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 dark:border-slate-700 dark:text-slate-200`}
               >
                 Cancel
               </button>
@@ -559,27 +563,29 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
           </form>
         </div>
       )}
-      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
         {loading ? (
           <div className="space-y-4 p-6">
             {[1, 2, 3, 4].map((n) => (
               <div
                 key={n}
-                className="h-12 animate-pulse rounded-lg bg-slate-100"
+                className="h-12 animate-pulse rounded-lg bg-slate-100 dark:bg-slate-900"
               />
             ))}
           </div>
         ) : isError ? (
           <div className="flex min-h-48 flex-col items-center justify-center gap-3 p-6 text-center">
             <AlertCircle className="size-7 text-red-500" />
-            <p className="font-semibold text-slate-900">
+            <p className="font-semibold text-slate-900 dark:text-slate-100">
               Unable to load {meta.title.toLowerCase()}
             </p>
-            <p className="text-sm text-slate-500">{queryError}</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              {queryError}
+            </p>
             <button
               type="button"
               onClick={() => void query.refetch()}
-              className={`${buttonClass} border border-slate-200`}
+              className={`${buttonClass} border border-slate-200 dark:border-slate-700`}
             >
               <RefreshCw className="size-4" /> Try again
             </button>
@@ -587,12 +593,12 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
         ) : filtered.length === 0 ? (
           <div className="flex min-h-48 flex-col items-center justify-center p-8 text-center">
             <Icon className="size-8 text-slate-300" />
-            <h2 className="mt-3 font-semibold text-slate-900">
+            <h2 className="mt-3 font-semibold text-slate-900 dark:text-slate-100">
               {search
                 ? "No matching items"
                 : `No ${meta.title.toLowerCase()} yet`}
             </h2>
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
               {search
                 ? "Try another search term."
                 : `Create your first ${meta.singular.toLowerCase()} to get started.`}
@@ -602,7 +608,7 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[700px]">
               <thead>
-                <tr className="border-b bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
+                <tr className="border-b bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400 dark:bg-slate-950">
                   <th className="px-5 py-4 font-semibold">Name / Details</th>
                   {kind !== "pricing" && (
                     <th className="px-5 py-4 font-semibold">Code</th>
@@ -623,7 +629,7 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                 {filtered.map((resource) => {
                   const active = resource.isActive !== false;
                   const hub = resource as Hub;
@@ -631,13 +637,13 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
                   return (
                     <tr
                       key={resource.id}
-                      className="text-sm hover:bg-slate-50/70"
+                      className="text-sm transition-colors hover:bg-slate-100 dark:hover:bg-slate-800/70"
                     >
                       <td className="px-5 py-4">
-                        <p className="font-semibold text-slate-900">
+                        <p className="font-semibold text-slate-900 dark:text-slate-100">
                           {resource.name}
                         </p>
-                        <p className="mt-1 max-w-sm truncate text-xs text-slate-500">
+                        <p className="mt-1 max-w-sm truncate text-xs text-slate-500 dark:text-slate-400">
                           {kind === "zones"
                             ? (resource as Zone).description || "No description"
                             : kind === "hubs"
@@ -646,12 +652,12 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
                         </p>
                       </td>
                       {kind !== "pricing" && (
-                        <td className="px-5 py-4 font-mono text-xs text-slate-600">
+                        <td className="px-5 py-4 font-mono text-xs text-slate-600 dark:text-slate-300">
                           {(resource as Zone | Hub).code}
                         </td>
                       )}
                       {kind === "hubs" && (
-                        <td className="px-5 py-4 text-slate-600">
+                        <td className="px-5 py-4 text-slate-600 dark:text-slate-300">
                           {hub.zone?.name ??
                             zones.find((z) => z.id === hub.zoneId)?.name ??
                             "—"}
@@ -672,7 +678,7 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
                       )}
                       <td className="px-5 py-4">
                         <span
-                          className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${active ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-500"}`}
+                          className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${active ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300" : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300"}`}
                         >
                           {active ? "Active" : "Inactive"}
                         </span>
@@ -682,7 +688,7 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
                           <button
                             type="button"
                             onClick={() => openEdit(resource)}
-                            className={`${buttonClass} border border-slate-200 text-slate-700 hover:bg-slate-100`}
+                            className={`${buttonClass} border border-slate-200 text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 dark:border-slate-700 dark:text-slate-200`}
                           >
                             <Pencil className="size-3.5" /> Edit
                           </button>
@@ -691,7 +697,7 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
                               type="button"
                               disabled={statusMutation.isPending}
                               onClick={() => statusMutation.mutate(resource)}
-                              className={`${buttonClass} border border-amber-200 text-amber-800 hover:bg-amber-50`}
+                              className={`${buttonClass} border border-amber-200 bg-white text-amber-800 hover:bg-amber-50 dark:border-amber-500/40 dark:bg-slate-900 dark:text-amber-300 dark:hover:bg-amber-500/10`}
                             >
                               Deactivate
                             </button>
@@ -700,7 +706,7 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
                               type="button"
                               disabled={activateMutation.isPending}
                               onClick={() => activateMutation.mutate(resource)}
-                              className={`${buttonClass} border border-emerald-200 text-emerald-700 hover:bg-emerald-50`}
+                              className={`${buttonClass} border border-emerald-200 bg-white text-emerald-700 hover:bg-emerald-50 dark:border-emerald-500/40 dark:bg-slate-900 dark:text-emerald-300 dark:hover:bg-emerald-500/10`}
                             >
                               {activateMutation.isPending && (
                                 <Loader2 className="size-3.5 animate-spin" />
@@ -712,7 +718,7 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
                             type="button"
                             disabled={deleteMutation.isPending}
                             onClick={() => deleteMutation.mutate(resource)}
-                            className={`${buttonClass} border border-red-200 text-red-700 hover:bg-red-50`}
+                            className={`${buttonClass} border border-red-200 bg-white text-red-700 hover:bg-red-50 dark:border-red-500/40 dark:bg-slate-900 dark:text-red-300 dark:hover:bg-red-500/10`}
                           >
                             Delete
                           </button>
@@ -726,7 +732,7 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
           </div>
         )}
       </div>
-      <p className="text-xs leading-5 text-slate-500">
+      <p className="text-xs leading-5 text-slate-500 dark:text-slate-400">
         Administrative changes are sent to the backend API. Inactive zones and
         hubs can be reactivated. Deleted items cannot be restored from this
         screen. Deleting a zone or hub may be rejected by the server if related

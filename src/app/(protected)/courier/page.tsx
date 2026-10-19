@@ -123,11 +123,11 @@ export default function CourierPage() {
 
   if (isLoading) {
     return (
-      <main className="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+      <main className="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8 lg:py-10 dark:bg-slate-950">
         <div className="mx-auto max-w-7xl space-y-8">
-          <div className="h-4 w-32 animate-pulse rounded bg-slate-200" />
-          <div className="h-9 w-64 max-w-full animate-pulse rounded-lg bg-slate-200" />
-          <div className="h-4 w-80 max-w-full animate-pulse rounded bg-slate-200" />
+          <div className="h-4 w-32 animate-pulse rounded bg-slate-200 dark:bg-slate-800" />
+          <div className="h-9 w-64 max-w-full animate-pulse rounded-lg bg-slate-200 dark:bg-slate-800" />
+          <div className="h-4 w-80 max-w-full animate-pulse rounded bg-slate-200 dark:bg-slate-800" />
 
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {Array.from(
@@ -136,7 +136,7 @@ export default function CourierPage() {
             ).map((key) => (
               <div
                 key={key}
-                className="h-72 animate-pulse rounded-2xl border border-slate-200 bg-white"
+                className="h-72 animate-pulse rounded-2xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900"
               />
             ))}
           </div>
@@ -147,21 +147,21 @@ export default function CourierPage() {
 
   if (isError) {
     return (
-      <main className="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+      <main className="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8 lg:py-10 dark:bg-slate-950">
         <div className="mx-auto max-w-7xl">
           <div
             role="alert"
-            className="flex items-start gap-3 rounded-2xl border border-red-200 bg-white p-5 shadow-sm"
+            className="flex items-start gap-3 rounded-2xl border border-red-200 bg-white p-5 shadow-sm dark:bg-slate-900"
           >
             <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-600">
               <Package className="size-5" />
             </div>
 
             <div>
-              <h1 className="font-bold text-slate-900">
+              <h1 className="font-bold text-slate-900 dark:text-slate-100">
                 Unable to load shipments
               </h1>
-              <p className="mt-1 text-sm leading-6 text-slate-600">
+              <p className="mt-1 text-sm leading-6 text-slate-600 dark:text-slate-300">
                 Failed to load your assigned shipments. Please refresh the page
                 and try again.
               </p>
@@ -173,12 +173,12 @@ export default function CourierPage() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+    <main className="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8 lg:py-10 dark:bg-slate-950">
       <div className="mx-auto max-w-7xl space-y-8">
         {/* Dashboard heading */}
-        <section className="relative overflow-hidden rounded-3xl bg-[#1D3557] px-6 py-8 text-white shadow-lg shadow-[#1D3557]/10 sm:px-8 sm:py-10">
+        <section className="relative overflow-hidden rounded-3xl bg-[#1D3557] px-6 py-8 text-white shadow-lg shadow-[#1D3557]/10 sm:px-8 sm:py-10 dark:shadow-black/20">
           <div className="pointer-events-none absolute -right-16 -top-24 size-72 rounded-full bg-white/[0.05] blur-2xl" />
-          <div className="pointer-events-none absolute -bottom-28 right-1/4 size-64 rounded-full bg-[#E76F51]/20 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-28 right-1/4 size-64 rounded-full bg-[#E76F51]/15 blur-3xl" />
 
           <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
             <div className="min-w-0">
@@ -218,23 +218,23 @@ export default function CourierPage() {
         <section className="space-y-5">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h2 className="text-xl font-extrabold tracking-tight text-[#1D3557] sm:text-2xl">
+              <h2 className="text-xl font-extrabold tracking-tight text-[#1D3557] sm:text-2xl dark:text-foreground">
                 Delivery assignments
               </h2>
 
-              <p className="mt-1.5 text-sm leading-6 text-slate-500">
+              <p className="mt-1.5 text-sm leading-6 text-slate-500 dark:text-slate-400">
                 Search shipments or filter by their current status.
               </p>
             </div>
 
-            <div className="inline-flex w-fit shrink-0 items-center gap-2 rounded-full border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-600">
+            <div className="inline-flex w-fit shrink-0 items-center gap-2 rounded-full border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-600 dark:border-slate-700 dark:text-slate-300 dark:bg-slate-900">
               <Package className="size-4 text-[#E76F51]" />
               {totalShipments} total
             </div>
           </div>
 
           {/* Search and status filter */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5 dark:border-slate-700 dark:bg-slate-900">
             <div className="grid grid-cols-1 items-end gap-4 lg:grid-cols-[minmax(0,1fr)_240px]">
               <form
                 onSubmit={handleSearchSubmit}
@@ -243,13 +243,13 @@ export default function CourierPage() {
                 <div className="min-w-0">
                   <label
                     htmlFor="courier-shipment-search"
-                    className="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500"
+                    className="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                   >
                     Search shipments
                   </label>
 
                   <div className="relative">
-                    <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
+                    <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
 
                     <input
                       id="courier-shipment-search"
@@ -257,7 +257,7 @@ export default function CourierPage() {
                       value={search}
                       onChange={(event) => setSearch(event.target.value)}
                       placeholder="Search tracking or recipient..."
-                      className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-4 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-[#1D3557] focus:bg-white focus:ring-4 focus:ring-[#1D3557]/10"
+                      className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-4 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-[#1D3557] focus:bg-white focus:ring-4 focus:ring-[#1D3557]/10 dark:border-slate-700 dark:text-slate-100 dark:bg-slate-950"
                     />
                   </div>
                 </div>
@@ -274,7 +274,7 @@ export default function CourierPage() {
               <div className="min-w-0">
                 <label
                   htmlFor="shipment-status"
-                  className="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500"
+                  className="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   Shipment status
                 </label>
@@ -283,7 +283,7 @@ export default function CourierPage() {
                   id="shipment-status"
                   value={status}
                   onChange={handleStatusChange}
-                  className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700 outline-none transition hover:border-slate-300 focus:border-[#1D3557] focus:bg-white focus:ring-4 focus:ring-[#1D3557]/10"
+                  className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700 outline-none transition hover:border-slate-300 focus:border-[#1D3557] focus:bg-white focus:ring-4 focus:ring-[#1D3557]/10 dark:border-slate-700 dark:text-slate-200 dark:bg-slate-950"
                 >
                   <option value="">All statuses</option>
 
@@ -299,17 +299,17 @@ export default function CourierPage() {
 
           {/* Results summary */}
           <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
-            <p className="text-slate-500">
+            <p className="text-slate-500 dark:text-slate-400">
               Showing{" "}
-              <span className="font-bold text-slate-800">
+              <span className="font-bold text-slate-800 dark:text-slate-100">
                 {shipments.length}
               </span>{" "}
               shipments on this page
             </p>
 
-            <p className="font-medium text-slate-500">
+            <p className="font-medium text-slate-500 dark:text-slate-400">
               Page{" "}
-              <span className="font-bold text-[#1D3557]">
+              <span className="font-bold text-[#1D3557] dark:text-foreground">
                 {meta?.page ?? page}
               </span>{" "}
               of {totalPages}
@@ -318,16 +318,16 @@ export default function CourierPage() {
 
           {/* Empty state */}
           {shipments.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-5 py-14 text-center sm:px-10">
-              <div className="mx-auto flex size-16 items-center justify-center rounded-2xl bg-[#1D3557]/[0.06] text-[#1D3557]">
+            <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-5 py-14 text-center sm:px-10 dark:border-slate-700 dark:bg-slate-900">
+              <div className="mx-auto flex size-16 items-center justify-center rounded-2xl bg-[#1D3557]/[0.06] text-[#1D3557] dark:text-foreground">
                 <Truck className="size-7" />
               </div>
 
-              <h3 className="mt-5 text-lg font-extrabold text-[#1D3557]">
+              <h3 className="mt-5 text-lg font-extrabold text-[#1D3557] dark:text-foreground">
                 No assigned shipments
               </h3>
 
-              <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">
+              <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500 dark:text-slate-400">
                 No shipments match your current search or status filter. Try
                 changing your search terms or selecting another status.
               </p>
@@ -337,16 +337,16 @@ export default function CourierPage() {
               {shipments.map((shipment) => (
                 <article
                   key={shipment.id}
-                  className="group flex min-w-0 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-1 hover:border-slate-300 hover:shadow-lg hover:shadow-[#1D3557]/[0.06]"
+                  className="group flex min-w-0 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-1 hover:border-slate-300 hover:shadow-lg hover:shadow-[#1D3557]/[0.06] dark:border-slate-700 dark:bg-slate-900"
                 >
-                  <div className="border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white p-5">
+                  <div className="border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white p-5 dark:border-slate-800 dark:from-slate-950 dark:to-slate-900">
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                        <p className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                           Tracking number
                         </p>
 
-                        <p className="mt-2 break-all font-mono text-sm font-bold leading-6 text-[#1D3557]">
+                        <p className="mt-2 break-all font-mono text-sm font-bold leading-6 text-[#1D3557] dark:text-foreground">
                           {shipment.trackingNumber}
                         </p>
                       </div>
@@ -364,29 +364,29 @@ export default function CourierPage() {
                   <div className="flex flex-1 flex-col p-5">
                     <div className="space-y-4">
                       <div>
-                        <p className="text-xs font-semibold text-slate-400">
+                        <p className="text-xs font-semibold text-slate-400 dark:text-slate-500">
                           Recipient
                         </p>
 
-                        <p className="mt-1 break-words text-sm font-bold text-slate-800">
+                        <p className="mt-1 break-words text-sm font-bold text-slate-800 dark:text-slate-100">
                           {shipment.recipientName}
                         </p>
 
-                        <p className="mt-1 break-all text-sm text-slate-500">
+                        <p className="mt-1 break-all text-sm text-slate-500 dark:text-slate-400">
                           {shipment.recipientPhone}
                         </p>
                       </div>
 
-                      <div className="rounded-xl bg-slate-50 p-3.5">
+                      <div className="rounded-xl bg-slate-50 p-3.5 dark:bg-slate-950">
                         <div className="flex items-start gap-2.5">
                           <MapPin className="mt-0.5 size-4 shrink-0 text-[#E76F51]" />
 
                           <div className="min-w-0">
-                            <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                            <p className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                               Delivery route
                             </p>
 
-                            <p className="mt-1.5 break-words text-sm font-semibold leading-5 text-slate-700">
+                            <p className="mt-1.5 break-words text-sm font-semibold leading-5 text-slate-700 dark:text-slate-200">
                               {shipment.originZone.name}
                               <span className="mx-2 text-[#E76F51]">→</span>
                               {shipment.destinationZone.name}
@@ -395,36 +395,36 @@ export default function CourierPage() {
                         </div>
 
                         <div className="mt-3 border-t border-slate-200/80 pt-3">
-                          <p className="text-xs font-semibold text-slate-400">
+                          <p className="text-xs font-semibold text-slate-400 dark:text-slate-500">
                             Delivery address
                           </p>
 
-                          <p className="mt-1 break-words text-sm leading-5 text-slate-600">
+                          <p className="mt-1 break-words text-sm leading-5 text-slate-600 dark:text-slate-300">
                             {shipment.deliveryAddress}
                           </p>
                         </div>
                       </div>
 
                       <div className="grid grid-cols-2 gap-3">
-                        <div className="rounded-xl border border-slate-100 p-3.5">
-                          <p className="text-xs font-semibold text-slate-400">
+                        <div className="rounded-xl border border-slate-100 p-3.5 dark:border-slate-800">
+                          <p className="text-xs font-semibold text-slate-400 dark:text-slate-500">
                             Package weight
                           </p>
 
-                          <p className="mt-2 text-lg font-extrabold text-[#1D3557]">
+                          <p className="mt-2 text-lg font-extrabold text-[#1D3557] dark:text-foreground">
                             {shipment.weight}{" "}
-                            <span className="text-xs font-semibold text-slate-500">
+                            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
                               kg
                             </span>
                           </p>
                         </div>
 
-                        <div className="rounded-xl border border-orange-100 bg-orange-50/50 p-3.5">
-                          <p className="text-xs font-semibold text-slate-500">
+                        <div className="rounded-xl border border-orange-200 bg-orange-50 p-3.5 dark:border-orange-800 dark:bg-orange-950/60">
+                          <p className="text-xs font-semibold text-orange-800 dark:text-orange-200">
                             Cash on delivery
                           </p>
 
-                          <p className="mt-2 break-words text-lg font-extrabold text-[#1D3557]">
+                          <p className="mt-2 break-words text-lg font-extrabold text-[#1D3557] dark:text-orange-100">
                             ৳{shipment.codAmount}
                           </p>
                         </div>
@@ -433,7 +433,7 @@ export default function CourierPage() {
 
                     <Link
                       href={`/courier/shipments/${shipment.id}`}
-                      className="mt-5 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-[#1D3557]/15 px-4 py-2.5 text-sm font-bold text-[#1D3557] transition hover:border-[#1D3557] hover:bg-[#1D3557] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51]"
+                      className="mt-5 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-[#1D3557]/15 px-4 py-2.5 text-sm font-bold text-[#1D3557] transition hover:border-[#1D3557] hover:bg-[#1D3557] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51] dark:border-slate-600 dark:text-slate-100 dark:hover:border-[#E76F51] dark:hover:bg-[#1D3557] dark:hover:text-white"
                     >
                       View shipment details
                       <span
@@ -453,18 +453,18 @@ export default function CourierPage() {
           {shipments.length > 0 && totalPages > 1 && (
             <nav
               aria-label="Shipment pagination"
-              className="flex flex-wrap items-center justify-center gap-3 border-t border-slate-200 pt-6"
+              className="flex flex-wrap items-center justify-center gap-3 border-t border-slate-200 pt-6 dark:border-slate-700"
             >
               <button
                 type="button"
                 disabled={page <= 1}
                 onClick={() => handlePageChange(page - 1)}
-                className="min-h-10 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-[#1D3557] hover:text-[#1D3557] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E76F51] disabled:cursor-not-allowed disabled:opacity-40"
+                className="min-h-10 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-[#1D3557] hover:text-[#1D3557] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E76F51] disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:text-slate-200 dark:bg-slate-900 dark:hover:border-slate-500 dark:hover:text-white"
               >
                 Previous
               </button>
 
-              <span className="rounded-xl bg-[#1D3557]/[0.06] px-4 py-2.5 text-sm font-bold tabular-nums text-[#1D3557]">
+              <span className="rounded-xl bg-[#1D3557]/[0.06] px-4 py-2.5 text-sm font-bold tabular-nums text-[#1D3557] dark:text-foreground">
                 {page} / {totalPages}
               </span>
 
@@ -472,7 +472,7 @@ export default function CourierPage() {
                 type="button"
                 disabled={page >= totalPages}
                 onClick={() => handlePageChange(page + 1)}
-                className="min-h-10 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-[#1D3557] hover:text-[#1D3557] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E76F51] disabled:cursor-not-allowed disabled:opacity-40"
+                className="min-h-10 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-[#1D3557] hover:text-[#1D3557] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E76F51] disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:text-slate-200 dark:bg-slate-900 dark:hover:border-slate-500 dark:hover:text-white"
               >
                 Next
               </button>

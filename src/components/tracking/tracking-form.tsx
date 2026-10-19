@@ -48,7 +48,7 @@ export default function TrackingForm() {
       id="track-shipment"
       className="mx-auto w-full max-w-[1440px] px-4 py-16 sm:px-6 lg:px-10"
     >
-      <div className="mx-auto max-w-4xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-900/5">
+      <div className="mx-auto max-w-4xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-900/5 dark:border-slate-700 dark:bg-slate-900">
         <div className="bg-[#1D3557] px-6 py-8 text-white sm:px-9 sm:py-10">
           <span className="inline-flex size-12 items-center justify-center rounded-2xl bg-white/10 text-[#F4A261]">
             <PackageSearch className="size-6" />
@@ -81,7 +81,7 @@ export default function TrackingForm() {
               }}
               placeholder="Enter your tracking number"
               autoComplete="off"
-              className="min-h-12 min-w-0 flex-1 rounded-xl border border-white/20 bg-white px-4 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:border-[#F4A261] focus:ring-2 focus:ring-[#F4A261]/30"
+              className="min-h-12 min-w-0 flex-1 rounded-xl border border-white/20 bg-white px-4 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:border-[#F4A261] focus:ring-2 focus:ring-[#F4A261]/30 dark:text-slate-100 dark:bg-slate-900"
               aria-invalid={Boolean(validationError)}
               aria-describedby={
                 validationError ? "tracking-validation-error" : undefined
@@ -111,9 +111,9 @@ export default function TrackingForm() {
 
         <div className="p-6 sm:p-9">
           {trackingQuery.isFetching && (
-            <output className="flex items-center gap-3 py-5 text-sm text-slate-600">
+            <output className="flex items-center gap-3 py-5 text-sm text-slate-600 dark:text-slate-300">
               <span
-                className="size-6 animate-spin rounded-full border-2 border-slate-200 border-t-[#E76F51]"
+                className="size-6 animate-spin rounded-full border-2 border-slate-200 border-t-[#E76F51] dark:border-slate-700"
                 aria-hidden="true"
               />
               Searching for your shipment...
@@ -141,12 +141,12 @@ export default function TrackingForm() {
 
           {trackingQuery.isSuccess && result && (
             <div>
-              <div className="flex flex-col justify-between gap-4 border-b border-slate-100 pb-5 sm:flex-row sm:items-center">
+              <div className="flex flex-col justify-between gap-4 border-b border-slate-100 pb-5 sm:flex-row sm:items-center dark:border-slate-800">
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                     Tracking number
                   </p>
-                  <p className="mt-1 break-all font-bold text-[#1D3557]">
+                  <p className="mt-1 break-all font-bold text-[#1D3557] dark:text-foreground">
                     {result.trackingNumber}
                   </p>
                 </div>
@@ -158,29 +158,29 @@ export default function TrackingForm() {
               </div>
 
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                <div className="rounded-2xl bg-slate-50 p-4">
-                  <div className="flex items-center gap-2 text-sm font-bold text-[#1D3557]">
+                <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-950">
+                  <div className="flex items-center gap-2 text-sm font-bold text-[#1D3557] dark:text-foreground">
                     <MapPin className="size-4 text-[#E76F51]" />
                     Origin
                   </div>
-                  <p className="mt-2 text-sm text-slate-600">
+                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
                     {result.originZone?.name ?? "Not available"}
                   </p>
                 </div>
 
-                <div className="rounded-2xl bg-slate-50 p-4">
-                  <div className="flex items-center gap-2 text-sm font-bold text-[#1D3557]">
+                <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-950">
+                  <div className="flex items-center gap-2 text-sm font-bold text-[#1D3557] dark:text-foreground">
                     <Truck className="size-4 text-[#E76F51]" />
                     Destination
                   </div>
-                  <p className="mt-2 text-sm text-slate-600">
+                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
                     {result.destinationZone?.name ?? "Not available"}
                   </p>
                 </div>
               </div>
 
               <div className="mt-7">
-                <h3 className="flex items-center gap-2 font-extrabold text-[#1D3557]">
+                <h3 className="flex items-center gap-2 font-extrabold text-[#1D3557] dark:text-foreground">
                   <Clock3 className="size-5 text-[#E76F51]" />
                   Shipment timeline
                 </h3>
@@ -196,26 +196,26 @@ export default function TrackingForm() {
                           <CheckCircle2 className="size-4" />
                         </span>
 
-                        <div className="min-w-0 flex-1 border-b border-slate-100 pb-4">
-                          <p className="font-bold text-[#1D3557]">
+                        <div className="min-w-0 flex-1 border-b border-slate-100 pb-4 dark:border-slate-800">
+                          <p className="font-bold text-[#1D3557] dark:text-foreground">
                             {formatStatus(event.status)}
                           </p>
 
                           {event.description && (
-                            <p className="mt-1 text-sm leading-6 text-slate-600">
+                            <p className="mt-1 text-sm leading-6 text-slate-600 dark:text-slate-300">
                               {event.description}
                             </p>
                           )}
 
                           {event.location && (
-                            <p className="mt-1 text-sm text-slate-500">
+                            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                               {event.location}
                             </p>
                           )}
 
                           <time
                             dateTime={event.createdAt}
-                            className="mt-2 block text-xs text-slate-400"
+                            className="mt-2 block text-xs text-slate-400 dark:text-slate-500"
                           >
                             {new Date(event.createdAt).toLocaleString()}
                           </time>
@@ -224,7 +224,7 @@ export default function TrackingForm() {
                     ))}
                   </ol>
                 ) : (
-                  <p className="mt-4 rounded-xl bg-slate-50 p-4 text-sm text-slate-600">
+                  <p className="mt-4 rounded-xl bg-slate-50 p-4 text-sm text-slate-600 dark:text-slate-300 dark:bg-slate-950">
                     No tracking events are available yet.
                   </p>
                 )}
@@ -235,7 +235,7 @@ export default function TrackingForm() {
           {!submittedNumber &&
             !validationError &&
             !trackingQuery.isFetching && (
-              <p className="text-center text-sm leading-6 text-slate-500">
+              <p className="text-center text-sm leading-6 text-slate-500 dark:text-slate-400">
                 Your shipment status and timeline will appear here after you
                 submit a tracking number.
               </p>

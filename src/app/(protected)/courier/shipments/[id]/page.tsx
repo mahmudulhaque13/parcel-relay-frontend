@@ -24,24 +24,24 @@ function getStatusClasses(status: string) {
   switch (status) {
     case "DELIVERED":
     case "RETURNED_TO_SENDER":
-      return "border-emerald-200 bg-emerald-50 text-emerald-700";
+      return "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300";
 
     case "DELIVERY_FAILED":
     case "CANCELLED":
-      return "border-red-200 bg-red-50 text-red-700";
+      return "border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950/60 dark:text-red-300";
 
     case "IN_TRANSIT":
     case "OUT_FOR_DELIVERY":
     case "RETURN_IN_TRANSIT":
-      return "border-blue-200 bg-blue-50 text-blue-700";
+      return "border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-800 dark:bg-blue-950/60 dark:text-blue-300";
 
     case "PICKED_UP":
     case "AT_ORIGIN_HUB":
     case "AT_DESTINATION_HUB":
-      return "border-violet-200 bg-violet-50 text-violet-700";
+      return "border-violet-200 bg-violet-50 text-violet-700 dark:border-violet-800 dark:bg-violet-950/60 dark:text-violet-300";
 
     default:
-      return "border-amber-200 bg-amber-50 text-amber-700";
+      return "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-300";
   }
 }
 
@@ -72,11 +72,11 @@ export default function CourierShipmentDetailsPage() {
 
   if (isLoading) {
     return (
-      <main className="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+      <main className="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8 lg:py-10 dark:bg-slate-950">
         <div className="mx-auto max-w-5xl space-y-6">
-          <div className="h-5 w-40 animate-pulse rounded bg-slate-200" />
-          <div className="h-36 animate-pulse rounded-2xl bg-slate-200" />
-          <div className="h-48 animate-pulse rounded-2xl bg-white" />
+          <div className="h-5 w-40 animate-pulse rounded bg-slate-200 dark:bg-slate-800" />
+          <div className="h-36 animate-pulse rounded-2xl bg-slate-200 dark:bg-slate-800" />
+          <div className="h-48 animate-pulse rounded-2xl bg-white dark:bg-slate-900" />
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {Array.from(
               { length: 4 },
@@ -84,11 +84,11 @@ export default function CourierShipmentDetailsPage() {
             ).map((key) => (
               <div
                 key={key}
-                className="h-28 animate-pulse rounded-2xl bg-slate-200"
+                className="h-28 animate-pulse rounded-2xl bg-slate-200 dark:bg-slate-800"
               />
             ))}
           </div>
-          <div className="h-64 animate-pulse rounded-2xl bg-white" />
+          <div className="h-64 animate-pulse rounded-2xl bg-white dark:bg-slate-900" />
         </div>
       </main>
     );
@@ -96,21 +96,21 @@ export default function CourierShipmentDetailsPage() {
 
   if (isError || !shipmentResponse?.data) {
     return (
-      <main className="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+      <main className="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8 lg:py-10 dark:bg-slate-950">
         <div className="mx-auto max-w-5xl">
           <section
             role="alert"
-            className="rounded-2xl border border-red-200 bg-white p-6 shadow-sm sm:p-8"
+            className="rounded-2xl border border-red-200 bg-white p-6 shadow-sm sm:p-8 dark:bg-slate-900"
           >
             <div className="flex size-12 items-center justify-center rounded-xl bg-red-50 text-red-600">
               <Package className="size-6" />
             </div>
 
-            <h1 className="mt-4 text-xl font-extrabold text-[#1D3557]">
+            <h1 className="mt-4 text-xl font-extrabold text-[#1D3557] dark:text-foreground">
               Unable to load shipment
             </h1>
 
-            <p className="mt-2 text-sm leading-6 text-slate-500">
+            <p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
               The shipment details could not be loaded. Please try again or
               return to your assigned shipments.
             </p>
@@ -164,14 +164,14 @@ export default function CourierShipmentDetailsPage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+    <main className="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8 lg:py-10 dark:bg-slate-950">
       <div className="mx-auto max-w-5xl space-y-6">
         {/* Page header */}
         <header>
           <button
             type="button"
             onClick={() => router.push("/courier")}
-            className="mb-5 inline-flex items-center gap-2 rounded-lg text-sm font-semibold text-slate-500 transition hover:text-[#1D3557] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51]"
+            className="mb-5 inline-flex items-center gap-2 rounded-lg text-sm font-semibold text-slate-500 transition hover:text-[#1D3557] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51] dark:text-slate-400"
           >
             <ArrowLeft className="size-4" />
             Back to My Shipments
@@ -210,17 +210,17 @@ export default function CourierShipmentDetailsPage() {
         </header>
 
         {/* Status update */}
-        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 dark:border-slate-700 dark:bg-slate-900">
           <div className="flex items-start gap-3">
-            <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-[#1D3557]/[0.06] text-[#1D3557]">
+            <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-[#1D3557]/[0.06] text-[#1D3557] dark:text-foreground">
               <CheckCircle2 className="size-5" />
             </div>
 
             <div>
-              <h2 className="text-lg font-extrabold text-[#1D3557]">
+              <h2 className="text-lg font-extrabold text-[#1D3557] dark:text-foreground">
                 Update shipment status
               </h2>
-              <p className="mt-1 text-sm leading-6 text-slate-500">
+              <p className="mt-1 text-sm leading-6 text-slate-500 dark:text-slate-400">
                 Select the next permitted status after completing the delivery
                 task.
               </p>
@@ -232,7 +232,7 @@ export default function CourierShipmentDetailsPage() {
               <div className="min-w-0 flex-1">
                 <label
                   htmlFor="next-shipment-status"
-                  className="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500"
+                  className="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   Next status
                 </label>
@@ -242,7 +242,7 @@ export default function CourierShipmentDetailsPage() {
                   value={selectedStatus}
                   onChange={(event) => setSelectedStatus(event.target.value)}
                   disabled={updateStatusMutation.isPending}
-                  className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 text-sm text-slate-700 outline-none transition hover:border-slate-300 focus:border-[#1D3557] focus:bg-white focus:ring-4 focus:ring-[#1D3557]/10 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 text-sm text-slate-700 outline-none transition hover:border-slate-300 focus:border-[#1D3557] focus:bg-white focus:ring-4 focus:ring-[#1D3557]/10 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:text-slate-200 dark:bg-slate-950"
                 >
                   <option value="">Select new status</option>
 
@@ -276,11 +276,11 @@ export default function CourierShipmentDetailsPage() {
               </div>
             </div>
           ) : (
-            <div className="mt-5 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4">
-              <p className="text-sm font-bold text-slate-700">
+            <div className="mt-5 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-950">
+              <p className="text-sm font-bold text-slate-700 dark:text-slate-200">
                 No further status updates are available.
               </p>
-              <p className="mt-1 text-sm leading-6 text-slate-500">
+              <p className="mt-1 text-sm leading-6 text-slate-500 dark:text-slate-400">
                 This shipment has reached a final status or has no permitted
                 next transition.
               </p>
@@ -291,60 +291,62 @@ export default function CourierShipmentDetailsPage() {
         {/* Shipment summary */}
         <section>
           <div className="mb-4">
-            <h2 className="text-lg font-extrabold text-[#1D3557]">
+            <h2 className="text-lg font-extrabold text-[#1D3557] dark:text-foreground">
               Shipment overview
             </h2>
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
               Package, delivery charge and payment information.
             </p>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-              <div className="flex size-10 items-center justify-center rounded-xl bg-[#1D3557]/[0.06] text-[#1D3557]">
+            <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+              <div className="flex size-10 items-center justify-center rounded-xl bg-[#1D3557]/[0.06] text-[#1D3557] dark:text-foreground">
                 <Package className="size-5" />
               </div>
-              <p className="mt-4 text-xs font-bold uppercase tracking-wider text-slate-400">
+              <p className="mt-4 text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                 Package weight
               </p>
-              <p className="mt-1 text-xl font-extrabold text-[#1D3557]">
+              <p className="mt-1 text-xl font-extrabold text-[#1D3557] dark:text-foreground">
                 {shipment.weight}{" "}
-                <span className="text-sm font-semibold text-slate-500">kg</span>
+                <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">
+                  kg
+                </span>
               </p>
             </article>
 
-            <article className="rounded-2xl border border-orange-100 bg-white p-5 shadow-sm">
+            <article className="rounded-2xl border border-orange-100 bg-white p-5 shadow-sm dark:bg-slate-900">
               <div className="flex size-10 items-center justify-center rounded-xl bg-orange-50 text-[#E76F51]">
                 <span className="text-sm font-black">৳</span>
               </div>
-              <p className="mt-4 text-xs font-bold uppercase tracking-wider text-slate-400">
+              <p className="mt-4 text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                 Cash on delivery
               </p>
-              <p className="mt-1 break-words text-xl font-extrabold text-[#1D3557]">
+              <p className="mt-1 break-words text-xl font-extrabold text-[#1D3557] dark:text-foreground">
                 ৳{shipment.codAmount}
               </p>
             </article>
 
-            <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
               <div className="flex size-10 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
                 <Package className="size-5" />
               </div>
-              <p className="mt-4 text-xs font-bold uppercase tracking-wider text-slate-400">
+              <p className="mt-4 text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                 Delivery charge
               </p>
-              <p className="mt-1 break-words text-xl font-extrabold text-[#1D3557]">
+              <p className="mt-1 break-words text-xl font-extrabold text-[#1D3557] dark:text-foreground">
                 ৳{shipment.deliveryCharge}
               </p>
             </article>
 
-            <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
               <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
                 <CheckCircle2 className="size-5" />
               </div>
-              <p className="mt-4 text-xs font-bold uppercase tracking-wider text-slate-400">
+              <p className="mt-4 text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                 Payment status
               </p>
-              <p className="mt-1 break-words text-base font-extrabold text-[#1D3557]">
+              <p className="mt-1 break-words text-base font-extrabold text-[#1D3557] dark:text-foreground">
                 {shipment.paymentStatus}
               </p>
             </article>
@@ -352,16 +354,16 @@ export default function CourierShipmentDetailsPage() {
         </section>
 
         {/* Recipient information */}
-        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-          <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-[#1D3557]/[0.06] text-[#1D3557]">
+        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 dark:border-slate-700 dark:bg-slate-900">
+          <div className="flex items-center gap-3 border-b border-slate-100 pb-4 dark:border-slate-800">
+            <div className="flex size-10 items-center justify-center rounded-xl bg-[#1D3557]/[0.06] text-[#1D3557] dark:text-foreground">
               <User className="size-5" />
             </div>
             <div>
-              <h2 className="font-extrabold text-[#1D3557]">
+              <h2 className="font-extrabold text-[#1D3557] dark:text-foreground">
                 Recipient information
               </h2>
-              <p className="mt-1 text-xs text-slate-500">
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                 Contact and delivery details
               </p>
             </div>
@@ -369,37 +371,37 @@ export default function CourierShipmentDetailsPage() {
 
           <div className="mt-5 grid gap-5 sm:grid-cols-2">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
+              <p className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                 Recipient name
               </p>
-              <p className="mt-2 break-words text-sm font-semibold text-slate-800">
+              <p className="mt-2 break-words text-sm font-semibold text-slate-800 dark:text-slate-100">
                 {shipment.recipientName}
               </p>
             </div>
 
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
+              <p className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                 Phone number
               </p>
-              <p className="mt-2 break-all text-sm font-semibold text-slate-800">
+              <p className="mt-2 break-all text-sm font-semibold text-slate-800 dark:text-slate-100">
                 {shipment.recipientPhone}
               </p>
             </div>
 
             <div className="sm:col-span-2">
-              <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
+              <p className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                 Delivery address
               </p>
-              <p className="mt-2 break-words text-sm leading-6 text-slate-700">
+              <p className="mt-2 break-words text-sm leading-6 text-slate-700 dark:text-slate-200">
                 {shipment.deliveryAddress}
               </p>
             </div>
 
             <div className="sm:col-span-2">
-              <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
+              <p className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                 Package description
               </p>
-              <p className="mt-2 break-words text-sm leading-6 text-slate-700">
+              <p className="mt-2 break-words text-sm leading-6 text-slate-700 dark:text-slate-200">
                 {shipment.packageDescription}
               </p>
             </div>
@@ -407,40 +409,42 @@ export default function CourierShipmentDetailsPage() {
         </section>
 
         {/* Delivery route */}
-        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-          <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
+        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 dark:border-slate-700 dark:bg-slate-900">
+          <div className="flex items-center gap-3 border-b border-slate-100 pb-4 dark:border-slate-800">
             <div className="flex size-10 items-center justify-center rounded-xl bg-orange-50 text-[#E76F51]">
               <MapPin className="size-5" />
             </div>
             <div>
-              <h2 className="font-extrabold text-[#1D3557]">Delivery route</h2>
-              <p className="mt-1 text-xs text-slate-500">
+              <h2 className="font-extrabold text-[#1D3557] dark:text-foreground">
+                Delivery route
+              </h2>
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                 Origin to destination
               </p>
             </div>
           </div>
 
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
-            <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
-              <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
+            <div className="rounded-xl border border-slate-100 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950">
+              <p className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                 Origin
               </p>
-              <p className="mt-2 break-words font-bold text-[#1D3557]">
+              <p className="mt-2 break-words font-bold text-[#1D3557] dark:text-foreground">
                 {shipment.originZone.name}
               </p>
-              <p className="mt-1 text-xs font-semibold text-slate-500">
+              <p className="mt-1 text-xs font-semibold text-slate-500 dark:text-slate-400">
                 Zone code: {shipment.originZone.code}
               </p>
             </div>
 
-            <div className="rounded-xl border border-orange-100 bg-orange-50/40 p-4">
-              <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
+            <div className="rounded-xl border border-orange-100 bg-orange-50/40 p-4 dark:border-slate-700 dark:bg-slate-950">
+              <p className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                 Destination
               </p>
-              <p className="mt-2 break-words font-bold text-[#1D3557]">
+              <p className="mt-2 break-words font-bold text-[#1D3557] dark:text-foreground">
                 {shipment.destinationZone.name}
               </p>
-              <p className="mt-1 text-xs font-semibold text-slate-500">
+              <p className="mt-1 text-xs font-semibold text-slate-500 dark:text-slate-400">
                 Zone code: {shipment.destinationZone.code}
               </p>
             </div>
@@ -448,28 +452,28 @@ export default function CourierShipmentDetailsPage() {
         </section>
 
         {/* Shipment timeline */}
-        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-          <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-[#1D3557]/[0.06] text-[#1D3557]">
+        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 dark:border-slate-700 dark:bg-slate-900">
+          <div className="flex items-center gap-3 border-b border-slate-100 pb-4 dark:border-slate-800">
+            <div className="flex size-10 items-center justify-center rounded-xl bg-[#1D3557]/[0.06] text-[#1D3557] dark:text-foreground">
               <Clock3 className="size-5" />
             </div>
             <div>
-              <h2 className="font-extrabold text-[#1D3557]">
+              <h2 className="font-extrabold text-[#1D3557] dark:text-foreground">
                 Shipment timeline
               </h2>
-              <p className="mt-1 text-xs text-slate-500">
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                 Recorded shipment events
               </p>
             </div>
           </div>
 
           {shipment.events.length === 0 ? (
-            <div className="mt-5 rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center">
-              <Clock3 className="mx-auto size-7 text-slate-400" />
-              <p className="mt-3 text-sm font-semibold text-slate-700">
+            <div className="mt-5 rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center dark:border-slate-700 dark:bg-slate-950">
+              <Clock3 className="mx-auto size-7 text-slate-400 dark:text-slate-500" />
+              <p className="mt-3 text-sm font-semibold text-slate-700 dark:text-slate-200">
                 No shipment events yet
               </p>
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                 Shipment activity will appear here when events are recorded.
               </p>
             </div>
@@ -481,14 +485,14 @@ export default function CourierShipmentDetailsPage() {
                   className="relative flex gap-4 pb-7 last:pb-0"
                 >
                   {index !== shipment.events.length - 1 && (
-                    <div className="absolute bottom-0 left-[15px] top-8 w-px bg-slate-200" />
+                    <div className="absolute bottom-0 left-[15px] top-8 w-px bg-slate-200 dark:bg-slate-800" />
                   )}
 
-                  <div className="relative z-10 flex size-8 shrink-0 items-center justify-center rounded-full border border-[#1D3557]/10 bg-[#1D3557]/[0.06] text-[#1D3557]">
+                  <div className="relative z-10 flex size-8 shrink-0 items-center justify-center rounded-full border border-[#1D3557]/10 bg-[#1D3557]/[0.06] text-[#1D3557] dark:text-foreground">
                     <span className="size-2.5 rounded-full bg-[#E76F51]" />
                   </div>
 
-                  <div className="min-w-0 flex-1 rounded-xl border border-slate-100 bg-slate-50/70 p-4">
+                  <div className="min-w-0 flex-1 rounded-xl border border-slate-200 bg-slate-50/70 p-4 transition-colors dark:border-slate-700 dark:bg-slate-950">
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                       <span
                         className={`inline-flex w-fit rounded-full border px-2.5 py-1 text-xs font-bold ${getStatusClasses(
@@ -498,19 +502,19 @@ export default function CourierShipmentDetailsPage() {
                         {getCourierShipmentStatusLabel(event.status)}
                       </span>
 
-                      <time className="text-xs leading-5 text-slate-500">
+                      <time className="text-xs leading-5 text-slate-500 dark:text-slate-400">
                         {formatEventDate(event.createdAt)}
                       </time>
                     </div>
 
                     {event.description && (
-                      <p className="mt-3 break-words text-sm leading-6 text-slate-700">
+                      <p className="mt-3 break-words text-sm leading-6 text-slate-700 dark:text-slate-200">
                         {event.description}
                       </p>
                     )}
 
                     {event.location && (
-                      <p className="mt-2 flex items-start gap-1.5 text-xs leading-5 text-slate-500">
+                      <p className="mt-2 flex items-start gap-1.5 text-xs leading-5 text-slate-500 dark:text-slate-400">
                         <MapPin className="mt-0.5 size-3.5 shrink-0" />
                         <span className="break-words">{event.location}</span>
                       </p>

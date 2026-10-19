@@ -13,22 +13,22 @@ export const metadata: Metadata = {
 
 export default function VerifyCourierEmailPage() {
   return (
-    <main className="relative isolate flex min-h-[calc(100vh-76px)] items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 via-white to-orange-50/60 px-4 py-10 sm:px-6 sm:py-14">
+    <main className="relative isolate flex min-h-[calc(100vh-76px)] items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 via-white to-orange-50/60 px-4 py-10 sm:px-6 sm:py-14 dark:to-slate-950 dark:from-slate-950 dark:via-slate-900">
       <div className="absolute -right-24 top-10 -z-10 size-80 rounded-full bg-orange-200/20 blur-3xl" />
       <div className="absolute -bottom-24 -left-24 -z-10 size-80 rounded-full bg-blue-100/30 blur-3xl" />
 
       <div className="w-full max-w-md">
         <Link
           href="/courier/register"
-          className="mb-7 inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition-colors hover:text-[#1D3557] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51]"
+          className="mb-7 inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition-colors hover:text-[#1D3557] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51] dark:text-slate-400"
         >
           <ArrowLeft className="size-4" />
           Back to courier registration
         </Link>
 
-        <section className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 p-6 shadow-xl shadow-[#1D3557]/[0.06] sm:p-9">
+        <section className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 p-6 shadow-xl shadow-[#1D3557]/[0.06] sm:p-9 dark:bg-slate-900/95">
           <div className="flex flex-col items-center text-center">
-            <div className="flex size-16 items-center justify-center rounded-2xl bg-[#1D3557]/[0.06] text-[#1D3557] ring-1 ring-[#1D3557]/10">
+            <div className="flex size-16 items-center justify-center rounded-2xl bg-[#1D3557]/[0.06] text-[#1D3557] ring-1 ring-[#1D3557]/10 dark:text-foreground">
               <MailCheck className="size-7" strokeWidth={1.8} />
             </div>
 
@@ -36,20 +36,20 @@ export default function VerifyCourierEmailPage() {
               Courier account verification
             </p>
 
-            <h1 className="mt-3 text-2xl font-black tracking-tight text-[#1D3557] sm:text-3xl">
+            <h1 className="mt-3 text-2xl font-black tracking-tight text-[#1D3557] sm:text-3xl dark:text-foreground">
               Verify your courier email
             </h1>
 
-            <p className="mt-3 text-sm leading-6 text-slate-500">
+            <p className="mt-3 text-sm leading-6 text-slate-500 dark:text-slate-400">
               Enter the 6-digit verification code sent to your email address to
               continue your courier application.
             </p>
           </div>
 
-          <div className="mt-7 flex items-start gap-3 rounded-xl border border-slate-100 bg-slate-50/80 p-3.5">
+          <div className="mt-7 flex items-start gap-3 rounded-xl border border-slate-100 bg-slate-50/80 p-3.5 dark:border-slate-800 dark:bg-slate-950/80">
             <ShieldCheck className="mt-0.5 size-5 shrink-0 text-[#E76F51]" />
 
-            <p className="text-xs leading-5 text-slate-600">
+            <p className="text-xs leading-5 text-slate-600 dark:text-slate-300">
               Keep your verification code private. Email verification is part of
               your courier application process.
             </p>
@@ -58,9 +58,9 @@ export default function VerifyCourierEmailPage() {
           <div className="mt-7">
             <Suspense
               fallback={
-                <div className="flex min-h-24 items-center justify-center gap-3 rounded-xl border border-slate-100 bg-slate-50/70 p-5 text-sm text-slate-500">
+                <div className="flex min-h-24 items-center justify-center gap-3 rounded-xl border border-slate-100 bg-slate-50/70 p-5 text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400">
                   <span
-                    className="loading loading-ring loading-md text-[#1D3557]"
+                    className="loading loading-ring loading-md text-[#1D3557] dark:text-foreground"
                     aria-hidden="true"
                   />
                   <output className="sr-only">Loading verification form</output>
@@ -72,12 +72,12 @@ export default function VerifyCourierEmailPage() {
             </Suspense>
           </div>
 
-          <div className="mt-7 border-t border-slate-100 pt-5 text-center">
-            <p className="text-sm text-slate-500">
+          <div className="mt-7 border-t border-slate-100 pt-5 text-center dark:border-slate-800">
+            <p className="text-sm text-slate-500 dark:text-slate-400">
               Already have an account?{" "}
               <Link
                 href="/login"
-                className="font-bold text-[#1D3557] underline decoration-[#E76F51]/60 underline-offset-4 transition-colors hover:text-[#E76F51] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51]"
+                className="font-bold text-[#1D3557] underline decoration-[#E76F51]/60 underline-offset-4 transition-colors hover:text-[#E76F51] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51] dark:text-foreground"
               >
                 Sign in
               </Link>
@@ -85,7 +85,7 @@ export default function VerifyCourierEmailPage() {
           </div>
         </section>
 
-        <p className="mt-5 text-center text-xs leading-5 text-slate-400">
+        <p className="mt-5 text-center text-xs leading-5 text-slate-400 dark:text-slate-500">
           ParcelRelay · Courier verification
         </p>
       </div>

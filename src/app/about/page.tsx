@@ -94,28 +94,28 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <main className="overflow-hidden bg-white text-slate-700">
+    <main className="overflow-hidden bg-white text-slate-700 dark:text-slate-200 dark:bg-slate-900">
       {/* Hero */}
-      <section className="relative isolate border-b border-slate-100">
-        <div className="absolute inset-0 -z-20 bg-gradient-to-br from-slate-50 via-white to-orange-50/70" />
+      <section className="relative isolate border-b border-slate-100 dark:border-slate-800">
+        <div className="absolute inset-0 -z-20 bg-gradient-to-br from-slate-50 via-white to-orange-50/70 dark:to-slate-950 dark:from-slate-950 dark:via-slate-900" />
         <div className="absolute -right-24 -top-16 -z-10 size-80 rounded-full bg-orange-200/20 blur-3xl sm:size-[28rem]" />
         <div className="absolute -bottom-20 -left-24 -z-10 size-72 rounded-full bg-blue-100/30 blur-3xl" />
 
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-12 px-4 py-14 sm:px-6 sm:py-20 lg:flex-row lg:items-center lg:gap-16 lg:px-10 lg:py-24">
           <div className="max-w-3xl flex-1">
-            <div className="inline-flex items-center gap-2.5 rounded-full border border-orange-200/80 bg-white/90 px-4 py-2 text-xs font-bold text-[#B84C32] shadow-sm sm:text-sm">
+            <div className="inline-flex items-center gap-2.5 rounded-full border border-orange-200/80 bg-white/90 px-4 py-2 text-xs font-bold text-[#B84C32] shadow-sm sm:text-sm dark:bg-slate-900/90">
               <span className="flex size-8 items-center justify-center rounded-full bg-orange-50 text-[#E76F51]">
                 <PackageCheck className="size-4" />
               </span>
               ParcelRelay Delivery Platform
             </div>
 
-            <h1 className="mt-6 text-4xl font-black leading-[1.12] tracking-tight text-[#1D3557] sm:text-5xl lg:text-6xl">
+            <h1 className="mt-6 text-4xl font-black leading-[1.12] tracking-tight text-[#1D3557] sm:text-5xl lg:text-6xl dark:text-foreground">
               Delivery management made{" "}
               <span className="text-[#E76F51]">simple.</span>
             </h1>
 
-            <p className="mt-6 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg">
+            <p className="mt-6 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg dark:text-slate-300">
               ParcelRelay is a delivery management platform designed to connect
               customers, couriers, and administrators in one streamlined system.
             </p>
@@ -131,14 +131,14 @@ export default function AboutPage() {
 
               <Link
                 href="/services"
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white/90 px-6 py-3 text-sm font-bold text-[#1D3557] transition-colors hover:border-[#1D3557]/25 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51]"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white/90 px-6 py-3 text-sm font-bold text-[#1D3557] transition-colors hover:border-[#1D3557]/25 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51] dark:hover:bg-slate-800 dark:border-slate-700 dark:text-foreground dark:bg-slate-900/90"
               >
                 Explore Services
                 <ArrowUpRight className="size-4" />
               </Link>
             </div>
 
-            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm text-slate-600">
+            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm text-slate-600 dark:text-slate-300">
               <span className="inline-flex items-center gap-2">
                 <CheckCircle2 className="size-4 shrink-0 text-[#E76F51]" />
                 Connected workflows
@@ -154,13 +154,13 @@ export default function AboutPage() {
           <div className="relative mx-auto w-full max-w-xl flex-1 lg:ml-auto">
             <div className="absolute -inset-4 rounded-[2rem] bg-[#1D3557]/[0.06] blur-2xl sm:-inset-6" />
 
-            <div className="relative rounded-3xl border border-slate-200/80 bg-white/95 p-5 shadow-2xl shadow-[#1D3557]/[0.08] sm:p-7">
-              <div className="flex items-center justify-between gap-4 border-b border-slate-100 pb-5">
+            <div className="relative rounded-3xl border border-slate-200/80 bg-white/95 p-5 shadow-2xl shadow-[#1D3557]/[0.08] sm:p-7 dark:bg-slate-900/95">
+              <div className="flex items-center justify-between gap-4 border-b border-slate-100 pb-5 dark:border-slate-800">
                 <div>
-                  <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400 sm:text-xs">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400 sm:text-xs dark:text-slate-500">
                     One connected platform
                   </p>
-                  <h2 className="mt-2 text-xl font-extrabold tracking-tight text-[#1D3557]">
+                  <h2 className="mt-2 text-xl font-extrabold tracking-tight text-[#1D3557] dark:text-foreground">
                     The delivery journey
                   </h2>
                 </div>
@@ -177,17 +177,17 @@ export default function AboutPage() {
                   return (
                     <div
                       key={item.title}
-                      className="rounded-2xl border border-slate-100 bg-slate-50/70 p-4 transition-colors hover:border-orange-100 hover:bg-orange-50/30 sm:p-5"
+                      className="rounded-2xl border border-slate-100 bg-slate-50/70 p-4 transition-colors hover:border-orange-100 hover:bg-orange-50/30 sm:p-5 dark:border-slate-800"
                     >
                       <span className="flex size-10 items-center justify-center rounded-xl bg-orange-50 text-[#E76F51]">
                         <Icon className="size-5" />
                       </span>
 
-                      <h3 className="mt-4 text-base font-extrabold text-[#1D3557]">
+                      <h3 className="mt-4 text-base font-extrabold text-[#1D3557] dark:text-foreground">
                         {item.title}
                       </h3>
 
-                      <p className="mt-1.5 text-xs leading-5 text-slate-500 sm:text-sm">
+                      <p className="mt-1.5 text-xs leading-5 text-slate-500 sm:text-sm dark:text-slate-400">
                         {item.description}
                       </p>
                     </div>
@@ -225,12 +225,12 @@ export default function AboutPage() {
               About ParcelRelay
             </p>
 
-            <h2 className="mt-3 text-3xl font-black leading-tight tracking-tight text-[#1D3557] sm:text-4xl">
+            <h2 className="mt-3 text-3xl font-black leading-tight tracking-tight text-[#1D3557] sm:text-4xl dark:text-foreground">
               One platform for the complete delivery journey.
             </h2>
           </div>
 
-          <div className="space-y-5 text-sm leading-7 text-slate-600 sm:text-base">
+          <div className="space-y-5 text-sm leading-7 text-slate-600 sm:text-base dark:text-slate-300">
             <p>
               ParcelRelay brings the main parts of a delivery workflow together
               in one platform. Customers can create shipments and complete
@@ -255,7 +255,7 @@ export default function AboutPage() {
       </section>
 
       {/* Features */}
-      <section className="relative overflow-hidden border-y border-slate-100 bg-slate-50/80">
+      <section className="relative overflow-hidden border-y border-slate-100 bg-slate-50/80 dark:border-slate-800 dark:bg-slate-950/80">
         <div className="absolute -right-32 top-0 size-80 rounded-full bg-orange-100/40 blur-3xl" />
 
         <div className="relative mx-auto w-full max-w-[1440px] px-4 py-16 sm:px-6 sm:py-20 lg:px-10 lg:py-24">
@@ -264,11 +264,11 @@ export default function AboutPage() {
               What ParcelRelay Provides
             </p>
 
-            <h2 className="mt-3 text-3xl font-black leading-tight tracking-tight text-[#1D3557] sm:text-4xl">
+            <h2 className="mt-3 text-3xl font-black leading-tight tracking-tight text-[#1D3557] sm:text-4xl dark:text-foreground">
               Everything connected in one workflow
             </h2>
 
-            <p className="mt-4 text-sm leading-7 text-slate-600 sm:text-base">
+            <p className="mt-4 text-sm leading-7 text-slate-600 sm:text-base dark:text-slate-300">
               The platform connects shipment creation, payment, delivery
               operations, and tracking into a single experience.
             </p>
@@ -281,7 +281,7 @@ export default function AboutPage() {
               return (
                 <article
                   key={feature.title}
-                  className="group flex h-full flex-col rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm shadow-slate-900/[0.02] transition duration-300 hover:-translate-y-1 hover:border-[#E76F51]/30 hover:shadow-xl hover:shadow-[#1D3557]/[0.06]"
+                  className="group flex h-full flex-col rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm shadow-slate-900/[0.02] transition duration-300 hover:-translate-y-1 hover:border-[#E76F51]/30 hover:shadow-xl hover:shadow-[#1D3557]/[0.06] dark:bg-slate-900"
                 >
                   <div className="flex items-center justify-between">
                     <span className="flex size-11 items-center justify-center rounded-xl bg-orange-50 text-[#E76F51] ring-1 ring-orange-100 transition-colors group-hover:bg-[#E76F51] group-hover:text-white">
@@ -293,11 +293,11 @@ export default function AboutPage() {
                     </span>
                   </div>
 
-                  <h3 className="mt-5 text-base font-extrabold leading-snug text-[#1D3557]">
+                  <h3 className="mt-5 text-base font-extrabold leading-snug text-[#1D3557] dark:text-foreground">
                     {feature.title}
                   </h3>
 
-                  <p className="mt-3 flex-1 text-sm leading-7 text-slate-600">
+                  <p className="mt-3 flex-1 text-sm leading-7 text-slate-600 dark:text-slate-300">
                     {feature.description}
                   </p>
                 </article>
@@ -314,11 +314,11 @@ export default function AboutPage() {
             Built Around Three Roles
           </p>
 
-          <h2 className="mt-3 text-3xl font-black leading-tight tracking-tight text-[#1D3557] sm:text-4xl">
+          <h2 className="mt-3 text-3xl font-black leading-tight tracking-tight text-[#1D3557] sm:text-4xl dark:text-foreground">
             A focused experience for every user
           </h2>
 
-          <p className="mt-4 text-sm leading-7 text-slate-600 sm:text-base">
+          <p className="mt-4 text-sm leading-7 text-slate-600 sm:text-base dark:text-slate-300">
             Each role gets the tools needed for its part of the delivery
             workflow.
           </p>
@@ -331,7 +331,7 @@ export default function AboutPage() {
             return (
               <article
                 key={role.title}
-                className="group rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm shadow-slate-900/[0.02] transition duration-300 hover:-translate-y-1 hover:border-[#E76F51]/30 hover:shadow-xl hover:shadow-[#1D3557]/[0.06] sm:p-7"
+                className="group rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm shadow-slate-900/[0.02] transition duration-300 hover:-translate-y-1 hover:border-[#E76F51]/30 hover:shadow-xl hover:shadow-[#1D3557]/[0.06] sm:p-7 dark:bg-slate-900"
               >
                 <div className="flex items-center justify-between">
                   <span className="flex size-12 items-center justify-center rounded-2xl bg-orange-50 text-[#E76F51] ring-1 ring-orange-100 transition-colors group-hover:bg-[#E76F51] group-hover:text-white">
@@ -343,11 +343,11 @@ export default function AboutPage() {
                   </span>
                 </div>
 
-                <h3 className="mt-6 text-xl font-extrabold text-[#1D3557]">
+                <h3 className="mt-6 text-xl font-extrabold text-[#1D3557] dark:text-foreground">
                   {role.title}
                 </h3>
 
-                <p className="mt-3 text-sm leading-7 text-slate-600">
+                <p className="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-300">
                   {role.description}
                 </p>
               </article>
@@ -357,7 +357,7 @@ export default function AboutPage() {
       </section>
 
       {/* CTA */}
-      <section className="border-t border-slate-100 bg-slate-50/80 px-4 py-16 sm:px-6 sm:py-20 lg:px-10">
+      <section className="border-t border-slate-100 bg-slate-50/80 px-4 py-16 sm:px-6 sm:py-20 lg:px-10 dark:border-slate-800 dark:bg-slate-950/80">
         <div className="relative mx-auto flex w-full max-w-[1280px] flex-col gap-7 overflow-hidden rounded-3xl bg-gradient-to-br from-[#1D3557] to-[#142943] px-6 py-10 shadow-xl shadow-[#1D3557]/10 sm:px-10 sm:py-12 md:flex-row md:items-center md:justify-between lg:px-12">
           <div className="absolute -right-16 -top-24 size-64 rounded-full bg-white/[0.04] blur-2xl" />
 

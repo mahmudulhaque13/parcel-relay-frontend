@@ -44,18 +44,18 @@ const factors = [
 
 export default function PricingPage() {
   return (
-    <main className="min-h-[70vh] bg-white text-slate-700">
-      <section className="border-b border-slate-100 bg-gradient-to-br from-slate-50 via-white to-orange-50/70">
+    <main className="min-h-[70vh] bg-white text-slate-700 dark:text-slate-200 dark:bg-slate-900">
+      <section className="border-b border-slate-100 bg-gradient-to-br from-slate-50 via-white to-orange-50/70 dark:border-slate-800 dark:to-slate-950 dark:from-slate-950 dark:via-slate-900">
         <div className="mx-auto w-full max-w-[1440px] px-4 py-16 sm:px-6 sm:py-20 lg:px-10 lg:py-24">
           <div className="max-w-3xl">
-            <span className="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-white px-4 py-2 text-xs font-bold text-[#B84C32] sm:text-sm">
+            <span className="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-white px-4 py-2 text-xs font-bold text-[#B84C32] sm:text-sm dark:bg-slate-900">
               <Calculator className="size-4" />
               Transparent delivery quotes
             </span>
-            <h1 className="mt-6 text-4xl font-black leading-tight tracking-tight text-[#1D3557] sm:text-5xl lg:text-6xl">
+            <h1 className="mt-6 text-4xl font-black leading-tight tracking-tight text-[#1D3557] sm:text-5xl lg:text-6xl dark:text-foreground">
               Know your delivery charge before you ship.
             </h1>
-            <p className="mt-6 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg">
+            <p className="mt-6 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg dark:text-slate-300">
               ParcelRelay calculates a shipment quote from the pricing rules
               configured for your route and package. The exact amount is shown
               in the shipment workflow before you confirm the request.
@@ -70,7 +70,7 @@ export default function PricingPage() {
               </Link>
               <Link
                 href="/contact"
-                className="inline-flex min-h-12 items-center justify-center rounded-xl border border-slate-200 bg-white px-6 py-3 text-sm font-bold text-[#1D3557] transition hover:bg-slate-50"
+                className="inline-flex min-h-12 items-center justify-center rounded-xl border border-slate-200 bg-white px-6 py-3 text-sm font-bold text-[#1D3557] transition hover:bg-slate-50 dark:hover:bg-slate-800 dark:border-slate-700 dark:text-foreground dark:bg-slate-900"
               >
                 Need help?
               </Link>
@@ -84,10 +84,10 @@ export default function PricingPage() {
           <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#E76F51] sm:text-sm">
             Quote factors
           </p>
-          <h2 className="mt-3 text-3xl font-black tracking-tight text-[#1D3557] sm:text-4xl">
+          <h2 className="mt-3 text-3xl font-black tracking-tight text-[#1D3557] sm:text-4xl dark:text-foreground">
             What affects your price?
           </h2>
-          <p className="mt-4 text-sm leading-7 text-slate-600 sm:text-base">
+          <p className="mt-4 text-sm leading-7 text-slate-600 sm:text-base dark:text-slate-300">
             Quotes use the active pricing configuration rather than a static
             price advertised on this page.
           </p>
@@ -97,15 +97,15 @@ export default function PricingPage() {
           {factors.map(({ icon: Icon, title, description }) => (
             <article
               key={title}
-              className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7"
+              className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7 dark:border-slate-700 dark:bg-slate-900"
             >
               <span className="flex size-12 items-center justify-center rounded-xl bg-orange-50 text-[#E76F51] ring-1 ring-orange-100">
                 <Icon className="size-6" />
               </span>
-              <h3 className="mt-5 text-lg font-extrabold text-[#1D3557]">
+              <h3 className="mt-5 text-lg font-extrabold text-[#1D3557] dark:text-foreground">
                 {title}
               </h3>
-              <p className="mt-3 text-sm leading-7 text-slate-600">
+              <p className="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-300">
                 {description}
               </p>
             </article>
@@ -113,20 +113,22 @@ export default function PricingPage() {
         </div>
       </section>
 
-      <section className="border-y border-slate-100 bg-slate-50">
+      <section className="border-y border-slate-100 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-5 px-4 py-10 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-10">
           <div className="flex items-start gap-3">
             <ShieldCheck className="mt-1 size-5 shrink-0 text-[#E76F51]" />
             <div>
-              <h2 className="font-extrabold text-[#1D3557]">Payment clarity</h2>
-              <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-600">
+              <h2 className="font-extrabold text-[#1D3557] dark:text-foreground">
+                Payment clarity
+              </h2>
+              <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300">
                 Review the generated quote in the customer shipment flow. Online
                 payment is handled through the integrated payment provider; do
                 not treat this information page as a payment confirmation.
               </p>
             </div>
           </div>
-          <div className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600">
+          <div className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-300">
             <CheckCircle2 className="size-4 text-[#E76F51]" />
             Quote calculated from active rules
           </div>

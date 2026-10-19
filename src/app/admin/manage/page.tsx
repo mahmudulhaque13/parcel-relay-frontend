@@ -11,11 +11,9 @@ import {
   UserRound,
   X,
 } from "lucide-react";
-
+import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-
 import { useEffect, useMemo, useState } from "react";
-
 import { toast } from "sonner";
 
 import type {
@@ -772,13 +770,14 @@ function UserAvatar({ user }: { user: AdminUser }) {
 
   if (imageUrl && !imageError) {
     return (
-      <img
+      <Image
         src={imageUrl}
         alt={user.name || "User avatar"}
         width={40}
         height={40}
         className="size-10 shrink-0 rounded-full object-cover"
         onError={() => setImageError(true)}
+        unoptimized
       />
     );
   }
@@ -787,7 +786,7 @@ function UserAvatar({ user }: { user: AdminUser }) {
     <div
       role="img"
       aria-label={`${user.name || "User"} avatar`}
-      className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#1D3557]/10 text-sm font-bold text-[#1D3557]"
+      className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#1D3557]/10 text-sm font-bold text-[#1D3557] dark:text-foreground"
     >
       {initials}
     </div>

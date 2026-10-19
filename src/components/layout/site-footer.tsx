@@ -33,7 +33,7 @@ export default function SiteFooter() {
               </span>
             </Link>
 
-            <p className="mt-5 max-w-sm text-sm leading-7 text-slate-400">
+            <p className="mt-5 max-w-sm text-sm leading-7 text-slate-400 dark:text-slate-500">
               A simpler way to manage shipments, coordinate deliveries, and keep
               your parcel operations moving.
             </p>
@@ -57,7 +57,7 @@ export default function SiteFooter() {
                 <li key={href}>
                   <Link
                     href={href}
-                    className="inline-flex text-sm text-slate-400 transition-colors hover:text-white"
+                    className="inline-flex text-sm text-slate-400 transition-colors hover:text-white dark:text-slate-500"
                   >
                     {label}
                   </Link>
@@ -76,7 +76,7 @@ export default function SiteFooter() {
                 <li key={href}>
                   <Link
                     href={href}
-                    className="inline-flex text-sm text-slate-400 transition-colors hover:text-white"
+                    className="inline-flex text-sm text-slate-400 transition-colors hover:text-white dark:text-slate-500"
                   >
                     {label}
                   </Link>
@@ -87,13 +87,13 @@ export default function SiteFooter() {
         </div>
 
         <div className="mt-12 flex flex-col gap-3 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs leading-6 text-slate-400 sm:text-sm">
+          <p className="text-xs leading-6 text-slate-400 sm:text-sm dark:text-slate-500">
             &copy; {new Date().getFullYear()} ParcelRelay. All rights reserved.
           </p>
 
           <Link
             href="/"
-            className="w-fit text-xs font-medium text-slate-400 transition-colors hover:text-white sm:text-sm"
+            className="w-fit text-xs font-medium text-slate-400 transition-colors hover:text-white sm:text-sm dark:text-slate-500"
           >
             Reliable deliveries. Simplified.
           </Link>

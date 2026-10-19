@@ -291,7 +291,7 @@ export default function CreateShipmentForm() {
 
       {/* Step 1: Zones */}
       {currentStep === 1 && (
-        <div className="space-y-6 rounded-xl border p-6">
+        <div className="space-y-6 rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-950">
           <div>
             <h2 className="text-xl font-semibold">Delivery Zones</h2>
             <p className="mt-1 text-sm text-muted-foreground">
@@ -302,7 +302,10 @@ export default function CreateShipmentForm() {
           <form.Field name="originZoneId">
             {(field) => (
               <div className="space-y-2">
-                <label htmlFor={field.name} className="text-sm font-medium">
+                <label
+                  htmlFor={field.name}
+                  className="text-sm font-semibold text-foreground"
+                >
                   Origin Zone
                 </label>
 
@@ -313,11 +316,20 @@ export default function CreateShipmentForm() {
                     invalidateQuote();
                     field.handleChange(event.target.value);
                   }}
-                  className="w-full rounded-lg border px-3 py-2"
+                  className="field-control w-full rounded-lg border px-3 py-2 text-foreground dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                 >
-                  <option value="">Select origin zone</option>
+                  <option
+                    className="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100"
+                    value=""
+                  >
+                    Select origin zone
+                  </option>
                   {zones.map((zone) => (
-                    <option key={zone.id} value={zone.id}>
+                    <option
+                      className="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100"
+                      key={zone.id}
+                      value={zone.id}
+                    >
                       {zone.name} ({zone.code})
                     </option>
                   ))}
@@ -329,7 +341,10 @@ export default function CreateShipmentForm() {
           <form.Field name="destinationZoneId">
             {(field) => (
               <div className="space-y-2">
-                <label htmlFor={field.name} className="text-sm font-medium">
+                <label
+                  htmlFor={field.name}
+                  className="text-sm font-semibold text-foreground"
+                >
                   Destination Zone
                 </label>
 
@@ -340,11 +355,20 @@ export default function CreateShipmentForm() {
                     invalidateQuote();
                     field.handleChange(event.target.value);
                   }}
-                  className="w-full rounded-lg border px-3 py-2"
+                  className="field-control w-full rounded-lg border px-3 py-2 text-foreground dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                 >
-                  <option value="">Select destination zone</option>
+                  <option
+                    className="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100"
+                    value=""
+                  >
+                    Select destination zone
+                  </option>
                   {zones.map((zone) => (
-                    <option key={zone.id} value={zone.id}>
+                    <option
+                      className="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100"
+                      key={zone.id}
+                      value={zone.id}
+                    >
                       {zone.name} ({zone.code})
                     </option>
                   ))}
@@ -357,7 +381,7 @@ export default function CreateShipmentForm() {
             <button
               type="button"
               onClick={handleStepOneNext}
-              className="rounded-lg border px-5 py-2 font-medium"
+              className="rounded-lg border border-slate-300 bg-white px-5 py-2 font-semibold text-slate-800 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
             >
               Continue
             </button>
@@ -367,7 +391,7 @@ export default function CreateShipmentForm() {
 
       {/* Step 2: Package */}
       {currentStep === 2 && (
-        <div className="space-y-6 rounded-xl border p-6">
+        <div className="space-y-6 rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-950">
           <div>
             <h2 className="text-xl font-semibold">Package Details</h2>
             <p className="mt-1 text-sm text-muted-foreground">
@@ -378,7 +402,10 @@ export default function CreateShipmentForm() {
           <form.Field name="weight">
             {(field) => (
               <div className="space-y-2">
-                <label htmlFor={field.name} className="text-sm font-medium">
+                <label
+                  htmlFor={field.name}
+                  className="text-sm font-semibold text-foreground"
+                >
                   Weight (kg)
                 </label>
 
@@ -393,7 +420,7 @@ export default function CreateShipmentForm() {
                     field.handleChange(Number(event.target.value));
                   }}
                   placeholder="e.g. 2.5"
-                  className="w-full rounded-lg border px-3 py-2"
+                  className="field-control w-full rounded-lg border px-3 py-2 text-foreground dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                 />
               </div>
             )}
@@ -402,7 +429,10 @@ export default function CreateShipmentForm() {
           <form.Field name="codAmount">
             {(field) => (
               <div className="space-y-2">
-                <label htmlFor={field.name} className="text-sm font-medium">
+                <label
+                  htmlFor={field.name}
+                  className="text-sm font-semibold text-foreground"
+                >
                   COD Amount
                 </label>
 
@@ -417,7 +447,7 @@ export default function CreateShipmentForm() {
                     field.handleChange(Number(event.target.value));
                   }}
                   placeholder="e.g. 500"
-                  className="w-full rounded-lg border px-3 py-2"
+                  className="field-control w-full rounded-lg border px-3 py-2 text-foreground dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                 />
               </div>
             )}
@@ -427,7 +457,7 @@ export default function CreateShipmentForm() {
             <button
               type="button"
               onClick={() => setCurrentStep(1)}
-              className="rounded-lg border px-5 py-2 font-medium"
+              className="rounded-lg border border-slate-300 bg-white px-5 py-2 font-semibold text-slate-800 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
             >
               Back
             </button>
@@ -435,7 +465,7 @@ export default function CreateShipmentForm() {
             <button
               type="button"
               onClick={handleStepTwoNext}
-              className="rounded-lg border px-5 py-2 font-medium"
+              className="rounded-lg border border-slate-300 bg-white px-5 py-2 font-semibold text-slate-800 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
             >
               Continue
             </button>
@@ -445,7 +475,7 @@ export default function CreateShipmentForm() {
 
       {/* Step 3: Quote */}
       {currentStep === 3 && (
-        <div className="space-y-6 rounded-xl border p-6">
+        <div className="space-y-6 rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-950">
           <div>
             <h2 className="text-xl font-semibold">Quote &amp; Review</h2>
             <p className="mt-1 text-sm text-muted-foreground">
@@ -480,7 +510,7 @@ export default function CreateShipmentForm() {
           </div>
 
           {isQuoteCurrent && shipmentQuote.data?.success && (
-            <div className="space-y-3 rounded-lg border p-4">
+            <div className="space-y-3 rounded-lg border border-slate-200 p-4 dark:border-slate-800">
               <h3 className="font-semibold">Delivery Charge</h3>
 
               <div className="flex justify-between text-sm">
@@ -498,7 +528,7 @@ export default function CreateShipmentForm() {
                 <span>৳{shipmentQuote.data.data.pricing.codCharge}</span>
               </div>
 
-              <div className="border-t pt-3">
+              <div className="border-t border-slate-200 pt-3 dark:border-slate-700">
                 <div className="flex justify-between font-semibold">
                   <span>Total Delivery Charge</span>
                   <span>৳{shipmentQuote.data.data.pricing.deliveryCharge}</span>
@@ -511,7 +541,7 @@ export default function CreateShipmentForm() {
             <button
               type="button"
               onClick={() => setCurrentStep(2)}
-              className="rounded-lg border px-5 py-2 font-medium"
+              className="rounded-lg border border-slate-300 bg-white px-5 py-2 font-semibold text-slate-800 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
             >
               Back
             </button>
@@ -522,7 +552,7 @@ export default function CreateShipmentForm() {
                   type="button"
                   onClick={handleGetQuote}
                   disabled={shipmentQuote.isPending}
-                  className="rounded-lg border px-5 py-2 font-medium disabled:opacity-50"
+                  className="rounded-lg border border-slate-300 bg-white px-5 py-2 font-semibold text-slate-800 transition-colors hover:bg-slate-50 disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
                 >
                   {shipmentQuote.isPending ? "Calculating..." : "Get Quote"}
                 </button>
@@ -533,7 +563,7 @@ export default function CreateShipmentForm() {
                   type="button"
                   onClick={handleStepThreeNext}
                   disabled={shipmentQuote.isPending}
-                  className="rounded-lg border px-5 py-2 font-medium disabled:opacity-50"
+                  className="rounded-lg border border-slate-300 bg-white px-5 py-2 font-semibold text-slate-800 transition-colors hover:bg-slate-50 disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
                 >
                   Continue
                 </button>
@@ -545,7 +575,7 @@ export default function CreateShipmentForm() {
 
       {/* Step 4: Recipient */}
       {currentStep === 4 && (
-        <div className="space-y-6 rounded-xl border p-6">
+        <div className="space-y-6 rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-950">
           <div>
             <h2 className="text-xl font-semibold">Recipient Details</h2>
             <p className="mt-1 text-sm text-muted-foreground">
@@ -556,7 +586,10 @@ export default function CreateShipmentForm() {
           <form.Field name="recipientName">
             {(field) => (
               <div className="space-y-2">
-                <label htmlFor={field.name} className="text-sm font-medium">
+                <label
+                  htmlFor={field.name}
+                  className="text-sm font-semibold text-foreground"
+                >
                   Recipient Name
                 </label>
 
@@ -567,7 +600,7 @@ export default function CreateShipmentForm() {
                   onBlur={field.handleBlur}
                   onChange={(event) => field.handleChange(event.target.value)}
                   placeholder="Enter recipient name"
-                  className="w-full rounded-lg border px-3 py-2"
+                  className="field-control w-full rounded-lg border px-3 py-2 text-foreground dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                 />
 
                 {field.state.meta.errors.length > 0 && (
@@ -582,7 +615,10 @@ export default function CreateShipmentForm() {
           <form.Field name="recipientPhone">
             {(field) => (
               <div className="space-y-2">
-                <label htmlFor={field.name} className="text-sm font-medium">
+                <label
+                  htmlFor={field.name}
+                  className="text-sm font-semibold text-foreground"
+                >
                   Recipient Phone
                 </label>
 
@@ -593,7 +629,7 @@ export default function CreateShipmentForm() {
                   onBlur={field.handleBlur}
                   onChange={(event) => field.handleChange(event.target.value)}
                   placeholder="Enter recipient phone"
-                  className="w-full rounded-lg border px-3 py-2"
+                  className="field-control w-full rounded-lg border px-3 py-2 text-foreground dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                 />
 
                 {field.state.meta.errors.length > 0 && (
@@ -608,7 +644,10 @@ export default function CreateShipmentForm() {
           <form.Field name="deliveryAddress">
             {(field) => (
               <div className="space-y-2">
-                <label htmlFor={field.name} className="text-sm font-medium">
+                <label
+                  htmlFor={field.name}
+                  className="text-sm font-semibold text-foreground"
+                >
                   Delivery Address
                 </label>
 
@@ -619,7 +658,7 @@ export default function CreateShipmentForm() {
                   onChange={(event) => field.handleChange(event.target.value)}
                   placeholder="Enter complete delivery address"
                   rows={4}
-                  className="w-full rounded-lg border px-3 py-2"
+                  className="field-control w-full rounded-lg border px-3 py-2 text-foreground dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                 />
 
                 {field.state.meta.errors.length > 0 && (
@@ -634,7 +673,10 @@ export default function CreateShipmentForm() {
           <form.Field name="packageDescription">
             {(field) => (
               <div className="space-y-2">
-                <label htmlFor={field.name} className="text-sm font-medium">
+                <label
+                  htmlFor={field.name}
+                  className="text-sm font-semibold text-foreground"
+                >
                   Package Description
                 </label>
 
@@ -645,7 +687,7 @@ export default function CreateShipmentForm() {
                   onChange={(event) => field.handleChange(event.target.value)}
                   placeholder="Describe the package contents"
                   rows={3}
-                  className="w-full rounded-lg border px-3 py-2"
+                  className="field-control w-full rounded-lg border px-3 py-2 text-foreground dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                 />
 
                 {field.state.meta.errors.length > 0 && (
@@ -694,7 +736,7 @@ export default function CreateShipmentForm() {
             <button
               type="button"
               onClick={() => setCurrentStep(3)}
-              className="rounded-lg border px-5 py-2 font-medium"
+              className="rounded-lg border border-slate-300 bg-white px-5 py-2 font-semibold text-slate-800 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
             >
               Back
             </button>
@@ -707,7 +749,7 @@ export default function CreateShipmentForm() {
                 initiatePaymentMutation.isPending ||
                 !isQuoteCurrent
               }
-              className="rounded-lg border px-5 py-2 font-medium disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-lg border border-slate-300 bg-white px-5 py-2 font-semibold text-slate-800 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
             >
               {createShipmentMutation.isPending ||
               initiatePaymentMutation.isPending ? (

@@ -10,6 +10,7 @@ import {
   UserRound,
   XCircle,
 } from "lucide-react";
+import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -78,10 +79,12 @@ function ApplicationCard({
       <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-start">
         <div className="flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted">
           {application.profilePhotoUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={application.profilePhotoUrl}
               alt={`${user.name}'s profile`}
+              width={64}
+              height={64}
+              unoptimized
               className="size-full object-cover"
             />
           ) : (

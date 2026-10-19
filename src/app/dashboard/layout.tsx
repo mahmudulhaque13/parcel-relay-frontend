@@ -13,10 +13,10 @@ export default function CustomerLayout({ children }: { children: ReactNode }) {
             <div className="flex items-center justify-between gap-4">
               <Link
                 href="/dashboard"
-                className="text-xl font-black tracking-tight text-[#1D3557]"
+                className="text-xl font-black tracking-tight text-[#1D3557] dark:text-foreground"
               >
                 ParcelRelay{" "}
-                <span className="text-sm font-semibold text-slate-500">
+                <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">
                   Customer
                 </span>
               </Link>

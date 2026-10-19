@@ -373,7 +373,7 @@ export default function AdminReportsPage() {
           <span>Reports</span>
         </div>
 
-        <h1 className="text-3xl font-black tracking-tight text-[#1D3557]">
+        <h1 className="text-3xl font-black tracking-tight text-[#1D3557] dark:text-foreground">
           Shipment Reports
         </h1>
 
@@ -425,7 +425,7 @@ export default function AdminReportsPage() {
 
       {/* Filters */}
 
-      <div className="rounded-xl border bg-card p-4">
+      <div className="rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm">
         <div className="grid gap-4 xl:grid-cols-3">
           {/* Search */}
 
@@ -446,7 +446,7 @@ export default function AdminReportsPage() {
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
                   placeholder="Tracking, recipient or phone..."
-                  className="h-10 w-full rounded-md border bg-background pl-9 pr-3 text-sm outline-none focus:border-primary"
+                  className="h-10 w-full rounded-md border border-input bg-background pl-9 pr-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/15"
                 />
               </div>
 
@@ -474,12 +474,18 @@ export default function AdminReportsPage() {
               id="report-status"
               value={status}
               onChange={(event) => handleStatusChange(event.target.value)}
-              className="h-10 w-full rounded-md border bg-background px-3 text-sm outline-none focus:border-primary"
+              className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
             >
-              <option value="">All Statuses</option>
+              <option value="" className="bg-background text-foreground">
+                All Statuses
+              </option>
 
               {shipmentStatuses.map((item) => (
-                <option key={item} value={item}>
+                <option
+                  key={item}
+                  value={item}
+                  className="bg-background text-foreground"
+                >
                   {getStatusLabel(item)}
                 </option>
               ))}
@@ -505,19 +511,34 @@ export default function AdminReportsPage() {
                     event.target.value as AdminShipmentReportQuery["sortBy"],
                   )
                 }
-                className="h-10 flex-1 rounded-md border bg-background px-3 text-sm outline-none focus:border-primary"
+                className="h-10 flex-1 rounded-md border border-input bg-background px-3 text-sm text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
               >
-                <option value="createdAt">Created Date</option>
+                <option
+                  value="createdAt"
+                  className="bg-background text-foreground"
+                >
+                  Created Date
+                </option>
 
-                <option value="updatedAt">Updated Date</option>
+                <option
+                  value="updatedAt"
+                  className="bg-background text-foreground"
+                >
+                  Updated Date
+                </option>
 
-                <option value="deliveryCharge">Delivery Charge</option>
+                <option
+                  value="deliveryCharge"
+                  className="bg-background text-foreground"
+                >
+                  Delivery Charge
+                </option>
               </select>
 
               <button
                 type="button"
                 onClick={toggleSortOrder}
-                className="inline-flex h-10 items-center gap-2 rounded-md border px-3 text-sm font-medium transition hover:bg-muted"
+                className="inline-flex h-10 items-center gap-2 rounded-md border border-input bg-background px-3 text-sm font-medium text-foreground transition hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                 title={sortOrder === "asc" ? "Ascending" : "Descending"}
               >
                 {sortOrder === "asc" ? (
@@ -548,12 +569,18 @@ export default function AdminReportsPage() {
               value={originZoneId}
               onChange={(event) => handleOriginZoneChange(event.target.value)}
               disabled={isZonesLoading}
-              className="h-10 w-full rounded-md border bg-background px-3 text-sm outline-none focus:border-primary disabled:cursor-not-allowed disabled:opacity-60"
+              className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              <option value="">All Origin Zones</option>
+              <option value="" className="bg-background text-foreground">
+                All Origin Zones
+              </option>
 
               {zones.map((zone) => (
-                <option key={zone.id} value={zone.id}>
+                <option
+                  key={zone.id}
+                  value={zone.id}
+                  className="bg-background text-foreground"
+                >
                   {zone.name}
 
                   {zone.code ? ` (${zone.code})` : ""}
@@ -579,12 +606,18 @@ export default function AdminReportsPage() {
                 handleDestinationZoneChange(event.target.value)
               }
               disabled={isZonesLoading}
-              className="h-10 w-full rounded-md border bg-background px-3 text-sm outline-none focus:border-primary disabled:cursor-not-allowed disabled:opacity-60"
+              className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              <option value="">All Destination Zones</option>
+              <option value="" className="bg-background text-foreground">
+                All Destination Zones
+              </option>
 
               {zones.map((zone) => (
-                <option key={zone.id} value={zone.id}>
+                <option
+                  key={zone.id}
+                  value={zone.id}
+                  className="bg-background text-foreground"
+                >
                   {zone.name}
 
                   {zone.code ? ` (${zone.code})` : ""}
@@ -600,7 +633,7 @@ export default function AdminReportsPage() {
               type="button"
               onClick={clearFilters}
               disabled={!hasActiveFilters}
-              className="h-10 w-full rounded-md border px-4 text-sm font-medium transition hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
+              className="h-10 w-full rounded-md border border-input bg-background px-4 text-sm font-medium text-foreground transition hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
             >
               Clear Filters
             </button>
@@ -656,7 +689,7 @@ export default function AdminReportsPage() {
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Financial Chart */}
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
+          <div className="rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-sm transition-shadow hover:shadow-md">
             <div className="mb-5">
               <h2 className="text-lg font-semibold">
                 Shipment Financial Overview
@@ -681,33 +714,48 @@ export default function AdminReportsPage() {
                     bottom: 10,
                   }}
                 >
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    className="stroke-muted"
-                  />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
 
                   <XAxis
                     dataKey="shortTrackingNumber"
                     tickLine={false}
                     axisLine={false}
                     tickMargin={8}
+                    tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
                   />
 
-                  <YAxis tickLine={false} axisLine={false} tickMargin={8} />
+                  <YAxis
+                    tickLine={false}
+                    axisLine={false}
+                    tickMargin={8}
+                    tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
+                  />
 
-                  <Tooltip />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "var(--popover)",
+                      borderColor: "var(--border)",
+                      borderRadius: 12,
+                      color: "var(--popover-foreground)",
+                    }}
+                    labelStyle={{ color: "var(--popover-foreground)" }}
+                  />
 
-                  <Legend />
+                  <Legend
+                    wrapperStyle={{ color: "var(--foreground)", fontSize: 12 }}
+                  />
 
                   <Bar
                     dataKey="deliveryCharge"
                     name="Delivery Charge"
+                    fill="#E76F51"
                     radius={[4, 4, 0, 0]}
                   />
 
                   <Bar
                     dataKey="codAmount"
                     name="COD Amount"
+                    fill="#4F8CC9"
                     radius={[4, 4, 0, 0]}
                   />
                 </BarChart>
@@ -717,7 +765,7 @@ export default function AdminReportsPage() {
 
           {/* Weight Chart */}
 
-          <div className="rounded-xl border bg-card p-5">
+          <div className="rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm">
             <div className="mb-5">
               <h2 className="text-lg font-semibold">Shipment Weight</h2>
 
@@ -740,16 +788,14 @@ export default function AdminReportsPage() {
                     bottom: 10,
                   }}
                 >
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    className="stroke-muted"
-                  />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
 
                   <XAxis
                     dataKey="shortTrackingNumber"
                     tickLine={false}
                     axisLine={false}
                     tickMargin={8}
+                    tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
                   />
 
                   <YAxis
@@ -757,13 +803,23 @@ export default function AdminReportsPage() {
                     axisLine={false}
                     tickMargin={8}
                     unit=" kg"
+                    tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
                   />
 
-                  <Tooltip />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "var(--popover)",
+                      borderColor: "var(--border)",
+                      borderRadius: 12,
+                      color: "var(--popover-foreground)",
+                    }}
+                    labelStyle={{ color: "var(--popover-foreground)" }}
+                  />
 
                   <Bar
                     dataKey="weight"
                     name="Weight (kg)"
+                    fill="#2A9D8F"
                     radius={[4, 4, 0, 0]}
                   />
                 </BarChart>
@@ -775,7 +831,7 @@ export default function AdminReportsPage() {
 
       {/* Report Table */}
 
-      <div className="rounded-xl border bg-card">
+      <div className="rounded-xl border border-border bg-card text-card-foreground">
         {isLoading ? (
           <TableSkeleton />
         ) : isError ? (
@@ -814,7 +870,10 @@ export default function AdminReportsPage() {
 
                 <tbody>
                   {reportData.data.map((shipment) => (
-                    <tr key={shipment.id} className="border-b last:border-0">
+                    <tr
+                      key={shipment.id}
+                      className="border-b border-border transition-colors last:border-0 hover:bg-muted/30"
+                    >
                       <td className="px-5 py-4">
                         <p className="font-medium">{shipment.trackingNumber}</p>
 
@@ -866,7 +925,7 @@ export default function AdminReportsPage() {
 
             {/* Mobile Cards */}
 
-            <div className="divide-y md:hidden">
+            <div className="divide-y divide-border md:hidden">
               {reportData.data.map((shipment) => (
                 <div key={shipment.id} className="space-y-4 p-5">
                   <div className="flex items-start justify-between gap-3">
@@ -940,7 +999,7 @@ export default function AdminReportsPage() {
 
             {/* Pagination */}
 
-            <div className="flex flex-col gap-3 border-t p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-3 border-t border-border p-4 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-muted-foreground">
                 Showing{" "}
                 <span className="font-medium text-foreground">
@@ -1008,11 +1067,11 @@ function SummaryCard({
   icon: React.ReactNode;
 }) {
   return (
-    <div className="rounded-xl border bg-card p-5">
+    <div className="rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm">
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">{title}</p>
 
-        <div className="rounded-xl bg-[#1D3557]/10 p-2 text-[#1D3557]">
+        <div className="rounded-xl bg-[#1D3557]/10 p-2 text-[#1D3557] dark:text-foreground">
           {icon}
         </div>
       </div>

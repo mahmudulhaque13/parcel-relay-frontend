@@ -16,21 +16,21 @@ export default function AdminDashboardPage() {
 
   if (isLoading) {
     return (
-      <main className="min-h-screen bg-slate-50">
+      <main className="min-h-screen bg-slate-50 dark:bg-slate-950">
         <div className="mx-auto w-full max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
-          <div className="h-8 w-56 animate-pulse rounded-lg bg-slate-200" />
-          <div className="h-20 animate-pulse rounded-2xl bg-slate-200" />
+          <div className="h-8 w-56 animate-pulse rounded-lg bg-slate-200 dark:bg-slate-800" />
+          <div className="h-20 animate-pulse rounded-2xl bg-slate-200 dark:bg-slate-800" />
           <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
             {["users", "shipments", "payments", "couriers"].map((item) => (
               <div
                 key={item}
-                className="h-36 animate-pulse rounded-2xl bg-white shadow-sm"
+                className="h-36 animate-pulse rounded-2xl bg-white shadow-sm dark:bg-slate-900"
               />
             ))}
           </div>
           <div className="grid gap-6 lg:grid-cols-2">
-            <div className="h-64 animate-pulse rounded-2xl bg-white" />
-            <div className="h-64 animate-pulse rounded-2xl bg-white" />
+            <div className="h-64 animate-pulse rounded-2xl bg-white dark:bg-slate-900" />
+            <div className="h-64 animate-pulse rounded-2xl bg-white dark:bg-slate-900" />
           </div>
         </div>
       </main>
@@ -39,18 +39,18 @@ export default function AdminDashboardPage() {
 
   if (isError || !data?.data) {
     return (
-      <main className="min-h-screen bg-slate-50">
+      <main className="min-h-screen bg-slate-50 dark:bg-slate-950">
         <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-          <div className="rounded-2xl border border-red-200 bg-white p-6 shadow-sm">
+          <div className="rounded-2xl border border-red-200 bg-white p-6 shadow-sm dark:bg-slate-900">
             <div className="flex items-start gap-4">
-              <div className="rounded-xl bg-red-50 p-3 text-red-600">
+              <div className="rounded-xl bg-red-50 p-3 text-red-600 dark:bg-red-950/50 dark:text-red-300">
                 <Activity className="size-6" />
               </div>
               <div>
-                <h1 className="text-lg font-bold text-slate-900">
+                <h1 className="text-lg font-bold text-slate-900 dark:text-slate-100">
                   Unable to load dashboard
                 </h1>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
+                <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
                   Dashboard statistics could not be loaded from the server.
                   Please try refreshing the page.
                 </p>
@@ -70,33 +70,37 @@ export default function AdminDashboardPage() {
       value: stats.users.total,
       description: `${stats.users.customers} customers`,
       icon: Users,
-      accent: "bg-blue-50 text-[#1D3557]",
+      accent:
+        "bg-blue-50 text-[#1D3557] dark:bg-blue-950/60 dark:text-blue-300",
     },
     {
       title: "Total Shipments",
       value: stats.shipments.total,
       description: `${stats.shipments.delivered} delivered`,
       icon: Package,
-      accent: "bg-orange-50 text-[#E76F51]",
+      accent:
+        "bg-orange-50 text-[#E76F51] dark:bg-orange-950/50 dark:text-orange-300",
     },
     {
       title: "Total Payments",
       value: stats.payments.total,
       description: `${stats.payments.paid} paid`,
       icon: CircleDollarSign,
-      accent: "bg-emerald-50 text-emerald-700",
+      accent:
+        "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300",
     },
     {
       title: "Total Couriers",
       value: stats.couriers.total,
       description: `${stats.couriers.available} available`,
       icon: Truck,
-      accent: "bg-violet-50 text-violet-700",
+      accent:
+        "bg-violet-50 text-violet-700 dark:bg-violet-950/50 dark:text-violet-300",
     },
   ];
 
   return (
-    <main className="min-h-screen bg-slate-50">
+    <main className="min-h-screen bg-slate-50 dark:bg-slate-950">
       <div className="mx-auto w-full max-w-7xl space-y-8 px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
         {/* Page heading */}
         <section className="flex flex-col gap-5 rounded-2xl bg-[#1D3557] p-6 text-white shadow-sm sm:p-8 lg:flex-row lg:items-center lg:justify-between">
@@ -124,10 +128,10 @@ export default function AdminDashboardPage() {
         {/* Main statistics */}
         <section>
           <div className="mb-4">
-            <h2 className="text-lg font-bold text-slate-900">
+            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">
               Platform Overview
             </h2>
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
               Current statistics from your platform.
             </p>
           </div>
@@ -139,10 +143,10 @@ export default function AdminDashboardPage() {
               return (
                 <article
                   key={card.title}
-                  className="min-w-0 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm transition-shadow hover:shadow-md sm:p-6"
+                  className="min-w-0 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm transition-shadow hover:shadow-md sm:p-6 dark:border-slate-800 dark:bg-slate-900"
                 >
                   <div className="flex items-start justify-between gap-3">
-                    <p className="text-sm font-medium text-slate-500">
+                    <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
                       {card.title}
                     </p>
                     <div className={`rounded-xl p-3 ${card.accent}`}>
@@ -150,11 +154,11 @@ export default function AdminDashboardPage() {
                     </div>
                   </div>
 
-                  <p className="mt-4 break-words text-3xl font-bold tracking-tight text-slate-900">
+                  <p className="mt-4 break-words text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
                     {card.value.toLocaleString("en-BD")}
                   </p>
 
-                  <p className="mt-2 text-sm text-slate-500">
+                  <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
                     {card.description}
                   </p>
                 </article>
@@ -164,16 +168,16 @@ export default function AdminDashboardPage() {
         </section>
 
         {/* Shipment overview */}
-        <section className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-6">
+        <section className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-6 dark:border-slate-800 dark:bg-slate-900">
           <div className="flex items-start gap-3">
-            <div className="rounded-xl bg-[#1D3557]/10 p-3 text-[#1D3557]">
+            <div className="rounded-xl bg-[#1D3557]/10 p-3 text-[#1D3557] dark:bg-blue-950/60 dark:text-blue-300">
               <Package className="size-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-slate-900">
+              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">
                 Shipment Overview
               </h2>
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                 Current shipment distribution by status.
               </p>
             </div>
@@ -215,16 +219,16 @@ export default function AdminDashboardPage() {
 
         {/* Payments and courier availability */}
         <div className="grid min-w-0 gap-6 lg:grid-cols-2">
-          <section className="min-w-0 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-6">
+          <section className="min-w-0 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-6 dark:border-slate-800 dark:bg-slate-900">
             <div className="flex items-start gap-3">
-              <div className="rounded-xl bg-emerald-50 p-3 text-emerald-700">
+              <div className="rounded-xl bg-emerald-50 p-3 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300">
                 <CircleDollarSign className="size-5" />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-slate-900">
+                <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">
                   Payment Overview
                 </h2>
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                   Current payment attempt distribution.
                 </p>
               </div>
@@ -254,16 +258,16 @@ export default function AdminDashboardPage() {
             </div>
           </section>
 
-          <section className="min-w-0 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-6">
+          <section className="min-w-0 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-6 dark:border-slate-800 dark:bg-slate-900">
             <div className="flex items-start gap-3">
-              <div className="rounded-xl bg-violet-50 p-3 text-violet-700">
+              <div className="rounded-xl bg-violet-50 p-3 text-violet-700 dark:bg-violet-950/50 dark:text-violet-300">
                 <Truck className="size-5" />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-slate-900">
+                <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">
                   Courier Availability
                 </h2>
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                   Current courier availability status.
                 </p>
               </div>
@@ -290,16 +294,16 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* User distribution */}
-        <section className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-6">
+        <section className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-6 dark:border-slate-800 dark:bg-slate-900">
           <div className="flex items-start gap-3">
-            <div className="rounded-xl bg-[#1D3557]/10 p-3 text-[#1D3557]">
+            <div className="rounded-xl bg-[#1D3557]/10 p-3 text-[#1D3557] dark:bg-blue-950/60 dark:text-blue-300">
               <Users className="size-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-slate-900">
+              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">
                 User Distribution
               </h2>
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                 Users grouped by their current role.
               </p>
             </div>
@@ -351,10 +355,12 @@ function StatItem({
 
   return (
     <div
-      className={`min-w-0 rounded-xl border border-slate-200 bg-slate-50/70 p-4 border-l-4 ${accentStyles[accent]}`}
+      className={`min-w-0 rounded-xl border border-slate-200 bg-slate-50 p-4 border-l-4 ${accentStyles[accent]} dark:border-slate-700 dark:bg-[#111b2e]`}
     >
-      <p className="text-sm leading-5 text-slate-500">{label}</p>
-      <p className="mt-2 break-words text-2xl font-bold tracking-tight text-slate-900">
+      <p className="text-sm leading-5 text-slate-500 dark:text-slate-400">
+        {label}
+      </p>
+      <p className="mt-2 break-words text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
         {value.toLocaleString("en-BD")}
       </p>
     </div>

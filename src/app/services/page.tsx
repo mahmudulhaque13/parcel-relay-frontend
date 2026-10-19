@@ -114,28 +114,28 @@ export const metadata: Metadata = {
 
 export default function ServicesPage() {
   return (
-    <main className="overflow-hidden bg-white text-slate-700">
+    <main className="overflow-hidden bg-white text-slate-700 dark:text-slate-200 dark:bg-slate-900">
       {/* Hero */}
-      <section className="relative isolate border-b border-slate-100">
-        <div className="absolute inset-0 -z-20 bg-gradient-to-br from-slate-50 via-white to-orange-50/70" />
+      <section className="relative isolate border-b border-slate-100 dark:border-slate-800">
+        <div className="absolute inset-0 -z-20 bg-gradient-to-br from-slate-50 via-white to-orange-50/70 dark:to-slate-950 dark:from-slate-950 dark:via-slate-900" />
         <div className="absolute -right-24 -top-20 -z-10 size-80 rounded-full bg-orange-200/20 blur-3xl sm:size-[28rem]" />
         <div className="absolute -bottom-20 -left-24 -z-10 size-72 rounded-full bg-blue-100/30 blur-3xl" />
 
         <div className="mx-auto w-full max-w-[1440px] px-4 py-16 sm:px-6 sm:py-20 lg:px-10 lg:py-24">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2.5 rounded-full border border-orange-200/80 bg-white/90 px-4 py-2 text-xs font-bold text-[#B84C32] shadow-sm sm:text-sm">
+            <div className="inline-flex items-center gap-2.5 rounded-full border border-orange-200/80 bg-white/90 px-4 py-2 text-xs font-bold text-[#B84C32] shadow-sm sm:text-sm dark:bg-slate-900/90">
               <span className="flex size-8 items-center justify-center rounded-full bg-orange-50 text-[#E76F51]">
                 <Truck className="size-4" />
               </span>
               ParcelRelay Services
             </div>
 
-            <h1 className="mt-6 text-4xl font-black leading-[1.12] tracking-tight text-[#1D3557] sm:text-5xl lg:text-6xl">
+            <h1 className="mt-6 text-4xl font-black leading-[1.12] tracking-tight text-[#1D3557] sm:text-5xl lg:text-6xl dark:text-foreground">
               Everything you need to manage a{" "}
               <span className="text-[#E76F51]">delivery.</span>
             </h1>
 
-            <p className="mt-6 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg">
+            <p className="mt-6 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg dark:text-slate-300">
               ParcelRelay connects shipment creation, delivery quotes, payments,
               courier operations, and shipment tracking in one delivery
               management platform.
@@ -152,14 +152,14 @@ export default function ServicesPage() {
 
               <Link
                 href="/about"
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white/90 px-6 py-3 text-sm font-bold text-[#1D3557] transition-colors hover:border-[#1D3557]/25 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51]"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white/90 px-6 py-3 text-sm font-bold text-[#1D3557] transition-colors hover:border-[#1D3557]/25 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E76F51] dark:hover:bg-slate-800 dark:border-slate-700 dark:text-foreground dark:bg-slate-900/90"
               >
                 About ParcelRelay
                 <ArrowUpRight className="size-4" />
               </Link>
             </div>
 
-            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm text-slate-600">
+            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm text-slate-600 dark:text-slate-300">
               <span className="inline-flex items-center gap-2">
                 <CheckCircle2 className="size-4 shrink-0 text-[#E76F51]" />
                 Connected shipment workflow
@@ -180,11 +180,11 @@ export default function ServicesPage() {
             Our Services
           </p>
 
-          <h2 className="mt-3 text-3xl font-black leading-tight tracking-tight text-[#1D3557] sm:text-4xl">
+          <h2 className="mt-3 text-3xl font-black leading-tight tracking-tight text-[#1D3557] sm:text-4xl dark:text-foreground">
             A connected delivery workflow
           </h2>
 
-          <p className="mt-4 text-sm leading-7 text-slate-600 sm:text-base">
+          <p className="mt-4 text-sm leading-7 text-slate-600 sm:text-base dark:text-slate-300">
             Each service supports a specific part of the shipment lifecycle,
             from creating a shipment to tracking its delivery progress.
           </p>
@@ -197,7 +197,7 @@ export default function ServicesPage() {
             return (
               <article
                 key={service.title}
-                className="group relative flex h-full flex-col rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm shadow-slate-900/[0.02] transition duration-300 hover:-translate-y-1 hover:border-[#E76F51]/30 hover:shadow-xl hover:shadow-[#1D3557]/[0.06] sm:p-7"
+                className="group relative flex h-full flex-col rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm shadow-slate-900/[0.02] transition duration-300 hover:-translate-y-1 hover:border-[#E76F51]/30 hover:shadow-xl hover:shadow-[#1D3557]/[0.06] sm:p-7 dark:bg-slate-900"
               >
                 <span className="absolute right-5 top-5 text-sm font-extrabold tracking-wider text-slate-200 transition-colors group-hover:text-[#E76F51]/50">
                   {String(index + 1).padStart(2, "0")}
@@ -207,17 +207,17 @@ export default function ServicesPage() {
                   <Icon className="size-6" />
                 </span>
 
-                <h3 className="mt-6 text-lg font-extrabold leading-snug text-[#1D3557] sm:text-xl">
+                <h3 className="mt-6 text-lg font-extrabold leading-snug text-[#1D3557] sm:text-xl dark:text-foreground">
                   {service.title}
                 </h3>
 
-                <p className="mt-3 flex-1 text-sm leading-7 text-slate-600">
+                <p className="mt-3 flex-1 text-sm leading-7 text-slate-600 dark:text-slate-300">
                   {service.description}
                 </p>
 
                 <div
                   aria-hidden="true"
-                  className="mt-6 h-px w-full bg-slate-100 transition-colors group-hover:bg-orange-100"
+                  className="mt-6 h-px w-full bg-slate-100 transition-colors group-hover:bg-orange-100 dark:bg-slate-900"
                 />
               </article>
             );
@@ -226,7 +226,7 @@ export default function ServicesPage() {
       </section>
 
       {/* How it works */}
-      <section className="relative overflow-hidden border-y border-slate-100 bg-slate-50/80">
+      <section className="relative overflow-hidden border-y border-slate-100 bg-slate-50/80 dark:border-slate-800 dark:bg-slate-950/80">
         <div className="absolute -right-32 top-0 size-80 rounded-full bg-orange-100/40 blur-3xl" />
 
         <div className="relative mx-auto w-full max-w-[1440px] px-4 py-16 sm:px-6 sm:py-20 lg:px-10 lg:py-24">
@@ -235,11 +235,11 @@ export default function ServicesPage() {
               How It Works
             </p>
 
-            <h2 className="mt-3 text-3xl font-black leading-tight tracking-tight text-[#1D3557] sm:text-4xl">
+            <h2 className="mt-3 text-3xl font-black leading-tight tracking-tight text-[#1D3557] sm:text-4xl dark:text-foreground">
               From shipment request to delivery
             </h2>
 
-            <p className="mt-4 text-sm leading-7 text-slate-600 sm:text-base">
+            <p className="mt-4 text-sm leading-7 text-slate-600 sm:text-base dark:text-slate-300">
               ParcelRelay keeps the main steps of the delivery process connected
               in a single workflow.
             </p>
@@ -249,17 +249,17 @@ export default function ServicesPage() {
             {workflow.map((item) => (
               <article
                 key={item.step}
-                className="group rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm shadow-slate-900/[0.02] transition duration-200 hover:-translate-y-1 hover:border-[#E76F51]/30 hover:shadow-lg hover:shadow-[#1D3557]/[0.05] sm:p-7"
+                className="group rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm shadow-slate-900/[0.02] transition duration-200 hover:-translate-y-1 hover:border-[#E76F51]/30 hover:shadow-lg hover:shadow-[#1D3557]/[0.05] sm:p-7 dark:bg-slate-900"
               >
                 <span className="flex size-11 items-center justify-center rounded-xl bg-orange-50 text-sm font-black text-[#E76F51] ring-1 ring-orange-100 transition-colors group-hover:bg-[#E76F51] group-hover:text-white">
                   {item.step}
                 </span>
 
-                <h3 className="mt-5 text-base font-extrabold leading-snug text-[#1D3557] sm:text-lg">
+                <h3 className="mt-5 text-base font-extrabold leading-snug text-[#1D3557] sm:text-lg dark:text-foreground">
                   {item.title}
                 </h3>
 
-                <p className="mt-3 text-sm leading-7 text-slate-600">
+                <p className="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-300">
                   {item.description}
                 </p>
               </article>
@@ -280,18 +280,18 @@ export default function ServicesPage() {
               Built around your workflow
             </p>
 
-            <h2 className="mt-3 text-3xl font-black leading-tight tracking-tight text-[#1D3557] sm:text-4xl">
+            <h2 className="mt-3 text-3xl font-black leading-tight tracking-tight text-[#1D3557] sm:text-4xl dark:text-foreground">
               Designed around a clear shipment lifecycle
             </h2>
 
-            <p className="mt-5 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
+            <p className="mt-5 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base dark:text-slate-300">
               ParcelRelay keeps payment, assignment, delivery status, and
               shipment tracking connected so that each role can work with the
               information relevant to its responsibilities.
             </p>
           </div>
 
-          <div className="rounded-3xl border border-slate-200/80 bg-slate-50/80 p-5 sm:p-7">
+          <div className="rounded-3xl border border-slate-200/80 bg-slate-50/80 p-5 sm:p-7 dark:bg-slate-950/80">
             <div className="space-y-0">
               {lifecycle.map((item, index) => (
                 <div key={item.number} className="flex gap-4 pb-6 last:pb-0">
@@ -301,16 +301,16 @@ export default function ServicesPage() {
                     </span>
 
                     {index !== lifecycle.length - 1 && (
-                      <span className="mt-2 min-h-6 w-px flex-1 bg-slate-200" />
+                      <span className="mt-2 min-h-6 w-px flex-1 bg-slate-200 dark:bg-slate-800" />
                     )}
                   </div>
 
                   <div className="min-w-0 pb-1">
-                    <h3 className="text-sm font-extrabold leading-6 text-[#1D3557] sm:text-base">
+                    <h3 className="text-sm font-extrabold leading-6 text-[#1D3557] sm:text-base dark:text-foreground">
                       {item.title}
                     </h3>
 
-                    <p className="mt-1.5 text-sm leading-6 text-slate-600">
+                    <p className="mt-1.5 text-sm leading-6 text-slate-600 dark:text-slate-300">
                       {item.description}
                     </p>
                   </div>
@@ -322,7 +322,7 @@ export default function ServicesPage() {
       </section>
 
       {/* CTA */}
-      <section className="border-t border-slate-100 bg-slate-50/80 px-4 py-16 sm:px-6 sm:py-20 lg:px-10">
+      <section className="border-t border-slate-100 bg-slate-50/80 px-4 py-16 sm:px-6 sm:py-20 lg:px-10 dark:border-slate-800 dark:bg-slate-950/80">
         <div className="relative mx-auto flex w-full max-w-[1280px] flex-col gap-7 overflow-hidden rounded-3xl bg-gradient-to-br from-[#1D3557] to-[#142943] px-6 py-10 shadow-xl shadow-[#1D3557]/10 sm:px-10 sm:py-12 md:flex-row md:items-center md:justify-between lg:px-12">
           <div className="absolute -right-16 -top-24 size-64 rounded-full bg-white/[0.04] blur-2xl" />
 

@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import ThemeToggle from "@/components/layout/theme-toggle";
 
 const adminLinks = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard },
@@ -49,13 +50,16 @@ export default function AdminNavigation() {
               isActive
                 ? "border-[#1D3557] bg-[#1D3557] text-white shadow-sm"
                 : "border-slate-200 bg-white text-slate-700 hover:border-[#1D3557] hover:bg-slate-50 hover:text-[#1D3557]"
-            }`}
+            } dark:hover:bg-slate-800 dark:text-slate-200 dark:bg-slate-900`}
           >
             <Icon aria-hidden="true" className="size-4 shrink-0" />
             <span>{label}</span>
           </Link>
         );
       })}
+      <div className="ml-auto flex items-center">
+        <ThemeToggle />
+      </div>
     </nav>
   );
 }
