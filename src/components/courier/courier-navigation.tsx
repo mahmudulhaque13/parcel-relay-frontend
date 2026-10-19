@@ -1,6 +1,6 @@
 "use client";
 
-import { CircleHelp, MapPin, Truck, UserRound } from "lucide-react";
+import { Truck, UserRound } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ThemeToggle from "@/components/layout/theme-toggle";
@@ -16,26 +16,18 @@ const courierLinks = [
     label: "My Profile",
     icon: UserRound,
   },
-  {
-    href: "/#tracking",
-    label: "Track Parcel",
-    icon: MapPin,
-  },
-  {
-    href: "/help",
-    label: "Help & Support",
-    icon: CircleHelp,
-  },
 ];
 
 export default function CourierNavigation() {
   const pathname = usePathname();
 
   return (
-    <nav aria-label="Courier navigation" className="flex flex-wrap gap-2">
+    <nav
+      aria-label="Courier navigation"
+      className="flex flex-wrap items-center gap-2"
+    >
       {courierLinks.map(({ href, label, icon: Icon }) => {
-        const route = href.split("#")[0];
-        const isActive = route !== "/" && pathname === route;
+        const isActive = pathname === href;
 
         return (
           <Link

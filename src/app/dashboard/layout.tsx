@@ -8,7 +8,7 @@ export default function CustomerLayout({ children }: { children: ReactNode }) {
   return (
     <RoleGuard allowedRoles={["CUSTOMER"]}>
       <div className="min-h-screen">
-        <header className="border-b border-border bg-background">
+        <header className="sticky top-0 z-50 border-b border-border bg-background/95 shadow-sm backdrop-blur">
           <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between gap-4">
               <Link

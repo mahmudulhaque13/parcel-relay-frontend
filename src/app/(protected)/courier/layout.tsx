@@ -9,7 +9,7 @@ export default function CourierLayout({ children }: { children: ReactNode }) {
   return (
     <RoleGuard allowedRoles={["COURIER"]}>
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
-        <header className="border-b border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
+        <header className="sticky top-0 z-50 border-b border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
           <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between gap-4">
               <Link

@@ -17,6 +17,7 @@ export default function PublicSiteShell({
     pathname === "/dashboard" ||
     pathname.startsWith("/dashboard/") ||
     pathname === "/courier" ||
+    pathname === "/courier/profile" ||
     pathname.startsWith("/courier/shipments/");
 
   const isPaymentSuccessRoute = pathname === "/payment/success";
