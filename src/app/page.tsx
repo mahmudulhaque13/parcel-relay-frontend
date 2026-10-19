@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
-
+import ParcelRelayAIAssistant from "@/components/ai/parcelrelay-ai-assistant";
 import TrackingForm from "@/components/tracking/tracking-form";
 
 export const metadata: Metadata = {
@@ -796,6 +796,9 @@ export default function Home() {
             </div>
           </div>
         </div>
+      </section>
+      <section className="mx-auto w-full max-w-[1440px] px-4 py-12 sm:px-6 sm:py-16 lg:px-10">
+        <ParcelRelayAIAssistant />
       </section>
     </main>
   );

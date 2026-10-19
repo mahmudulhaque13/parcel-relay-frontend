@@ -26,6 +26,61 @@ export default function CreateShipmentForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [quotedPayload, setQuotedPayload] =
     useState<ShipmentQuotePayload | null>(null);
+  const [improvingDescription, setImprovingDescription] = useState(false);
+  const [descriptionError, setDescriptionError] = useState("");
+
+  const improvePackageDescription = async () => {
+    const message = String(
+      form.getFieldValue("packageDescription") ?? "",
+    ).trim();
+
+    if (message.length < 3) {
+      setDescriptionError("Enter at least a few words about the parcel first.");
+      return;
+    }
+
+    setImprovingDescription(true);
+    setDescriptionError("");
+
+    try {
+      const response = await fetch("/api/ai-assistant", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message, mode: "description" }),
+      });
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Could not improve description.");
+      }
+
+      if (typeof result.answer !== "string" || !result.answer.trim()) {
+        throw new Error("AI returned an invalid description.");
+      }
+
+      const improvedDescription = result.answer.trim();
+
+      form.setFieldValue("packageDescription", improvedDescription);
+
+      if (improvedDescription.toLowerCase() === message.toLowerCase()) {
+        toast.info(
+          "Your description is already clear. No changes were needed.",
+        );
+      } else {
+        toast.success("Package description improved with AI.");
+      }
+    } catch (error) {
+      setDescriptionError(
+        error instanceof Error
+          ? error.message
+          : "Could not improve description.",
+      );
+    } finally {
+      setImprovingDescription(false);
+    }
+  };
 
   const zones = data?.data ?? [];
 
@@ -689,6 +744,23 @@ export default function CreateShipmentForm() {
                   rows={3}
                   className="field-control w-full rounded-lg border px-3 py-2 text-foreground dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                 />
+
+                <div className="mt-2 space-y-2">
+                  <button
+                    type="button"
+                    onClick={improvePackageDescription}
+                    disabled={improvingDescription}
+                    className="rounded-lg border border-border px-3 py-2 text-sm font-semibold hover:bg-muted disabled:opacity-60"
+                  >
+                    {improvingDescription ? "Improving…" : "Improve with AI"}
+                  </button>
+
+                  {descriptionError && (
+                    <p role="alert" className="text-sm text-destructive">
+                      {descriptionError}
+                    </p>
+                  )}
+                </div>
 
                 {field.state.meta.errors.length > 0 && (
                   <p className="text-sm text-destructive">

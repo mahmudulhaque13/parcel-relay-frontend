@@ -5,12 +5,16 @@ const platformLinks = [
   { href: "/services", label: "Our services" },
   { href: "/about", label: "About ParcelRelay" },
   { href: "/courier/register", label: "Become a courier" },
+  { href: "/help", label: "Help & Support" },
+  { href: "/contact", label: "Contact" },
 ];
 
 const accountLinks = [
   { href: "/login", label: "Log in" },
   { href: "/register", label: "Create an account" },
   { href: "/dashboard/shipments/create", label: "Create a shipment" },
+  { href: "/privacy", label: "Privacy overview" },
+  { href: "/terms", label: "Terms overview" },
 ];
 
 export default function SiteFooter() {
