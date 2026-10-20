@@ -1,8 +1,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import LogoutButton from "@/components/auth/logout-button";
 import RoleGuard from "@/components/auth/role-guard";
 import CustomerNavigation from "@/components/dashboard/customer-navigation";
+import DashboardAccountMenu from "@/components/layout/dashboard-account-menu";
 
 export default function CustomerLayout({ children }: { children: ReactNode }) {
   return (
@@ -21,7 +21,7 @@ export default function CustomerLayout({ children }: { children: ReactNode }) {
                 </span>
               </Link>
 
-              <LogoutButton />
+              <DashboardAccountMenu />
             </div>
 
             <CustomerNavigation />

@@ -2,10 +2,13 @@
 
 import {
   CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
   ExternalLink,
   FileText,
   Loader2,
   RefreshCw,
+  Search,
   ShieldCheck,
   UserRound,
   XCircle,
@@ -17,6 +20,8 @@ import { toast } from "sonner";
 import type { CourierApplication } from "@/api/courier.api";
 import { useCourierApplications } from "@/hooks/use-courier-applications";
 import { useReviewCourierApplication } from "@/hooks/use-review-courier-application";
+
+const PAGE_SIZE = 6;
 
 function getErrorMessage(error: unknown) {
   return error instanceof Error
@@ -248,8 +253,30 @@ export default function CourierApplications() {
 
   const reviewMutation = useReviewCourierApplication();
   const [reviewingUserId, setReviewingUserId] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
 
   const applications = response?.data ?? [];
+  const filteredApplications = applications.filter((application) =>
+    [
+      application.user.name,
+      application.user.email,
+      application.phone ?? "",
+      application.applicationStatus,
+    ]
+      .join(" ")
+      .toLowerCase()
+      .includes(search.trim().toLowerCase()),
+  );
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredApplications.length / PAGE_SIZE),
+  );
+  const currentPage = Math.min(page, totalPages);
+  const visibleApplications = filteredApplications.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE,
+  );
 
   async function handleReview(
     userId: string,
@@ -316,10 +343,38 @@ export default function CourierApplications() {
         </button>
       </div>
 
-      {!isLoading && !isError && (
-        <div className="text-sm text-muted-foreground">
-          {applications.length} pending{" "}
-          {applications.length === 1 ? "application" : "applications"}
+      {!isLoading && !isError && applications.length > 0 && (
+        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 sm:flex-row sm:items-end sm:justify-between">
+          <div className="w-full sm:max-w-md">
+            <label
+              htmlFor="courier-application-search"
+              className="mb-2 block text-xs font-bold uppercase tracking-wide text-muted-foreground"
+            >
+              Search applications
+            </label>
+            <div className="relative">
+              <Search
+                aria-hidden="true"
+                className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+              />
+              <input
+                id="courier-application-search"
+                type="search"
+                value={search}
+                onChange={(event) => {
+                  setSearch(event.target.value);
+                  setPage(1);
+                }}
+                placeholder="Name, email, phone, or status..."
+                className="min-h-11 w-full rounded-xl border border-input bg-background pl-9 pr-3 text-sm text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              />
+            </div>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            {filteredApplications.length} of {applications.length} application
+            {applications.length === 1 ? "" : "s"} · Page {currentPage} of{" "}
+            {totalPages}
+          </p>
         </div>
       )}
 
@@ -357,20 +412,37 @@ export default function CourierApplications() {
             Try again
           </button>
         </div>
-      ) : applications.length === 0 ? (
+      ) : filteredApplications.length === 0 ? (
         <div className="flex min-h-56 flex-col items-center justify-center rounded-xl border border-dashed p-6 text-center">
           <div className="rounded-full bg-muted p-3">
             <CheckCircle2 className="size-7 text-muted-foreground" />
           </div>
-          <h3 className="mt-3 font-semibold">No pending applications</h3>
+          <h3 className="mt-3 font-semibold">
+            {applications.length === 0
+              ? "No pending applications"
+              : "No matching applications"}
+          </h3>
           <p className="mt-1 max-w-md text-sm text-muted-foreground">
-            New courier applications will appear here after applicants register
-            and submit their required documents.
+            {applications.length === 0
+              ? "New courier applications will appear here after applicants register and submit their required documents."
+              : "Try a different name, email, phone number, or status."}
           </p>
+          {search && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearch("");
+                setPage(1);
+              }}
+              className="mt-3 rounded-lg border border-border px-3 py-2 text-sm font-semibold hover:bg-muted"
+            >
+              Clear search
+            </button>
+          )}
         </div>
       ) : (
         <div className="grid gap-5 xl:grid-cols-2">
-          {applications.map((application) => (
+          {visibleApplications.map((application) => (
             <ApplicationCard
               key={application.id}
               application={application}
@@ -379,6 +451,36 @@ export default function CourierApplications() {
             />
           ))}
         </div>
+      )}
+
+      {!isLoading && !isError && filteredApplications.length > PAGE_SIZE && (
+        <nav
+          aria-label="Courier application pagination"
+          className="flex flex-wrap items-center justify-center gap-3 border-t border-border pt-5"
+        >
+          <button
+            type="button"
+            disabled={currentPage <= 1}
+            onClick={() => setPage(Math.max(1, currentPage - 1))}
+            className="inline-flex min-h-10 items-center gap-1 rounded-xl border border-border px-4 py-2 text-sm font-semibold hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            <ChevronLeft aria-hidden="true" className="size-4" /> Previous
+          </button>
+          <span
+            aria-live="polite"
+            className="text-sm font-semibold text-muted-foreground"
+          >
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            type="button"
+            disabled={currentPage >= totalPages}
+            onClick={() => setPage(Math.min(totalPages, currentPage + 1))}
+            className="inline-flex min-h-10 items-center gap-1 rounded-xl border border-border px-4 py-2 text-sm font-semibold hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            Next <ChevronRight aria-hidden="true" className="size-4" />
+          </button>
+        </nav>
       )}
     </section>
   );

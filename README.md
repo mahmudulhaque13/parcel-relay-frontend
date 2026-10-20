@@ -9,22 +9,6 @@ A responsive courier and logistics management web application built with **Next.
 - **Frontend Repository:** https://github.com/mahmudulhaque13/parcel-relay-frontend
 - **Backend Repository:** https://github.com/mahmudulhaque13/parcel-relay-backend
 
-## Screenshots
-
-### Homepage
-
-![ParcelRelay Homepage](./parcelrelay-homepage.png)
-
-<!-- Replace the paths below after uploading screenshots to the repository. -->
-
-<!--
-### Homepage
-![ParcelRelay Homepage](./screenshots/homepage.png)
-
-### Dashboard
-![ParcelRelay Dashboard](./screenshots/dashboard.png)
--->
-
 ## Features
 
 ### Authentication and Access Control
@@ -61,7 +45,21 @@ A responsive courier and logistics management web application built with **Next.
 - Shipment creation and details
 - Public shipment tracking
 - Stripe test-payment flow with success and cancellation pages
+- Search, status filters, sorting, and pagination across supported shipment/report lists
 - Loading, empty, and error states across supported workflows
+
+### AI Assistance (STN-7)
+
+- Homepage ParcelRelay AI assistant for general shipment, tracking, payment, and courier workflow guidance
+- AI-assisted package-description rewriting in the shipment creation form
+- AI requests are handled by a server-side API route; the Gemini key must never be exposed with a `NEXT_PUBLIC_` variable
+
+### Additional Pages and Account UX
+
+- Help & Support, Privacy Overview, and Terms Overview pages
+- Role-aware account menus and editable profile pages for Customer, Courier, and Admin
+- Sticky role-specific navigation, light/dark theme toggle, and responsive shipment cards
+- Footer with project contact email, GitHub, LinkedIn, and site navigation links
 
 ## Tech Stack
 
@@ -95,6 +93,10 @@ cd parcel-relay-frontend
 npm install
 ```
 
+### Demo access
+
+The login page includes Demo Customer, Demo Courier, and Demo Admin actions when the backend's demo-login endpoint is enabled. The login page can also auto-fill dedicated demo-account credentials if the matching `NEXT_PUBLIC_DEMO_*` variables are configured. Share evaluator-specific email/password details through the submission channel required by the assignment; do not commit real passwords or privileged account credentials to this repository.
+
 ### 3. Configure environment variables
 
 Create a `.env.local` file in the project root and configure the API base URL using the exact variable name expected by the project's API client.
@@ -111,7 +113,24 @@ For the deployed backend, use the appropriate production API base URL:
 NEXT_PUBLIC_API_BASE_URL=https://parcel-relay-backend.vercel.app/api/v1
 ```
 
-**Important:** Verify the variable name and API path against the current source code before using these examples. Never expose private keys, database credentials, JWT secrets, or Stripe secret keys in frontend environment variables.
+For local AI testing, add the Gemini key to `.env.local` (never to source control):
+
+```env
+GEMINI_API_KEY=your_gemini_api_key
+```
+
+Optional demo credential autofill uses these public environment variables only for dedicated, intentionally public demo accounts. Do not use a personal or privileged real-user password for this feature:
+
+```env
+NEXT_PUBLIC_DEMO_CUSTOMER_EMAIL=
+NEXT_PUBLIC_DEMO_COURIER_EMAIL=
+NEXT_PUBLIC_DEMO_ADMIN_EMAIL=
+NEXT_PUBLIC_DEMO_PASSWORD=
+```
+
+Set `GEMINI_API_KEY` separately in Vercel for each environment that needs AI functionality. Local `.env.local` values are not automatically copied to Vercel.
+
+**Important:** Verify the variable name and API path against the current source code before using these examples. Never expose private keys, database credentials, JWT secrets, or Stripe secret keys in frontend environment variables. `GEMINI_API_KEY` must remain server-only and must not have a `NEXT_PUBLIC_` prefix.
 
 ### 4. Start the development server
 

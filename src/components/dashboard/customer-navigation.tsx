@@ -39,8 +39,8 @@ export default function CustomerNavigation() {
             className={`inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-semibold transition ${
               isActive
                 ? "border-[#1D3557] bg-[#1D3557] text-white"
-                : "border-slate-200 text-slate-700 hover:border-[#1D3557] hover:bg-slate-50 hover:text-[#1D3557]"
-            } dark:hover:bg-slate-800 dark:text-slate-200`}
+                : "border-slate-200 text-slate-700 hover:border-[#1D3557] hover:bg-slate-50 hover:text-[#1D3557] dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+            }`}
           >
             <Icon className="size-4" />
             {label}

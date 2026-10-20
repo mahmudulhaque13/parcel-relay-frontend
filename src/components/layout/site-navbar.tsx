@@ -116,21 +116,24 @@ export default function SiteNavbar() {
     }
   }
 
+  const profilePath =
+    user?.role === "ADMIN"
+      ? "/admin/profile"
+      : user?.role === "COURIER"
+        ? "/courier/profile"
+        : "/dashboard/profile";
+
   const profileLinks = [
     {
       href: dashboardPath,
       label: "Dashboard",
       icon: LayoutDashboard,
     },
-    ...(user?.role === "CUSTOMER"
-      ? [
-          {
-            href: "/dashboard/profile",
-            label: "My Profile",
-            icon: UserRound,
-          },
-        ]
-      : []),
+    {
+      href: profilePath,
+      label: "My Profile",
+      icon: UserRound,
+    },
   ];
 
   return (

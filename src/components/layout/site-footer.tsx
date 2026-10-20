@@ -1,4 +1,10 @@
-import { ArrowUpRight, PackageCheck } from "lucide-react";
+import {
+  ArrowUpRight,
+  Briefcase,
+  Code2,
+  Mail,
+  PackageCheck,
+} from "lucide-react";
 import Link from "next/link";
 
 const platformLinks = [
@@ -21,7 +27,7 @@ export default function SiteFooter() {
   return (
     <footer className="mt-auto bg-[#10243d] text-slate-300">
       <div className="mx-auto w-full max-w-[1440px] px-4 py-12 sm:px-6 sm:py-14 lg:px-10 lg:py-16">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr] lg:gap-16">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr] lg:gap-12">
           <div>
             <Link
               href="/"
@@ -37,7 +43,7 @@ export default function SiteFooter() {
               </span>
             </Link>
 
-            <p className="mt-5 max-w-sm text-sm leading-7 text-slate-400 dark:text-slate-500">
+            <p className="mt-5 max-w-sm text-sm leading-7 text-slate-400">
               A simpler way to manage shipments, coordinate deliveries, and keep
               your parcel operations moving.
             </p>
@@ -61,7 +67,7 @@ export default function SiteFooter() {
                 <li key={href}>
                   <Link
                     href={href}
-                    className="inline-flex text-sm text-slate-400 transition-colors hover:text-white dark:text-slate-500"
+                    className="inline-flex text-sm text-slate-400 transition-colors hover:text-white"
                   >
                     {label}
                   </Link>
@@ -80,7 +86,7 @@ export default function SiteFooter() {
                 <li key={href}>
                   <Link
                     href={href}
-                    className="inline-flex text-sm text-slate-400 transition-colors hover:text-white dark:text-slate-500"
+                    className="inline-flex text-sm text-slate-400 transition-colors hover:text-white"
                   >
                     {label}
                   </Link>
@@ -88,16 +94,56 @@ export default function SiteFooter() {
               ))}
             </ul>
           </div>
+
+          <div>
+            <h2 className="text-sm font-bold tracking-wide text-white">
+              Contact &amp; connect
+            </h2>
+
+            <ul className="mt-5 space-y-3">
+              <li>
+                <a
+                  href="mailto:m.h.upal13@gmail.com"
+                  className="inline-flex items-center gap-2 text-sm text-slate-400 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E76F51]"
+                >
+                  <Mail aria-hidden="true" className="size-4 shrink-0" />
+                  Email project contact
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/mahmudulhaque13"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="inline-flex items-center gap-2 text-sm text-slate-400 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E76F51]"
+                >
+                  <Code2 aria-hidden="true" className="size-4 shrink-0" />
+                  GitHub
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.linkedin.com/in/mahmudul-haque-425113420/"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="inline-flex items-center gap-2 text-sm text-slate-400 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E76F51]"
+                >
+                  <Briefcase aria-hidden="true" className="size-4 shrink-0" />
+                  LinkedIn
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div className="mt-12 flex flex-col gap-3 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs leading-6 text-slate-400 sm:text-sm dark:text-slate-500">
+          <p className="text-xs leading-6 text-slate-400 sm:text-sm">
             &copy; {new Date().getFullYear()} ParcelRelay. All rights reserved.
           </p>
 
           <Link
             href="/"
-            className="w-fit text-xs font-medium text-slate-400 transition-colors hover:text-white sm:text-sm dark:text-slate-500"
+            className="w-fit text-xs font-medium text-slate-400 transition-colors hover:text-white sm:text-sm"
           >
             Reliable deliveries. Simplified.
           </Link>

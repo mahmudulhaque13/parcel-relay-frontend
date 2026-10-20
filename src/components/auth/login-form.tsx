@@ -87,6 +87,31 @@ export default function LoginForm() {
   const dividerLabelClassName =
     "px-3 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-400 dark:text-slate-400";
 
+  const demoPassword = process.env.NEXT_PUBLIC_DEMO_PASSWORD ?? "";
+  const demoCredentialProfiles = [
+    {
+      role: "CUSTOMER" as const,
+      label: "Fill customer credentials",
+      email: process.env.NEXT_PUBLIC_DEMO_CUSTOMER_EMAIL?.trim() ?? "",
+    },
+    {
+      role: "COURIER" as const,
+      label: "Fill courier credentials",
+      email: process.env.NEXT_PUBLIC_DEMO_COURIER_EMAIL?.trim() ?? "",
+    },
+    {
+      role: "ADMIN" as const,
+      label: "Fill admin credentials",
+      email: process.env.NEXT_PUBLIC_DEMO_ADMIN_EMAIL?.trim() ?? "",
+    },
+  ].filter((profile) => profile.email && demoPassword);
+
+  const fillDemoCredentials = (email: string) => {
+    form.setFieldValue("email", email);
+    form.setFieldValue("password", demoPassword);
+    toast.success("Demo credentials filled. Select Sign in to continue.");
+  };
+
   const demoButtonClassName =
     "flex min-h-12 items-center justify-center rounded-xl border border-slate-200 bg-slate-50/70 px-3 py-3 text-sm font-bold text-[#1D3557] transition duration-200 hover:border-[#1D3557]/25 hover:bg-[#1D3557]/[0.04] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E76F51] disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:border-slate-500 dark:hover:bg-slate-700";
 
@@ -232,6 +257,27 @@ export default function LoginForm() {
           <span className={dividerLabelClassName}>Demo login</span>
           <span className={dividerClassName} />
         </div>
+
+        {demoCredentialProfiles.length > 0 && (
+          <div className="space-y-2">
+            <p className="text-center text-xs text-muted-foreground">
+              Fill configured demo credentials into the form
+            </p>
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+              {demoCredentialProfiles.map((profile) => (
+                <button
+                  key={profile.role}
+                  type="button"
+                  onClick={() => fillDemoCredentials(profile.email)}
+                  disabled={demoLoadingRole !== null}
+                  className={demoButtonClassName}
+                >
+                  {profile.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <button

@@ -1,9 +1,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-
-import LogoutButton from "@/components/auth/logout-button";
 import RoleGuard from "@/components/auth/role-guard";
 import CourierNavigation from "@/components/courier/courier-navigation";
+import DashboardAccountMenu from "@/components/layout/dashboard-account-menu";
 
 export default function CourierLayout({ children }: { children: ReactNode }) {
   return (
@@ -22,7 +21,7 @@ export default function CourierLayout({ children }: { children: ReactNode }) {
                 </span>
               </Link>
 
-              <LogoutButton />
+              <DashboardAccountMenu />
             </div>
 
             <CourierNavigation />

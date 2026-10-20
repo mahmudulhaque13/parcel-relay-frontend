@@ -1,8 +1,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import AdminNavigation from "@/components/admin/admin-navigation";
-import LogoutButton from "@/components/auth/logout-button";
 import RoleGuard from "@/components/auth/role-guard";
+import DashboardAccountMenu from "@/components/layout/dashboard-account-menu";
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
@@ -21,7 +21,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                 </span>
               </Link>
 
-              <LogoutButton />
+              <DashboardAccountMenu />
             </div>
 
             <AdminNavigation />

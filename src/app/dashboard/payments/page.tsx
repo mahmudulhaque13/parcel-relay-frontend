@@ -1,13 +1,31 @@
 "use client";
 
-import { CreditCard, Eye, Loader2, Receipt } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  CreditCard,
+  Eye,
+  Loader2,
+  Receipt,
+  Search,
+} from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import {
+  type ChangeEvent,
+  type FormEvent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { initiatePayment } from "@/api/payment.api";
 import { useMyShipments } from "@/hooks/use-my-shipments";
 import { usePaymentStatus } from "@/hooks/use-payment-status";
-import { getShipmentStatusLabel } from "@/lib/shipment-status";
+import {
+  getShipmentStatusLabel,
+  shipmentStatuses,
+} from "@/lib/shipment-status";
 
 function PaymentDetails({ shipmentId }: { shipmentId: string }) {
   const { data, isLoading, isError } = usePaymentStatus(shipmentId);
@@ -199,27 +217,82 @@ function PaymentDetails({ shipmentId }: { shipmentId: string }) {
 }
 
 export default function PaymentsPage() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const page = Math.max(1, Number(searchParams.get("page")) || 1);
+  const status = searchParams.get("status") ?? "";
+  const query = searchParams.get("q") ?? "";
+  const [search, setSearch] = useState(query);
   const [selectedShipmentId, setSelectedShipmentId] = useState<string | null>(
     null,
   );
 
-  const { data, isLoading, isError } = useMyShipments({
-    page: 1,
-    limit: 50,
-    sortBy: "createdAt",
-    sortOrder: "desc",
-  });
+  useEffect(() => {
+    setSearch(query);
+  }, [query]);
+
+  const previousFilters = useRef({ page, status, query });
+
+  useEffect(() => {
+    const previous = previousFilters.current;
+
+    if (
+      previous.page !== page ||
+      previous.status !== status ||
+      previous.query !== query
+    ) {
+      setSelectedShipmentId(null);
+    }
+
+    previousFilters.current = { page, status, query };
+  }, [page, status, query]);
+
+  const { data, isLoading, isError, error, refetch, isFetching } =
+    useMyShipments({
+      page,
+      limit: 10,
+      sortBy: "createdAt",
+      sortOrder: "desc",
+      ...(query ? { q: query } : {}),
+      ...(status ? { status } : {}),
+    });
 
   const shipments = data?.data.data ?? [];
+  const meta = data?.data.meta;
+  const totalPages = Math.max(1, meta?.totalPage ?? 1);
+
+  function updateParams(updates: Record<string, string | null>) {
+    const params = new URLSearchParams(searchParams.toString());
+    Object.entries(updates).forEach(([key, value]) => {
+      if (value) params.set(key, value);
+      else params.delete(key);
+    });
+    const nextQuery = params.toString();
+    router.push(nextQuery ? `${pathname}?${nextQuery}` : pathname);
+  }
+
+  function handleSearchSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    updateParams({ q: search.trim() || null, page: null });
+  }
+
+  function handleStatusChange(event: ChangeEvent<HTMLSelectElement>) {
+    updateParams({ status: event.target.value || null, page: null });
+  }
+
+  function handlePageChange(nextPage: number) {
+    if (nextPage < 1 || nextPage > totalPages || isFetching) return;
+    updateParams({ page: nextPage === 1 ? null : String(nextPage) });
+  }
 
   if (isLoading) {
     return (
       <main className="min-h-screen p-6">
         <div className="mx-auto max-w-7xl space-y-6">
           <div className="h-9 w-48 animate-pulse rounded-md bg-muted" />
-
-          <div className="h-5 w-96 animate-pulse rounded-md bg-muted" />
-
+          <div className="h-5 w-96 max-w-full animate-pulse rounded-md bg-muted" />
+          <div className="h-12 animate-pulse rounded-xl border bg-muted" />
           <div className="space-y-4">
             {[1, 2, 3].map((item) => (
               <div
@@ -241,7 +314,17 @@ export default function PaymentsPage() {
             role="alert"
             className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-600"
           >
-            Failed to load your payment records. Please refresh and try again.
+            <p>
+              Failed to load your payment records.{" "}
+              {error instanceof Error ? error.message : "Please try again."}
+            </p>
+            <button
+              type="button"
+              onClick={() => void refetch()}
+              className="mt-3 rounded-md border border-red-300 px-3 py-2 font-semibold hover:bg-red-100"
+            >
+              Try again
+            </button>
           </div>
         </div>
       </main>
@@ -249,88 +332,178 @@ export default function PaymentsPage() {
   }
 
   return (
-    <main className="min-h-screen p-6">
+    <main className="min-h-screen p-4 sm:p-6">
       <div className="mx-auto max-w-7xl space-y-8">
         <div>
           <h1 className="text-3xl font-bold">Payments</h1>
-
           <p className="mt-2 text-muted-foreground">
-            View payment status and transaction details for your shipments.
+            Search and filter shipment payment status, then open transaction
+            details.
+          </p>
+        </div>
+
+        <section
+          aria-label="Payment filters"
+          className="grid gap-4 rounded-xl border border-border bg-card p-4 sm:p-5 lg:grid-cols-[minmax(0,1fr)_260px]"
+        >
+          <form
+            onSubmit={handleSearchSubmit}
+            className="flex min-w-0 flex-col gap-3 sm:flex-row"
+          >
+            <label htmlFor="payment-shipment-search" className="sr-only">
+              Search by tracking number, recipient, or address
+            </label>
+            <div className="relative min-w-0 flex-1">
+              <Search
+                aria-hidden="true"
+                className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+              />
+              <input
+                id="payment-shipment-search"
+                type="search"
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="Tracking number or recipient..."
+                className="min-h-11 w-full rounded-xl border border-input bg-background pl-9 pr-3 text-sm text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              />
+            </div>
+            <button
+              type="submit"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+            >
+              <Search aria-hidden="true" className="size-4" /> Search
+            </button>
+          </form>
+          <div>
+            <label
+              htmlFor="payment-status-filter"
+              className="mb-2 block text-xs font-bold uppercase tracking-wide text-muted-foreground"
+            >
+              Shipment status
+            </label>
+            <select
+              id="payment-status-filter"
+              value={status}
+              onChange={handleStatusChange}
+              className="min-h-11 w-full rounded-xl border border-input bg-background px-3 text-sm text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <option value="">All statuses</option>
+              {shipmentStatuses.map((item) => (
+                <option key={item} value={item}>
+                  {getShipmentStatusLabel(item)}
+                </option>
+              ))}
+            </select>
+          </div>
+        </section>
+
+        <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-muted-foreground">
+          <p>
+            {meta?.total ?? shipments.length} shipment
+            {(meta?.total ?? shipments.length) === 1 ? "" : "s"} found
+          </p>
+          <p>
+            Page {meta?.page ?? page} of {totalPages}
           </p>
         </div>
 
         {shipments.length === 0 ? (
           <div className="rounded-xl border border-dashed p-10 text-center">
             <CreditCard className="mx-auto h-10 w-10 text-muted-foreground" />
-
-            <h2 className="mt-4 font-semibold">No shipments found</h2>
-
+            <h2 className="mt-4 font-semibold">
+              {query || status
+                ? "No matching payment records"
+                : "No shipments found"}
+            </h2>
             <p className="mt-2 text-sm text-muted-foreground">
-              Create a shipment to see its payment information here.
+              {query || status
+                ? "Try changing the search term or status filter."
+                : "Create a shipment to see its payment information here."}
             </p>
-
-            <Link
-              href="/dashboard/shipments/create"
-              className="mt-5 inline-flex rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
-            >
-              Create Shipment
-            </Link>
+            {!query && !status && (
+              <Link
+                href="/dashboard/shipments/create"
+                className="mt-5 inline-flex rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+              >
+                Create Shipment
+              </Link>
+            )}
           </div>
         ) : (
-          <section className="space-y-4">
+          <section aria-label="Shipment payments" className="space-y-4">
             {shipments.map((shipment) => {
               const isSelected = selectedShipmentId === shipment.id;
-
               return (
                 <article
                   key={shipment.id}
-                  className="rounded-xl border bg-card p-5 shadow-sm"
+                  className="rounded-xl border border-border bg-card p-5 shadow-sm"
                 >
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div className="space-y-2">
+                    <div className="min-w-0 space-y-2">
                       <div>
                         <p className="text-xs text-muted-foreground">
                           Tracking Number
                         </p>
-
-                        <p className="font-semibold">
+                        <p className="break-all font-semibold">
                           {shipment.trackingNumber}
                         </p>
                       </div>
-
                       <div className="flex flex-wrap gap-2 text-sm">
                         <span className="rounded-full bg-muted px-3 py-1">
                           {getShipmentStatusLabel(shipment.status)}
                         </span>
-
                         <span className="rounded-full bg-muted px-3 py-1">
                           Delivery: ৳{shipment.deliveryCharge}
                         </span>
-
                         <span className="rounded-full bg-muted px-3 py-1">
                           COD: ৳{shipment.codAmount}
                         </span>
                       </div>
                     </div>
-
                     <button
                       type="button"
+                      aria-expanded={isSelected}
                       onClick={() =>
                         setSelectedShipmentId(isSelected ? null : shipment.id)
                       }
-                      className="inline-flex items-center justify-center gap-2 rounded-md border px-4 py-2 text-sm font-medium transition-colors hover:bg-muted"
+                      className="inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-semibold transition-colors hover:bg-muted"
                     >
-                      <Eye className="h-4 w-4" />
-
+                      <Eye aria-hidden="true" className="size-4" />
                       {isSelected ? "Hide Payment" : "View Payment"}
                     </button>
                   </div>
-
                   {isSelected && <PaymentDetails shipmentId={shipment.id} />}
                 </article>
               );
             })}
           </section>
+        )}
+
+        {shipments.length > 0 && totalPages > 1 && (
+          <nav
+            aria-label="Payment shipment pagination"
+            className="flex flex-wrap items-center justify-center gap-3 border-t border-border pt-6"
+          >
+            <button
+              type="button"
+              disabled={page <= 1 || isFetching}
+              onClick={() => handlePageChange(page - 1)}
+              className="inline-flex min-h-10 items-center gap-1 rounded-xl border border-border px-4 py-2 text-sm font-semibold hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <ChevronLeft aria-hidden="true" className="size-4" /> Previous
+            </button>
+            <span className="rounded-xl bg-muted px-4 py-2.5 text-sm font-bold tabular-nums">
+              {meta?.page ?? page} / {totalPages}
+            </span>
+            <button
+              type="button"
+              disabled={page >= totalPages || isFetching}
+              onClick={() => handlePageChange(page + 1)}
+              className="inline-flex min-h-10 items-center gap-1 rounded-xl border border-border px-4 py-2 text-sm font-semibold hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Next <ChevronRight aria-hidden="true" className="size-4" />
+            </button>
+          </nav>
         )}
       </div>
     </main>

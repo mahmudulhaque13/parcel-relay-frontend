@@ -11,7 +11,7 @@ import {
   shipmentStatuses,
 } from "@/lib/shipment-status";
 
-const PAGE_SIZE = 9;
+const PAGE_SIZE = 8;
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -88,7 +88,7 @@ export default function DashboardPage() {
           <div className="h-9 w-64 animate-pulse rounded-md bg-muted" />
           <div className="h-5 w-96 animate-pulse rounded-md bg-muted" />
 
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             {[1, 2, 3, 4, 5, 6].map((item) => (
               <div
                 key={item}
@@ -205,7 +205,7 @@ export default function DashboardPage() {
               </Link>
             </div>
           ) : (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
               {shipments.map((shipment) => (
                 <article
                   key={shipment.id}

@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { useCourierShipments } from "@/hooks/use-courier-shipments";
 import { getShipmentStatusLabel } from "@/lib/shipment-status";
 
-const PAGE_SIZE = 9;
+const PAGE_SIZE = 8;
 
 const courierShipmentStatuses = [
   "ASSIGNED",
@@ -129,7 +129,7 @@ export default function CourierPage() {
           <div className="h-9 w-64 max-w-full animate-pulse rounded-lg bg-slate-200 dark:bg-slate-800" />
           <div className="h-4 w-80 max-w-full animate-pulse rounded bg-slate-200 dark:bg-slate-800" />
 
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {Array.from(
               { length: 6 },
               (_, index) => `shipment-skeleton-${index}`,
@@ -333,7 +333,7 @@ export default function CourierPage() {
               </p>
             </div>
           ) : (
-            <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
               {shipments.map((shipment) => (
                 <article
                   key={shipment.id}

@@ -4,6 +4,8 @@ import {
   AlertCircle,
   Building2,
   Check,
+  ChevronLeft,
+  ChevronRight,
   CircleDollarSign,
   Loader2,
   MapPin,
@@ -52,6 +54,7 @@ const inputClass =
   "mt-1.5 h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#1D3557] focus:ring-2 focus:ring-[#1D3557]/10 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-slate-500";
 const buttonClass =
   "inline-flex min-h-9 items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-50";
+const PAGE_SIZE = 8;
 function unwrap<T>(response: unknown): T {
   const root = response as { data?: unknown };
   const nested = root?.data;
@@ -89,6 +92,7 @@ const moduleMeta: Record<
 export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
   const [editing, setEditing] = useState<Resource | null>(null);
   const [formOpen, setFormOpen] = useState(false);
   const [errorText, setErrorText] = useState("");
@@ -331,11 +335,18 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
       "code" in item ? item.code : "",
       "address" in item ? item.address : "",
       "description" in item ? (item.description ?? "") : "",
+      "isActive" in item ? (item.isActive ? "active" : "inactive") : "",
     ]
       .join(" ")
       .toLowerCase();
-    return haystack.includes(search.toLowerCase());
+    return haystack.includes(search.toLowerCase().trim());
   });
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const visibleResources = filtered.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE,
+  );
   const Icon =
     kind === "zones" ? MapPin : kind === "hubs" ? Building2 : CircleDollarSign;
   const loading = query.isLoading;
@@ -383,14 +394,18 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
           <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
           <input
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
             placeholder={`Search ${meta.title.toLowerCase()}...`}
             className="h-10 w-full rounded-lg border border-slate-200 bg-white pl-9 pr-3 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:border-[#1D3557] dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-500"
           />
         </div>
         <div className="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
           <span>
-            {filtered.length} item{filtered.length === 1 ? "" : "s"}
+            {filtered.length} item{filtered.length === 1 ? "" : "s"} · Page{" "}
+            {currentPage} of {totalPages}
           </span>
           <button
             type="button"
@@ -630,7 +645,7 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {filtered.map((resource) => {
+                {visibleResources.map((resource) => {
                   const active = resource.isActive !== false;
                   const hub = resource as Hub;
                   const price = resource as PricingRule;
@@ -732,6 +747,35 @@ export default function ResourceManagement({ kind }: { kind: ModuleKind }) {
           </div>
         )}
       </div>
+      {!loading && !isError && filtered.length > PAGE_SIZE && (
+        <nav
+          aria-label={`${meta.title} pagination`}
+          className="flex flex-wrap items-center justify-center gap-3"
+        >
+          <button
+            type="button"
+            disabled={currentPage <= 1}
+            onClick={() => setPage(Math.max(1, currentPage - 1))}
+            className={`${buttonClass} border border-slate-200 text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800`}
+          >
+            <ChevronLeft className="size-4" aria-hidden="true" /> Previous
+          </button>
+          <span
+            aria-live="polite"
+            className="text-sm font-semibold text-slate-600 dark:text-slate-300"
+          >
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            type="button"
+            disabled={currentPage >= totalPages}
+            onClick={() => setPage(Math.min(totalPages, currentPage + 1))}
+            className={`${buttonClass} border border-slate-200 text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800`}
+          >
+            Next <ChevronRight className="size-4" aria-hidden="true" />
+          </button>
+        </nav>
+      )}
       <p className="text-xs leading-5 text-slate-500 dark:text-slate-400">
         Administrative changes are sent to the backend API. Inactive zones and
         hubs can be reactivated. Deleted items cannot be restored from this
